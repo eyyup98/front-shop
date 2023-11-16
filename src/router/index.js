@@ -29,6 +29,12 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../components/admin/Catalogs.vue')
     },
+    {
+      path: '/admin/panel',
+      name: 'panel',
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../components/admin/Panel.vue')
+    },
   ]
 })
 
