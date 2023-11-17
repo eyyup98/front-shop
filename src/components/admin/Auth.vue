@@ -26,7 +26,6 @@ export default {
   },
   methods: {
     auth: async function () {
-      // await axios.get('https://apitest.mpall.ru/api/v1/test/list')
       try {
         await axios.post('http://back.ey/api/v1/auth/authentication', {
           login: this.login,
@@ -42,18 +41,7 @@ export default {
         return;
       }
 
-      await router.push({path: '/admin/catalogs'})
-
-
-      // if (this.response.data[0].user === this.login && this.response.data[0].password === this.password) {
-      //   // await router.push({path: '/'})
-      //   this.text = 'Успешно вошли!'
-      // } else {
-      //     this.text = 'Неверный логин или пароль!'
-      // }
-      // setTimeout(() => {
-      //   this.text = null
-      // }, 2000);
+      await router.push({path: '/admin/panel/catalogs'})
     }
   },
   mounted() {

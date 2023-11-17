@@ -3,7 +3,7 @@
 
 
   <div class="container">
-    <h1 class="h1 m">Catalogs</h1>
+    <h1 class="h1 m">Groups</h1>
   </div>
 </template>
 
@@ -13,7 +13,7 @@ import axios from "axios";
 import router from "../../router";
 
 export default {
-  name: "Catalogs",
+  name: "Groups",
   components: {
     NavBar,
   },

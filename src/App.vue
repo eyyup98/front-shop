@@ -1,8 +1,43 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+// import axios from "axios";
+// import router from "./router";
+// console.log('localStorage.access_token');
+// console.log(localStorage.access_token);
+// if (localStorage.access_token !== null) {
+//   document.getElementsByClassName('wrapper').visibility = 'hidden';
+// } /*else {
+//   document.getElementById('wrapper').style.display = 'none';
+// }*/
+// export default {
+//   name: "App",
+//   data(){
+//     return {
+//       access_token: null
+//     }
+//   },
+//   mounted() {
+//     this.access_token = localStorage.access_token;
+//     console.log('this.access_token')
+//     console.log(this.access_token)
+//   }
+// }
 </script>
 
 <template>
+<!--  <header id="header-access_token">-->
+<!--  <header>-->
+<!--    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />-->
+
+<!--    <div class="wrapper">-->
+<!--      <h1>{{this.localStorage.access_token}}</h1>-->
+<!--      <nav>-->
+<!--        <RouterLink to="/admin/panel/catalogs">Catalog</RouterLink>-->
+<!--        <RouterLink to="/about">About</RouterLink>-->
+<!--        <RouterLink to="/admin/auth">Вход</RouterLink>-->
+<!--      </nav>-->
+<!--    </div>-->
+<!--  </header>-->
 <!--  <header>-->
 <!--    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />-->
 
