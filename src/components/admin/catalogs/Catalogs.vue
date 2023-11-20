@@ -28,6 +28,7 @@
       </tr>
       </tbody>
     </table>
+    <span id="catalog-message"></span>
 
   </div>
 </template>
@@ -90,7 +91,11 @@ export default {
             }
           })
         } catch (exception) {
-          console.log(exception.response.data)
+          document.getElementById('catalog-message').innerHTML  = exception.response.data.msg
+          setTimeout(() => {
+            document.getElementById('catalog-message').innerHTML  = ''
+          }, 3000);
+          return;
         }
         await this.getData()
       }

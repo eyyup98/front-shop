@@ -8,8 +8,8 @@
   <div class="container">
     <h1 class="h1 m">Groups</h1>
 
-    <button class="button" @click="addGr">Добавить группу</button>
-    <button class="button" @click="addSubGr">Добавить подгруппу</button>
+    <button class="button" @click="addGroup('parent')">Добавить группу</button>
+    <button class="button" @click="addGroup('child')">Добавить подгруппу</button>
 
     <div class="loading" v-if="loading === true">Загрузка данных...</div>
     <table class="table" v-if="loading === false">
@@ -66,7 +66,7 @@ export default {
     NavBar,
     GroupModal
   },
-  data(){
+  data() {
     return {
       loading: true,
       groupsParent: null,
@@ -75,6 +75,13 @@ export default {
       modal: false,
       modalGroup: null,
       arrayChild: [],
+      newGroup: {
+        id: '',
+        catalog_id: null,
+        parent_id: null,
+        name: '',
+        active: 1
+      }
     }
   },
   methods: {
@@ -110,6 +117,14 @@ export default {
         this.loading = true
         await this.getData()
       }
+
+      this.newGroup = {
+        id: '',
+        catalog_id: null,
+        parent_id: null,
+        name: '',
+        active: 1
+      }
     },
     async deleteGr(object, type) {
       type = type === 'parent' ? 'группу' : 'подгруппу'
@@ -136,21 +151,10 @@ export default {
       this.modalGroup = object
       this.groupType = type
     },
-    addGr() {
+    addGroup(type) {
       this.modal = true
-      this.modalCat = {
-        id: '',
-        name: '',
-        active: 1
-      }
-    },
-    addSubGr() {
-      this.modal = true
-      this.modalCat = {
-        id: '',
-        name: '',
-        active: 1
-      }
+      this.modalGroup = this.newGroup
+      this.groupType = type
     },
     changeViewChild(index){
       if (this.groupsParent[index].view_child === false) {

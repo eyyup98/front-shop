@@ -18,9 +18,9 @@
     flex-direction:column;
     margin: 5% auto 0;
 }
-.input {
-    height: 30px;
-    font-size: 18px;
+input {
+    height: 25px;
+    font-size: 14px;
 }
 .delete{
     margin: 0 10px 0 0;
@@ -28,6 +28,10 @@
 select{
     height: 25px;
     font-size: 14px;
+}
+.flex-list{
+    display: flex;
+    flex-direction:column;
 }
 
 /*_____________TABLE______________*/

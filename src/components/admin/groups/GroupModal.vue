@@ -7,15 +7,16 @@
         <select v-model="group.catalog_id">
           <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
         </select>
-        <div v-if="groupType === 'parent'">
+        <div v-if="groupType === 'parent'" class="flex-list">
           <label>Название группы</label>
           <input v-model="group.name">
         </div>
-        <div v-else>
+        <div v-else class="flex-list">
           <label>Группа</label>
           <select v-model="group.parent_id">
             <option v-for="item in groupsParent" :value="item.id">{{item.name}}</option>
           </select>
+          <label>Название подгруппы</label>
           <input v-model="group.name">
         </div>
         <label>Активный</label>
@@ -83,7 +84,23 @@ export default {
       }
     },
     async save() {
-      console.log(this.group)
+      console.log(this.type)
+
+      if (this.group.catalog_id === null) {
+        document.getElementById('modal-message').innerHTML  = 'Необходимо выбрать категорию'
+        setTimeout(() => {
+          document.getElementById('modal-message').innerHTML  = ''
+        }, 2000);
+        return;
+      }
+
+      if (this.groupType === 'child' && this.group.parent_id === null) {
+        document.getElementById('modal-message').innerHTML  = 'Необходимо выбрать группу'
+        setTimeout(() => {
+          document.getElementById('modal-message').innerHTML  = ''
+        }, 2000);
+        return;
+      }
 
       if (this.group.name.replace(/\s/g, "") === '') {
         document.getElementById('modal-message').innerHTML  = 'Необходимо заполнить название'
