@@ -6,7 +6,7 @@
   </GroupModal>
 
   <div class="container">
-    <h1 class="h1 m">Groups</h1>
+    <h1 class="h1 m">Группы</h1>
 
     <button class="button" @click="addGroup('parent')">Добавить группу</button>
     <button class="button" @click="addGroup('child')">Добавить подгруппу</button>

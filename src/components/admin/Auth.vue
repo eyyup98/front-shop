@@ -44,8 +44,20 @@ export default {
       await router.push({path: '/admin/panel/catalogs'})
     }
   },
-  mounted() {
-
+  async mounted() {
+    if (typeof localStorage.access_token !== "undefined") {
+      try {
+        await axios.get('http://back.ey/api/v1/verification', {
+          params: {
+            token: localStorage.access_token
+          }
+        })
+      } catch (exception) {
+        await router.push({path: '/'})
+        return;
+      }
+      await router.push({path: '/admin/panel/catalogs'})
+    }
   }
 }
 </script>

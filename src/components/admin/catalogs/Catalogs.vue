@@ -4,7 +4,7 @@
   <CatModal v-if="modal === true" :catalog="modalCat" @updateParent="updateParentMethod"></CatModal>
 
   <div class="container">
-    <h1 class="h1 m">Catalogs</h1>
+    <h1 class="h1 m">Каталоги</h1>
 
     <button class="button" @click="addCat">Добавить категорию</button>
 
