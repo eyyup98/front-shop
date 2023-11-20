@@ -48,7 +48,7 @@ export default {
             }
           })
       } catch (exception) {
-          // await router.push({path: '/'})
+          await router.push({path: '/'})
       }
     }
 }
