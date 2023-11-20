@@ -1,7 +1,7 @@
 <template>
   <NavBar></NavBar>
 
-  <CatModal v-if="modal === true" :index="index" :catalog="modalCat" @updateParent="updateParentMethod"></CatModal>
+  <CatModal v-if="modal === true" :catalog="modalCat" @updateParent="updateParentMethod"></CatModal>
 
   <div class="container">
     <h1 class="h1 m">Catalogs</h1>
@@ -12,13 +12,11 @@
     <table class="table" v-if="loading === false">
       <thead class="thead">
       <tr>
-        <th id="cat-name" @click="" class="">Название</th>
-        <th id="cat-active" @click="" class="">Активный</th>
-        <th class="">Действия</th>
+        <th>Название</th>
+        <th>Активный</th>
+        <th>Действия</th>
       </tr>
       </thead>
-
-
       <tbody class="" v-for="(row, index) in catalogs">
       <tr>
         <th>{{ row.name }}</th>
@@ -50,8 +48,7 @@ export default {
       loading: true,
       catalogs: null,
       modal: false,
-      modalCat: null,
-      index: null,
+      modalCat: null
     }
   },
   methods: {
@@ -101,7 +98,6 @@ export default {
     editCat(index){
       this.modal = true
       this.modalCat = this.catalogs[index]
-      this.index = index
     }
   },
   async mounted() {

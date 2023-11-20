@@ -33,9 +33,6 @@ export default {
   props: {
     catalog: {
       required: false
-    },
-    index: {
-      required: false
     }
   },
   data(){

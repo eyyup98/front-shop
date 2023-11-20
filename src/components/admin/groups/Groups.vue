@@ -1,29 +1,170 @@
 <template class="template">
   <NavBar></NavBar>
 
+  <GroupModal v-if="modal === true" @updateParent="updateParentMethod" :group="modalGroup" :groupType="groupType"
+              :groupsParent="groupsParent">
+  </GroupModal>
 
   <div class="container">
     <h1 class="h1 m">Groups</h1>
+
+    <button class="button" @click="addGr">Добавить группу</button>
+    <button class="button" @click="addSubGr">Добавить подгруппу</button>
+
+    <div class="loading" v-if="loading === true">Загрузка данных...</div>
+    <table class="table" v-if="loading === false">
+      <thead class="thead">
+      <tr>
+        <th>#</th>
+        <th>Каталог</th>
+        <th>Название группы</th>
+        <th>Название подгруппы</th>
+        <th>Активный</th>
+        <th>Действия</th>
+      </tr>
+      </thead>
+
+      <tbody class="" v-for="(row, index) in groupsParent">
+      <tr>
+        <th v-if="row.view_child === false" @click="changeViewChild(index)">v</th>
+        <th v-else @click="changeViewChild(index)">x</th>
+        <th>{{ row.catalog_name }}</th>
+        <th>{{ row.name }}</th>
+        <th></th>
+        <th>{{ row.active }}</th>
+        <th>
+          <i class="delete" @click="deleteGr(row, 'parent')">d</i>
+          <i class="edit" @click="editGr(row, 'parent')">e</i>
+        </th>
+      </tr>
+
+      <tr class="child-list" v-if="row.view_child === true" v-for="(row2) in groupsChild[row.id]">
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>{{ row2.name }}</th>
+        <th>{{ row2.active }}</th>
+        <th>
+          <i class="delete" @click="deleteGr(row2, 'child', )">d</i>
+          <i class="edit" @click="editGr(row2, 'child', )">e</i>
+        </th>
+      </tr>
+      </tbody>
+    </table>
+    <span id="group-message"></span>
   </div>
 </template>
 
 <script>
 import NavBar from "../NavBar.vue";
 import axios from "axios";
-import router from "../../../router";
+import GroupModal from "./GroupModal.vue";
 
 export default {
   name: "Groups",
   components: {
     NavBar,
+    GroupModal
   },
   data(){
     return {
+      loading: true,
+      groupsParent: null,
+      groupsChild: null,
+      groupType: null,
+      modal: false,
+      modalGroup: null,
+      arrayChild: [],
     }
   },
   methods: {
+    async getData() {
+      this.loading = true
+      try {
+        await axios.get('http://back.ey/api/v1/groups/parents', {
+          params: {
+            token: localStorage.access_token
+          }
+        }).then(response => (
+            this.groupsParent = response.data
+        ))
+        this.loading = false
+      } catch (exception) {
+      }
+      try {
+        await axios.get('http://back.ey/api/v1/groups/childs', {
+          params: {
+            token: localStorage.access_token
+          }
+        }).then(response => (
+            this.groupsChild = response.data
+        ))
+        this.loading = false
+      } catch (exception) {
+      }
+    },
+    async updateParentMethod(data) {
+      this.modal = false
+
+      if (data.changed === true) {
+        this.loading = true
+        await this.getData()
+      }
+    },
+    async deleteGr(object, type) {
+      type = type === 'parent' ? 'группу' : 'подгруппу'
+      if (confirm(`Вы действителдьно хотите удалить ${type} "` + object.name + '"')) {
+        try {
+          await axios.delete('http://back.ey/api/v1/groups/' + object.id, {
+            params: {
+              token: localStorage.access_token
+            }
+          })
+        } catch (exception) {
+          document.getElementById('group-message').innerHTML  = exception.response.data.msg
+          setTimeout(() => {
+            document.getElementById('group-message').innerHTML  = ''
+          }, 3000);
+          return;
+        }
+        await this.getData()
+      }
+    },
+    editGr(object, type) {
+      this.modal = true
+
+      this.modalGroup = object
+      this.groupType = type
+    },
+    addGr() {
+      this.modal = true
+      this.modalCat = {
+        id: '',
+        name: '',
+        active: 1
+      }
+    },
+    addSubGr() {
+      this.modal = true
+      this.modalCat = {
+        id: '',
+        name: '',
+        active: 1
+      }
+    },
+    changeViewChild(index){
+      if (this.groupsParent[index].view_child === false) {
+        this.groupsParent[index].view_child = true;
+        this.arrayChild[index] = this.groupsParent[index]
+      }
+      else {
+        this.groupsParent[index].view_child = false;
+        delete this.arrayChild[index];
+      }
+    }
   },
-  mounted() {
+  async mounted() {
+    await this.getData()
   }
 }
 </script>
