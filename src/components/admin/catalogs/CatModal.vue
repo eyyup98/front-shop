@@ -7,14 +7,16 @@
       <div class="window">
 <!--        <div class="">{{catalog}}</div>-->
         <label>Название каталога</label>
-        <input type="text" v-model="catalog.name">
+        <input class="input" type="text" v-model="catalog.name">
         <label>Активный</label>
         <p>
         <input type="checkbox" name="catalog-active" :checked="catalog.active" @click="active">
         </p>
-        <button @click="closeModal">Отмена</button>
-        <button @click="save">Сохранить</button>
+        <button class="button" @click="closeModal">Отмена</button>
+        <button class="button" @click="save">Сохранить</button>
         <div class="response" v-if="response !== null"></div>
+
+        <span id="modal-message"></span>
       </div>
   </div>
 
@@ -55,22 +57,33 @@ export default {
       }
     },
     async save() {
+      if (this.catalog.name.replace(/\s/g, "") === '') {
+        document.getElementById('modal-message').innerHTML  = 'Необходимо заполнить название'
+        setTimeout(() => {
+          document.getElementById('modal-message').innerHTML  = ''
+        }, 2000);
+        return;
+      }
+
       try {
-        await axios.post('http://back.ey/api/v1/catalogs/' + this.catalog.id, {
+        await axios.post(`http://back.ey/api/v1/catalogs/${this.catalog.id}`, {
           token: localStorage.access_token,
           params: {
             name: this.catalog.name,
             active: this.catalog.active,
           }
-        }, {mode: "no-cors"})
+        })
       } catch (exception) {
-        this.response = exception.data
+        this.response = exception.response.data
+        document.getElementById('modal-message').innerHTML  = exception.response.data.msg
+        setTimeout(() => {
+          document.getElementById('modal-message').innerHTML  = ''
+        }, 2000);
+        return;
       }
 
       this.$emit('updateParent', {
-        close: false,
-        index: this.index,
-        modalCat: this.catalog
+        close: false
       })
     }
   },
@@ -80,23 +93,4 @@ export default {
 </script>
 
 <style scoped>
-.modal {
-  font-size: 24px;
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  z-index: 100;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-}
-.window{
-  background-color: white;
-  width: 50%;
-  min-height: 50%;
-  max-height: 70%;
-  align-self:center;
-  display: flex;
-  flex-direction:column;
-}
 </style>

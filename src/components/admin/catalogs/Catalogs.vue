@@ -6,11 +6,11 @@
   <div class="container">
     <h1 class="h1 m">Catalogs</h1>
 
-    <button @click="addCat">Добавить категорию</button>
+    <button class="button" @click="addCat">Добавить категорию</button>
 
     <div class="loading" v-if="loading === true">Загрузка данных...</div>
-    <table class="" v-if="loading === false">
-      <thead class="">
+    <table class="table" v-if="loading === false">
+      <thead class="thead">
       <tr>
         <th id="cat-name" @click="" class="">Название</th>
         <th id="cat-active" @click="" class="">Активный</th>
@@ -21,14 +21,11 @@
 
       <tbody class="" v-for="(row, index) in catalogs">
       <tr>
-
         <th>{{ row.name }}</th>
         <th>{{ row.active }}</th>
-
-
         <th>
-          <i class="" @click="deleteCat(index)">d</i>
-          <i class="" @click="editCat(index)">e</i>
+          <i class="delete" @click="deleteCat(index)">d</i>
+          <i class="edit" @click="editCat(index)">e</i>
         </th>
       </tr>
       </tbody>
@@ -58,36 +55,53 @@ export default {
     }
   },
   methods: {
-    updateParentMethod(data){
+    async getData() {
+      try {
+        await axios.get('http://back.ey/api/v1/catalogs', {
+          params: {
+            token: localStorage.access_token
+          }
+        }).then(response => (
+            this.catalogs = response.data
+        ))
+        this.loading = false
+      } catch (exception) {
+      }
+    },
+    async updateParentMethod(data) {
       this.modal = data.close
-      this.catalogs[data.index] = data.modalCat
+      await this.getData()
     },
     addCat() {
-
+      this.modal = true
+      this.modalCat = {
+        id: '',
+        name: '',
+        active: 1
+      }
     },
-    deleteCat(index){
+    async deleteCat(index) {
       if (confirm('Вы действителдьно хотите удалить каталог "' + this.catalogs[index].name + '"')) {
+        try {
+          await axios.delete('http://back.ey/api/v1/catalogs/' + this.catalogs[index].id, {
+            params: {
+              token: localStorage.access_token
+            }
+          })
+        } catch (exception) {
+          console.log(exception.response.data)
+        }
+        await this.getData()
       }
     },
     editCat(index){
       this.modal = true
       this.modalCat = this.catalogs[index]
       this.index = index
-      // console.log('this.modalCat')
-      // console.log(this.modalCat)
     }
   },
   async mounted() {
-    try {
-      await axios.get('http://back.ey/api/v1/catalogs', {
-        params: {
-          token: localStorage.access_token
-        }
-      }).then(response => (
-          this.catalogs = response.data
-      ))
-      this.loading = false
-    } catch (exception) {}
+    await this.getData()
   }
 }
 </script>
@@ -95,19 +109,5 @@ export default {
 <style scoped>
 .template {
   /*border: 10px solid red;*/
-}
-.h1 {
-  text-align: center;
-}
-.container {
-  padding: 10px;
-  background-color: rgba(119, 255, 133, 0.3);
-  display: flex;
-  flex-direction:column;
-  margin: 5% auto 0;
-}
-.loading {
-  margin: 30px 0 0 0;
-  text-align: center;
 }
 </style>

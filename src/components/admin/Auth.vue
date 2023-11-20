@@ -69,10 +69,6 @@ export default {
 .label {
   font-size: 24px;
 }
-.input {
-  height: 30px;
-  font-size: 18px;
-}
 .button {
   height: 30px;
   width: 50%;
