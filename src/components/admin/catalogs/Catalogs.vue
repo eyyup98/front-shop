@@ -14,7 +14,7 @@
       <tr>
         <th>Название</th>
         <th>Активный</th>
-        <th>Действия</th>
+        <th class="th-events">Действия</th>
       </tr>
       </thead>
       <tbody class="" v-for="(row, index) in catalogs">

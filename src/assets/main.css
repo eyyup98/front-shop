@@ -46,10 +46,14 @@ tbody:nth-child(odd){
     color: white;
 }
 th {
-    min-width: 50px;
+    /*min-width: 50px;*/
+    /*max-width: 100px;*/
 }
 .child-list {
     background-color: white;
+}
+.th-events{
+    width: 10%;
 }
 /*_____________________________*/
 

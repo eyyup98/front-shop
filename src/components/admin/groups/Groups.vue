@@ -17,17 +17,18 @@
       <tr>
         <th>#</th>
         <th>Каталог</th>
-        <th>Название группы</th>
-        <th>Название подгруппы</th>
+        <th>Группа</th>
+        <th>Подгруппа</th>
         <th>Активный</th>
-        <th>Действия</th>
+        <th class="th-events">Действия</th>
       </tr>
       </thead>
 
       <tbody class="" v-for="(row, index) in groupsParent">
       <tr>
-        <th v-if="row.view_child === false" @click="changeViewChild(index)">v</th>
-        <th v-else @click="changeViewChild(index)">x</th>
+        <th style="font-size: 20px; width: 50px" v-if="row.view_child === false && typeof groupsChild[row.id] !== 'undefined'" @click="changeViewChild(index)">V</th>
+        <th style="font-size: 20px; width: 50px"  v-else-if="row.view_child === true && typeof groupsChild[row.id] !== 'undefined'" @click="changeViewChild(index)">X</th>
+        <th v-else></th>
         <th>{{ row.catalog_name }}</th>
         <th>{{ row.name }}</th>
         <th></th>
@@ -174,9 +175,6 @@ export default {
 </script>
 
 <style scoped>
-.template {
-  /*border: 10px solid red;*/
-}
 .h1 {
   text-align: center;
 }

@@ -21,7 +21,7 @@
         </div>
         <label>Активный</label>
         <p>
-        <input type="checkbox" name="catalog-active" :checked="group.active" @click="active">
+        <input type="checkbox" :checked="group.active" @click="active">
         </p>
         <button class="button" @click="closeModal">Отмена</button>
         <button class="button" @click="save">Сохранить</button>
@@ -63,10 +63,10 @@ export default {
       })
     },
     active(){
-      if (this.catalog.active === 1) {
-        this.catalog.active = 0
-      } else if (this.catalog.active === 0) {
-        this.catalog.active = 1
+      if (this.group.active === 1) {
+        this.group.active = 0
+      } else if (this.group.active === 0) {
+        this.group.active = 1
       }
     },
     async getCatalogs() {
@@ -84,8 +84,6 @@ export default {
       }
     },
     async save() {
-      console.log(this.type)
-
       if (this.group.catalog_id === null) {
         document.getElementById('modal-message').innerHTML  = 'Необходимо выбрать категорию'
         setTimeout(() => {
