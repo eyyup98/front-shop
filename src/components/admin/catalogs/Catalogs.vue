@@ -1,4 +1,4 @@
-<template class="template">
+<template>
   <NavBar></NavBar>
 
   <CatModal v-if="modal === true" :index="index" :catalog="modalCat" @updateParent="updateParentMethod"></CatModal>
@@ -56,6 +56,7 @@ export default {
   },
   methods: {
     async getData() {
+      this.loading = true
       try {
         await axios.get('http://back.ey/api/v1/catalogs', {
           params: {
@@ -69,8 +70,11 @@ export default {
       }
     },
     async updateParentMethod(data) {
-      this.modal = data.close
-      await this.getData()
+      this.modal = false
+      if (data.changed === true) {
+        this.loading = true
+        await this.getData()
+      }
     },
     addCat() {
       this.modal = true
@@ -107,7 +111,4 @@ export default {
 </script>
 
 <style scoped>
-.template {
-  /*border: 10px solid red;*/
-}
 </style>

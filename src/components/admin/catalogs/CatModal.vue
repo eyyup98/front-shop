@@ -46,7 +46,7 @@ export default {
   methods: {
     closeModal() {
       this.$emit('updateParent', {
-        close: false,
+        changed: false,
       })
     },
     active(){
@@ -83,7 +83,7 @@ export default {
       }
 
       this.$emit('updateParent', {
-        close: false
+        changed: true
       })
     }
   },

@@ -43,6 +43,8 @@ tbody:nth-child(odd){
 .modal {
     font-size: 24px;
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100vh;
     z-index: 100;
@@ -55,7 +57,7 @@ tbody:nth-child(odd){
     background-color: white;
     width: 50%;
     min-height: 50%;
-    max-height: 70%;
+    max-height: 80%;
     align-self:center;
     display: flex;
     flex-direction:column;

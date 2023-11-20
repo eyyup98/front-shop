@@ -51,10 +51,24 @@ import { RouterLink, RouterView } from 'vue-router'
 <!--      </nav>-->
 <!--    </div>-->
 <!--  </header>-->
-  <RouterView />
+  <div class="template">
+    <div class="all-content">
+      <RouterView />
+    </div>
+  </div>
 </template>
 
 <style scoped>
+.template{
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.all-content{
+  background-color: rgb(255, 255, 255);
+  margin: 0 auto;
+  max-width: 1200px;
+  height: 100vh;
+  padding: 20px;
+}
 header {
   line-height: 1.5;
   max-height: 100vh;
