@@ -41,7 +41,7 @@ export default {
         return;
       }
 
-      await router.push({path: '/admin/panel/catalogs'})
+      // await router.push({path: '/admin/panel/catalogs'})
     }
   },
   mounted() {
