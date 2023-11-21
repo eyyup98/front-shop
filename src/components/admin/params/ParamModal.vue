@@ -67,13 +67,9 @@ export default {
     },
     addParam() {
       this.object.params[this.object.params.length] = {id: null, name: '', title_id: this.object.id}
-      console.log(this.object.params)
     },
     deleteParam(index) {
-      // console.log(this.object.params)
-      // alert(this.object.params[index].name)
       if (confirm(`Вы действителдьно хотите удалить параметр "` + this.object.params[index].name ?? '' + '"')) {
-        // console.log(index)
         if (this.object.params[index].id !== null) {
           this.deleteParamsArray[this.deleteParamsArray.length] = this.object.params[index].id;
         }
@@ -105,6 +101,7 @@ export default {
         return
 
       try {
+        let title_id = null
         await axios.post(`http://back.ey/api/v1/params-title/${this.object.id}`, {
           token: localStorage.access_token,
           params: {
@@ -113,7 +110,16 @@ export default {
             group_parent_id: this.object.group_parent_id,
             group_child_id: this.object.group_child_id,
           }
-        })
+        }).then(response => (
+            title_id = response.data.title_id
+        ))
+
+        this.object.params.forEach(function(param) {
+          if (param.title_id === '') {
+            param.title_id = title_id
+          }
+        });
+
         await axios.post(`http://back.ey/api/v1/params`, {
           token: localStorage.access_token,
           params: this.object.params,
@@ -163,7 +169,6 @@ export default {
     await this.getGroupsParent();
     await this.getGroupsChild();
     this.loading = false
-    console.log(this.object)
   }
 }
 </script>

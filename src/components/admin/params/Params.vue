@@ -18,7 +18,6 @@
       <th>Группа</th>
       <th>Подгруппа</th>
       <th>Заголовок параметров</th>
-      <th>Параметр</th>
       <th>Активный</th>
       <th class="th-events">Действия</th>
     </tr>
@@ -33,7 +32,6 @@
       <th>{{ row.group_parent_name }}</th>
       <th>{{ row.group_child_name }}</th>
       <th>{{ row.name }}</th>
-      <th></th>
       <th>{{ row.group_active }}</th>
       <th>
         <i class="delete" @click="deleteParam(row)">d</i>
@@ -41,8 +39,11 @@
       </th>
     </tr>
 
+    <tr v-if="row.view_params === true && row.params.length !== 0">
+      <th colspan="7">Параметры</th>
+    </tr>
     <tr class="child-list" v-if="row.view_params === true" v-for="(row2) in row.params">
-      <th></th><th></th><th></th><th></th><th></th><th>{{ row2.name }}</th><th></th><th></th>
+      <th colspan="7">{{ row2.name }}</th>
     </tr>
     </tbody>
   </table>
@@ -81,8 +82,6 @@ export default {
       }).then(response => (
           this.paramsTitle = response.data
       ))
-
-      console.log(this.paramsTitle)
 
       this.loading = false
     },
