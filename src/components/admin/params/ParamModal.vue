@@ -28,7 +28,7 @@
         <button @click="deleteParam(index)" style="flex: 0 1 20%;">d</button>
       </div>
 
-<!--      </div>-->
+      <button @click="addParam">+</button>
 
         <button class="button" @click="closeModal">Отмена</button>
         <button class="button" @click="save">Сохранить</button>
@@ -54,7 +54,8 @@ export default {
       groupsChild: null,
       catalogs: null,
       loading: true,
-      object: null
+      object: null,
+      readySave: true
     }
   },
   methods: {
@@ -63,48 +64,35 @@ export default {
         changed: false,
       })
     },
+    addParam() {
+      this.object.params.push({id: null, name: '', title_id: this.object.id})
+    },
     deleteParam(index) {
       if (confirm(`Вы действителдьно хотите удалить параметр "` + this.object.params[index].name + '"')) {
 
       }
     },
+    errorMessage(msg = 'Необходимо все поля'){
+      document.getElementById('modal-message').innerHTML  = msg
+      setTimeout(() => {
+        document.getElementById('modal-message').innerHTML  = ''
+      }, 2000);
+    },
     async save() {
-      // console.log(this.object)
-      // return
-      this.object.params.forEach(function(eachEle, index, array) {
+      if (this.object.name.replace(/\s/g, "") === '') {
+        this.errorMessage()
+        this.readySave = false
+      }
+
+      this.object.params.forEach((function(eachEle) {
         if (eachEle.name.replace(/\s/g, "") === '') {
-          document.getElementById('modal-message').innerHTML  = 'Необходимо все поля'
-          setTimeout(() => {
-            document.getElementById('modal-message').innerHTML  = ''
-          }, 2000);
-          return;
+          this.errorMessage()
+          this.readySave = false
         }
-      })
-      // console.log(this.object.params)
-      // return
-      // if (this.group.catalog_id === null) {
-      //   document.getElementById('modal-message').innerHTML  = 'Необходимо выбрать категорию'
-      //   setTimeout(() => {
-      //     document.getElementById('modal-message').innerHTML  = ''
-      //   }, 2000);
-      //   return;
-      // }
-      //
-      // if (this.groupType === 'child' && this.group.parent_id === null) {
-      //   document.getElementById('modal-message').innerHTML  = 'Необходимо выбрать группу'
-      //   setTimeout(() => {
-      //     document.getElementById('modal-message').innerHTML  = ''
-      //   }, 2000);
-      //   return;
-      // }
-      //
-      // if (this.group.name.replace(/\s/g, "") === '') {
-      //   document.getElementById('modal-message').innerHTML  = 'Необходимо заполнить название'
-      //   setTimeout(() => {
-      //     document.getElementById('modal-message').innerHTML  = ''
-      //   }, 2000);
-      //   return;
-      // }
+      }).bind(this))
+
+      if (!this.readySave)
+        return
 
       try {
         await axios.post(`http://back.ey/api/v1/params-title/${this.object.id}`, {
@@ -116,11 +104,12 @@ export default {
             group_child_id: this.object.group_child_id,
           }
         })
+        await axios.post(`http://back.ey/api/v1/params`, {
+          token: localStorage.access_token,
+          params: this.object.params
+        })
       } catch (exception) {
-        document.getElementById('modal-message').innerHTML  = exception.response.data.msg
-        setTimeout(() => {
-          document.getElementById('modal-message').innerHTML  = ''
-        }, 2000);
+        this.errorMessage(exception.response.data.msg ?? 'Ошибка при сохранении')
         return;
       }
 
