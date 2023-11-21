@@ -10,7 +10,7 @@
                 <router-link class="nav-link" to="/admin/panel/groups">Группы</router-link>
             </li>
             <li class="nav-item">
-                <router-link class="nav-link" to="/admin/panel/params">Параметры товваров</router-link>
+                <router-link class="nav-link" to="/admin/panel/params">Параметры товаров</router-link>
             </li>
             <li class="nav-item">
                 <button class="nav-link" @click="logout">Выход</button>
