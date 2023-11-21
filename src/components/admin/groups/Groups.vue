@@ -26,6 +26,7 @@
 
       <tbody class="" v-for="(row, index) in groupsParent">
       <tr>
+<!--        <th>{{ groupsChild[row.id] }}</th>-->
         <th style="font-size: 20px; width: 50px" v-if="row.view_child === false && typeof groupsChild[row.id] !== 'undefined'" @click="changeViewChild(index)">V</th>
         <th style="font-size: 20px; width: 50px"  v-else-if="row.view_child === true && typeof groupsChild[row.id] !== 'undefined'" @click="changeViewChild(index)">X</th>
         <th v-else></th>
@@ -88,7 +89,7 @@ export default {
   methods: {
     async getData() {
       this.loading = true
-      try {
+      // try {
         await axios.get('http://back.ey/api/v1/groups/parents', {
           params: {
             token: localStorage.access_token
@@ -97,9 +98,9 @@ export default {
             this.groupsParent = response.data
         ))
         this.loading = false
-      } catch (exception) {
-      }
-      try {
+      // } catch (exception) {}
+
+      // try {
         await axios.get('http://back.ey/api/v1/groups/childs', {
           params: {
             token: localStorage.access_token
@@ -108,8 +109,7 @@ export default {
             this.groupsChild = response.data
         ))
         this.loading = false
-      } catch (exception) {
-      }
+      // } catch (exception) {}
     },
     async updateParentMethod(data) {
       this.modal = false

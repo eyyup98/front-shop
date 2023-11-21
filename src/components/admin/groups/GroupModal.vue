@@ -1,7 +1,7 @@
 <template>
 
   <div class="modal">
-      <div class="window">
+      <div class="window" v-on:keyup.enter="save" v-on:keyup.esc="closeModal">
         <label>Каталог</label>
 <!--        <div class="loading" v-if="loading === true">Загрузка данных...</div>-->
         <select v-model="group.catalog_id">
@@ -14,7 +14,10 @@
         <div v-else class="flex-list">
           <label>Группа</label>
           <select v-model="group.parent_id">
-            <option v-for="item in groupsParent" :value="item.id">{{item.name}}</option>
+            <option v-if="group.catalog_id === null" :value="null">Сперва выберите каталог</option>
+            <template v-for="item in groupsParent">
+              <option v-if="item.catalog_id === group.catalog_id" :value="item.id">{{ item.name}}</option>
+            </template>
           </select>
           <label>Название подгруппы</label>
           <input v-model="group.name">
@@ -37,7 +40,7 @@ import axios from "axios";
 export default {
   name: "GroupModal",
   components: {
-    group: null
+    // group: null
   },
   props: {
     group: {

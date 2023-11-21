@@ -7,7 +7,7 @@
       <div class="window">
 <!--        <div class="">{{catalog}}</div>-->
         <label>Название каталога</label>
-        <input class="input" type="text" v-model="catalog.name">
+        <input class="input" type="text" v-model="catalog.name" v-on:keyup.enter="save" v-on:keyup.esc="closeModal">
         <label>Активный</label>
         <p>
         <input type="checkbox" name="catalog-active" :checked="catalog.active" @click="active">
@@ -85,6 +85,7 @@ export default {
     }
   },
   async mounted() {
+    console.log('load')
   }
 }
 </script>
