@@ -55,7 +55,8 @@ export default {
       catalogs: null,
       loading: true,
       object: null,
-      readySave: true
+      readySave: true,
+      deleteParamsArray: []
     }
   },
   methods: {
@@ -65,11 +66,18 @@ export default {
       })
     },
     addParam() {
-      this.object.params.push({id: null, name: '', title_id: this.object.id})
+      this.object.params[this.object.params.length] = {id: null, name: '', title_id: this.object.id}
+      console.log(this.object.params)
     },
     deleteParam(index) {
-      if (confirm(`Вы действителдьно хотите удалить параметр "` + this.object.params[index].name + '"')) {
-
+      // console.log(this.object.params)
+      // alert(this.object.params[index].name)
+      if (confirm(`Вы действителдьно хотите удалить параметр "` + this.object.params[index].name ?? '' + '"')) {
+        // console.log(index)
+        if (this.object.params[index].id !== null) {
+          this.deleteParamsArray[this.deleteParamsArray.length] = this.object.params[index].id;
+        }
+        this.object.params.splice(index);
       }
     },
     errorMessage(msg = 'Необходимо все поля'){
@@ -79,6 +87,8 @@ export default {
       }, 2000);
     },
     async save() {
+      this.readySave = true
+
       if (this.object.name.replace(/\s/g, "") === '') {
         this.errorMessage()
         this.readySave = false
@@ -106,7 +116,8 @@ export default {
         })
         await axios.post(`http://back.ey/api/v1/params`, {
           token: localStorage.access_token,
-          params: this.object.params
+          params: this.object.params,
+          delete: this.deleteParamsArray
         })
       } catch (exception) {
         this.errorMessage(exception.response.data.msg ?? 'Ошибка при сохранении')
@@ -152,7 +163,7 @@ export default {
     await this.getGroupsParent();
     await this.getGroupsChild();
     this.loading = false
-    // console.log(this.object)
+    console.log(this.object)
   }
 }
 </script>

@@ -86,6 +86,20 @@ export default {
 
       this.loading = false
     },
+    newParam() {
+      return {
+        id: '',
+        catalog_id: null,
+        group_parent_id: null,
+        group_child_id: null,
+        name: '',
+        params: [],
+      }
+    },
+    addParam(){
+      this.modalParam = this.newParam()
+      this.modal = true
+    },
     async updateParentMethod(data) {
       this.modal = false
 
