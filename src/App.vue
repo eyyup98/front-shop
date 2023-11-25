@@ -1,30 +1,51 @@
-<script setup>
+<script>
 import { RouterLink, RouterView } from 'vue-router'
-// import axios from "axios";
-// import router from "./router";
-// console.log('localStorage.access_token');
-// console.log(localStorage.access_token);
-// if (localStorage.access_token !== null) {
-//   document.getElementsByClassName('wrapper').visibility = 'hidden';
-// } /*else {
-//   document.getElementById('wrapper').style.display = 'none';
-// }*/
-// export default {
-//   name: "App",
-//   data(){
-//     return {
-//       access_token: null
-//     }
-//   },
-//   mounted() {
-//     this.access_token = localStorage.access_token;
-//     console.log('this.access_token')
-//     console.log(this.access_token)
-//   }
-// }
+import NavBar from "./components/admin/NavBar.vue";
+export default {
+  name: "App",
+  components: {
+    NavBar
+  },
+  data() {
+    return {
+      now_route: null
+    }
+  },
+  computed: {
+    now_route() {
+      return this.$route.fullPath.split('/')[1];
+    }
+  },
+}
+
+
+/*import axios from "axios";
+import router from "./router";
+console.log('localStorage.access_token');
+console.log(localStorage.access_token);
+if (localStorage.access_token !== null) {
+  document.getElementsByClassName('wrapper').visibility = 'hidden';
+} /!*else {
+  document.getElementById('wrapper').style.display = 'none';
+}*!/
+export default {
+  name: "App",
+  data(){
+    return {
+      access_token: null
+    }
+  },
+  mounted() {
+    this.access_token = localStorage.access_token;
+    console.log('this.access_token')
+    console.log(this.access_token)
+  }
+}*/
 </script>
 
 <template>
+<!--  <h1>{{now_route}}</h1>-->
+  <NavBar v-if="now_route === 'admin'"></NavBar>
 <!--  <header id="header-access_token">-->
 <!--  <header>-->
 <!--    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />-->

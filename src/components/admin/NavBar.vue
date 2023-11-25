@@ -61,14 +61,13 @@ export default {
 .nav {
   display: flex;
   justify-content:space-evenly;
+  font-size: 18px;
 }
 .nav-list{
   display: flex;
   list-style-type: none;
-  /*border: 2px solid red;*/
 }
 .nav-item {
-  /*border: 2px solid blue;*/
   padding: 0 10px 0;
 }
 </style>

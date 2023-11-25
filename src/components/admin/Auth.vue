@@ -69,15 +69,6 @@ export default {
 .h1 {
   text-align: center;
 }
-.container {
-  padding: 10px;
-  background-color: rgba(119, 255, 133, 0.3);
-  width: 500px;
-  height: 500px;
-  display: flex;
-  flex-direction:column;
-  margin: 5% auto 0;
-}
 .label {
   font-size: 24px;
 }

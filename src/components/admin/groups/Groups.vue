@@ -1,5 +1,5 @@
 <template class="template">
-  <NavBar></NavBar>
+<!--  <NavBar></NavBar>-->
 
   <GroupModal v-if="modal === true" @updateParent="updateParentMethod" :object="modalGroup">
   </GroupModal>
@@ -48,14 +48,14 @@
 </template>
 
 <script>
-import NavBar from "../NavBar.vue";
+// import NavBar from "../NavBar.vue";
 import axios from "axios";
 import GroupModal from "./GroupModal.vue";
 
 export default {
   name: "Groups",
   components: {
-    NavBar,
+    // NavBar,
     GroupModal
   },
   data() {
@@ -143,14 +143,4 @@ export default {
 </script>
 
 <style scoped>
-.h1 {
-  text-align: center;
-}
-.container {
-  padding: 10px;
-  background-color: rgba(119, 255, 133, 0.3);
-  display: flex;
-  flex-direction:column;
-  margin: 5% auto 0;
-}
 </style>

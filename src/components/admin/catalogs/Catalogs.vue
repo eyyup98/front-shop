@@ -1,5 +1,5 @@
 <template>
-  <NavBar></NavBar>
+<!--  <NavBar></NavBar>-->
 
   <CatModal v-if="modal === true" :catalog="modalCat" @updateParent="updateParentMethod"></CatModal>
 
@@ -34,14 +34,14 @@
 </template>
 
 <script>
-import NavBar from "../NavBar.vue";
+// import NavBar from "../NavBar.vue";
 import CatModal from "./CatModal.vue";
 import axios from "axios";
 
 export default {
   name: "Catalogs",
   components: {
-    NavBar,
+    // NavBar,
     CatModal
   },
   data(){

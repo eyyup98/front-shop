@@ -73,7 +73,7 @@ export default {
         if (this.object.params[index].id !== null) {
           this.deleteParamsArray[this.deleteParamsArray.length] = this.object.params[index].id;
         }
-        this.object.params.splice(index);
+        this.object.params.splice(index, 1);
       }
     },
     errorMessage(msg = 'Необходимо все поля'){

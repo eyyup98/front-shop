@@ -1,6 +1,4 @@
 <template class="template">
-  <NavBar></NavBar>
-
   <ParamModal v-if="modal === true" @updateParent="updateParentMethod" :objectParent="modalParam"></ParamModal>
 
   <div class="container">
@@ -53,14 +51,12 @@
 </template>
 
 <script>
-import NavBar from "../NavBar.vue";
 import axios from "axios";
 import ParamModal from "./ParamModal.vue";
 
 export default {
   name: "Params",
   components: {
-    NavBar,
     ParamModal
   },
   data() {
@@ -131,6 +127,7 @@ export default {
     }
   },
   async mounted() {
+    console.log(this.$route.view_panel)
     await this.getData()
   }
 }
