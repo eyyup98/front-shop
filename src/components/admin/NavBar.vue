@@ -13,7 +13,10 @@
                 <router-link class="nav-link" to="/admin/panel/params">Параметры товаров</router-link>
             </li>
             <li class="nav-item">
-                <button class="nav-link" @click="logout">Выход</button>
+                <router-link class="nav-link" to="/admin/panel/products">Товары</router-link>
+            </li>
+            <li class="nav-item">
+                <button @click="logout">Выход</button>
             </li>
         </ul>
     </nav>

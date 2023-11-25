@@ -51,12 +51,11 @@ h1 {
 
 }
 button{
-	border-radius: 5px;
-	box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+	min-width: 50px;
+	/*border-radius: 5px;*/
+	/*box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);*/
 }
-button:hover {
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-}
-button:active{
-	opacity: 0.8;
-}
+
+/*button:active{*/
+/*	opacity: 0.8;*/
+/*}*/

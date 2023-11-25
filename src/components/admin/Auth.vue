@@ -53,7 +53,8 @@ export default {
           }
         })
       } catch (exception) {
-        await router.push({path: '/'})
+        delete localStorage.access_token
+        // await router.push({path: '/'})
         return;
       }
       await router.push({path: '/admin/panel/catalogs'})

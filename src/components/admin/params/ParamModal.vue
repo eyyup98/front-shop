@@ -4,11 +4,11 @@
     <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
     <div class="window" v-on:keyup.enter="save" v-on:keyup.esc="closeModal" v-else>
       <label>Каталог</label>
-        <select v-model="object.catalog_id">
+        <select v-model="object.catalog_id" @change="object.group_parent_id = null; object.group_child_id = null">
           <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
         </select>
           <label>Группа</label>
-          <select v-model="object.group_parent_id">
+          <select v-model="object.group_parent_id" @change="object.group_child_id = null">
             <option v-if="object.catalog_id === null" :value="null">Сперва выберите каталог</option>
             <template v-for="item in groupsParent">
               <option v-if="item.catalog_id === object.catalog_id" :value="item.id">{{ item.name}}</option>
