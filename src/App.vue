@@ -8,7 +8,6 @@ export default {
   },
   data() {
     return {
-      now_route: null
     }
   },
   computed: {

@@ -127,7 +127,6 @@ export default {
     }
   },
   async mounted() {
-    console.log(this.$route.view_panel)
     await this.getData()
   }
 }

@@ -85,7 +85,6 @@ export default {
     }
   },
   async mounted() {
-    console.log('load')
   }
 }
 </script>

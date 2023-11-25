@@ -1,8 +1,10 @@
 @import './base.css';
 
 .button{
-    margin: 0 auto;
+    margin: 5px auto;
     width: 200px;
+    height: 30px;
+    background: rgba(52, 113, 33, 0.45);
 }
 .loading {
     margin: 30px 0 0 0;
@@ -81,6 +83,7 @@ th {
     align-self:center;
     display: flex;
     flex-direction:column;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
 /*____________________________________________*/
 
