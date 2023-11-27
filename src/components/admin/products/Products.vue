@@ -1,24 +1,20 @@
 <template>
   <ProductModal v-if="modal === true" @updateParent="updateParentMethod" :objectParent="modalProduct"></ProductModal>
 <!--  <img v-bind:src="url" alt="" :height="100" />-->
-  <div class="container">
+  <div class="container-list">
     <h1 class="h1 m">Товары</h1>
     <button class="button" @click="addProduct">Добавить</button>
     <div class="loading" v-if="loading === true">Загрузка данных...</div>
     <div class="products-container">
-      <div class="product-block" v-for="row in products">
-        <div v-if="row.img" class="div-img" style="background-color: #f8f8f8">
-          <img :src="baseUrl+row.img" class="img" alt=""/>
+      <div class="product-block" v-for="row in products" @click="editProduct(row)">
+        <div class="div-img" style="background-color: #f8f8f8">
+          <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
+          <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
         </div>
-        <div v-else class="div-img"> </div>
         <div class="product-block-text">
           <label>{{row.name}}</label>
           <label>{{row.price}}</label>
           <label>{{row.discount}}</label>
-          <div class="product-buttons">
-            <i class="delete" @click="deleteParam(row)">d</i>
-            <i class="edit" @click="editParam(row)">e</i>
-          </div>
         </div>
       </div>
     </div>
@@ -46,6 +42,11 @@ export default {
   methods: {
     addProduct(){
       this.modalProduct = this.newProduct()
+      this.modal = true
+    },
+    editProduct(object){
+      this.modalProduct = {id: object.id}
+      console.log(this.modalProduct.id)
       this.modal = true
     },
     async getData() {
@@ -92,35 +93,38 @@ export default {
 
 <style scoped>
 .img{
-  width: 150px;
+  width: 100%;
+  height: 40vh;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: auto 100%;
+  border-radius: 3%;
 }
 .product-block {
-  border: solid 2px black;
-  margin: 5px;
-  background-color: #f8f8f8;
   display: flex;
   flex-direction:column;
+  flex: 0 1 25%;
+  padding: 10px;
+  border-radius: 3%;
+}
+.product-block:hover{
+  transform: scale(1.1, 1.1);
+  background-color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
 .products-container{
   display:flex;
   flex-wrap:wrap;
   position: relative;
 }
-.div-img{
-  height: 100px;
-  width: 150px;
-  background-color: #2c3e50;
-}
 .product-block-text{
-  /*position: absolute;*/
-  /*bottom: 5px;*/
   display: flex;
   flex-direction: column;
 }
-.product-buttons{
-  padding: 0 10px;
+.container-list{
+  padding: 10px;
   display: flex;
-  justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.25);
+  flex-direction:column;
+  background-color: rgba(0, 0, 0, 0.01);
 }
 </style>

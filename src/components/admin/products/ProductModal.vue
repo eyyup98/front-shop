@@ -25,9 +25,9 @@
       <label>Название товара</label>
       <input type="text" v-model="product.name">
 
-      <div style="display: flex; flex-direction:column; margin: 0 0 10px 0;" v-for="(row, index) in params">
+      <div style="display: flex; flex-direction:column; margin: 0 0 10px 0;" v-for="(row) in params">
         <label>{{ row.name }}</label>
-        <div style=" margin: 5px 0;font-size:18px; display: flex;justify-content:flex-end;" v-for="(row2, index2) in row.params">
+        <div style=" margin: 5px 0;font-size:18px; display: flex;justify-content:flex-end;" v-for="(row2) in row.params">
           <div style="width: 95%;display: flex; flex-wrap:wrap;">
             <label style=" flex: 0 1 50%;">{{ row2.name }}</label>
             <input style=" flex: 0 1 50%;" type="text" v-model="row2.value">
@@ -38,7 +38,7 @@
         <input type="file" ref="file" v-on:change="handleFileUpload($event)"/>
       </label>
 
-      <Carousel :wrap-around="false" :breakpoints="breakpoints" v-if="this.product.img.length > 0">
+      <Carousel :wrap-around="false" :breakpoints="breakpoints" v-if="preview_img.length > 0">
         <Slide v-for="(slide, index) in preview_img" :key="true">
           <div class="img-slide">
             <div class="img-title">
@@ -126,7 +126,7 @@ export default {
       this.product.params = []
       this.params.forEach((function(eachEle) {
         eachEle.params.forEach((function(eachEle2) {
-          if (typeof eachEle2.value !== "undefined") {
+          if (typeof eachEle2.value !== "undefined" || eachEle2.value.replace(/\s/g, "") !== '') {
             this.product.params[this.product.params.length] = {
               param_id: eachEle2.id,
               name: eachEle2.value
@@ -187,8 +187,9 @@ export default {
     handleFileUpload(e){
       let index = this.product.img.length
       this.product.img[index] = this.$refs.file.files[0];
-      const file = e.target.files[0];
-      this.preview_img[index] = URL.createObjectURL(file);
+      this.preview_img[index] = URL.createObjectURL(e.target.files[0]);
+      // console.log(this.product.img)
+      // console.log(this.preview_img[index])
     },
     deleteImg(index){
       this.product.img.splice(index, 1);
@@ -235,16 +236,44 @@ export default {
       }).then(response => (
           this.params = response.data
       ))
-    }
+    },
+    async getProduct(id) {
+      await axios.get(`http://back.ey/api/v1/products/${id}`, {
+        params: {
+          token: localStorage.access_token
+        }
+      }).then(response => (
+          this.product = response.data
+      ))
+    },
+    async getProductImg(id) {
+      await axios.get(`http://back.ey/api/v1/products-img`, {
+        params: {
+          token: localStorage.access_token,
+          product_id: id
+        }
+      }).then(response => (
+          this.product.img = response.data
+      ))
+      this.product.img.forEach((function(eachEle) {
+        this.preview_img[this.preview_img.length] = 'http://back-img.ey' + eachEle.src
+      }).bind(this))
+    },
   },
   async mounted() {
     this.loading = true
-    this.product = JSON.parse(JSON.stringify(this.objectParent));
+    if (this.objectParent.id === '') {
+      this.product = JSON.parse(JSON.stringify(this.objectParent));
+    } else {
+      await this.getProduct(this.objectParent.id);
+      await this.getProductImg(this.objectParent.id);
+    }
     await this.getCatalogs();
     await this.getGroups();
     await this.getSubgroups();
     await this.getParams();
     this.loading = false
+    console.log(this.product)
   }
 }
 </script>
