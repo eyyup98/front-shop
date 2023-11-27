@@ -5,32 +5,38 @@
     <div class="window" v-on:keyup.esc="closeModal" v-else>
 
       <label>Каталог</label>
-      <select v-model="product.catalog_id" @change="product.group_id = null; product.subgroup_id = null">
+      <select v-if="product.id === ''" v-model="product.catalog_id" @change="product.group_id = null; product.subgroup_id = null">
         <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
       </select>
+      <span v-else>{{product.catalog_name}}</span>
       <label>Группа</label>
-      <select v-model="product.group_id" @change="product.subgroup_id = null">
+      <select v-if="product.id === ''" v-model="product.group_id" @change="product.subgroup_id = null">
         <option v-if="product.catalog_id === null" :value="null">Сперва выберите каталог</option>
         <template v-for="item in groups">
           <option v-if="item.catalog_id === product.catalog_id" :value="item.id">{{ item.name}}</option>
         </template>
       </select>
-      <label>Подгруппа</label>
-      <select v-model="product.subgroup_id">
+      <span v-else>{{product.group_name}}</span>
+      <label v-if="product.subgroup_name || product.id === ''">Подгруппа</label>
+      <select v-if="product.id === ''" v-model="product.subgroup_id">
         <template v-for="item in subgroups">
           <option v-if="item.parent_id === product.group_id" :value="item.id">{{ item.name}}</option>
         </template>
       </select>
+      <span v-else>{{product.subgroup_name}}</span>
 
       <label>Название товара</label>
       <input type="text" v-model="product.name">
 
       <div style="display: flex; flex-direction:column; margin: 0 0 10px 0;" v-for="(row) in params">
-        <label>{{ row.name }}</label>
-        <div style=" margin: 5px 0;font-size:18px; display: flex;justify-content:flex-end;" v-for="(row2) in row.params">
-          <div style="width: 95%;display: flex; flex-wrap:wrap;">
-            <label style=" flex: 0 1 50%;">{{ row2.name }}</label>
-            <input style=" flex: 0 1 50%;" type="text" v-model="row2.value">
+        <div v-if="row.catalog_id === product.catalog_id && row.group_id === (product.subgroup_id ?? product.group_id)">
+          <label v-if="row.params.length > 0">{{ row.name }}</label>
+          <div style=" margin: 5px 0;font-size:18px; display: flex;justify-content:flex-end;" v-for="(row2) in row.params">
+  <!--          <div>{{row2}}</div>-->
+            <div style="width: 95%;display: flex; flex-wrap:wrap;">
+              <label style=" flex: 0 1 50%;">{{ row2.name }}</label>
+              <input style=" flex: 0 1 50%;" type="text" v-model="row2.value" @focusout="testtt(row)">
+            </div>
           </div>
         </div>
       </div>
@@ -117,6 +123,9 @@ export default {
     }
   },
   methods: {
+    testtt(tt){
+      console.log(tt)
+    },
     closeModal() {
       this.$emit('updateParent', {
         changed: false,
@@ -126,7 +135,7 @@ export default {
       this.product.params = []
       this.params.forEach((function(eachEle) {
         eachEle.params.forEach((function(eachEle2) {
-          if (typeof eachEle2.value !== "undefined" || eachEle2.value.replace(/\s/g, "") !== '') {
+          if (typeof eachEle2.value !== "undefined" && eachEle2.value.replace(/\s/g, "") !== '') {
             this.product.params[this.product.params.length] = {
               param_id: eachEle2.id,
               name: eachEle2.value
@@ -279,7 +288,9 @@ export default {
 </script>
 
 <style scoped>
-
+span{
+  font-size: 18px;
+}
 .carousel__item {
   max-height: 150px;
   margin: 5px 0 0 0;
