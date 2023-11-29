@@ -29,13 +29,13 @@
       <input type="text" v-model="product.name">
 
       <div style="display: flex; flex-direction:column; margin: 0 0 10px 0;" v-for="(row) in params">
-        <div v-if="row.catalog_id === product.catalog_id && row.group_id === (product.subgroup_id ?? product.group_id)">
+        <div v-if="row.catalog_id === product.catalog_id && (row.group_id === product.group_id || row.group_id === product.subgroup_id)">
           <label v-if="row.params.length > 0">{{ row.name }}</label>
           <div style=" margin: 5px 0;font-size:18px; display: flex;justify-content:flex-end;" v-for="(row2) in row.params">
   <!--          <div>{{row2}}</div>-->
             <div style="width: 95%;display: flex; flex-wrap:wrap;">
               <label style=" flex: 0 1 50%;">{{ row2.name }}</label>
-              <input style=" flex: 0 1 50%;" type="text" v-model="row2.value" @focusout="testtt(row)">
+              <input style=" flex: 0 1 50%;" type="text" v-model="row2.value">
             </div>
           </div>
         </div>
@@ -49,7 +49,7 @@
           <div class="img-slide">
             <div class="img-title">
               <label style="overflow: hidden; max-width: 100px">{{product.img[index].name}}</label>
-              <button @click="deleteImg(index)">d</button>
+              <button @click="deleteImg(index, product.img[index])">d</button>
             </div>
             <div class="carousel__item">
               <img v-if="slide" :src="slide" class="img" alt=""/>
@@ -98,13 +98,12 @@ export default {
     return {
       catalogs: null,
       groups: null,
-      test: [],
       subgroups: null,
       params: null,
       product: null,
       loading: true,
       input_text: null,
-      deleteArray: [],
+      deleteImgArr: [],
       preview_img: [],
       breakpoints: {
         670: {
@@ -123,9 +122,6 @@ export default {
     }
   },
   methods: {
-    testtt(tt){
-      console.log(tt)
-    },
     closeModal() {
       this.$emit('updateParent', {
         changed: false,
@@ -135,7 +131,7 @@ export default {
       this.product.params = []
       this.params.forEach((function(eachEle) {
         eachEle.params.forEach((function(eachEle2) {
-          if (typeof eachEle2.value !== "undefined" && eachEle2.value.replace(/\s/g, "") !== '') {
+          if (typeof eachEle2.value !== "undefined") {
             this.product.params[this.product.params.length] = {
               param_id: eachEle2.id,
               name: eachEle2.value
@@ -146,12 +142,15 @@ export default {
 
       if (this.product.catalog_id === null) {
         this.errorMessage('Необходимо выбрать каталог')
+        return
       }
       if (this.product.group_id === null) {
         this.errorMessage('Необходимо выбрать группу')
+        return
       }
       if (this.product.name.replace(/\s/g, "") === '') {
         this.errorMessage('Необходимо заполнить название')
+        return
       }
 
       try {
@@ -182,6 +181,7 @@ export default {
           },
           params: {
             token: localStorage.access_token,
+            delete: this.deleteImgArr
           },
         })
       } catch (exception) {
@@ -200,9 +200,13 @@ export default {
       // console.log(this.product.img)
       // console.log(this.preview_img[index])
     },
-    deleteImg(index){
-      this.product.img.splice(index, 1);
-      this.preview_img.splice(index, 1);
+    deleteImg(index, object){
+      if (confirm(`Вы действителдьно хотите удалить изображение "` + object.name + '"')) {
+        this.product.img.splice(index, 1);
+        this.preview_img.splice(index, 1);
+        this.deleteImgArr[this.deleteImgArr.length] = {id: object.id}
+        console.log(this.deleteImgArr)
+      }
     },
     errorMessage(msg = 'Необходимо все поля'){
       document.getElementById('modal-message').innerHTML  = msg
@@ -254,6 +258,9 @@ export default {
       }).then(response => (
           this.product = response.data
       ))
+      this.params = this.product.params
+      console.log('this.params')
+      console.log(this.params)
     },
     async getProductImg(id) {
       await axios.get(`http://back.ey/api/v1/products-img`, {
@@ -273,6 +280,7 @@ export default {
     this.loading = true
     if (this.objectParent.id === '') {
       this.product = JSON.parse(JSON.stringify(this.objectParent));
+      await this.getParams();
     } else {
       await this.getProduct(this.objectParent.id);
       await this.getProductImg(this.objectParent.id);
@@ -280,7 +288,6 @@ export default {
     await this.getCatalogs();
     await this.getGroups();
     await this.getSubgroups();
-    await this.getParams();
     this.loading = false
     console.log(this.product)
   }

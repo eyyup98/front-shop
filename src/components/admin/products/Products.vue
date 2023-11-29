@@ -5,7 +5,7 @@
     <h1 class="h1 m">Товары</h1>
     <button class="button" @click="addProduct">Добавить</button>
     <div class="loading" v-if="loading === true">Загрузка данных...</div>
-    <div class="products-container">
+    <div class="products-container" v-else>
       <div class="product-block" v-for="row in products" @click="editProduct(row)">
         <div class="div-img" style="background-color: #f8f8f8">
           <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>

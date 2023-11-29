@@ -1,6 +1,4 @@
 <template class="template">
-<!--  <NavBar></NavBar>-->
-
   <GroupModal v-if="modal === true" @updateParent="updateParentMethod" :object="modalGroup">
   </GroupModal>
 
@@ -13,34 +11,47 @@
     <table class="table" v-if="loading === false">
       <thead class="thead">
       <tr>
-        <th>#</th>
-        <th>Каталог</th>
-        <th>Группа</th>
-        <th>Активный</th>
+        <th width="10%">#</th>
+        <th width="25%">Каталог</th>
+        <th width="25%">Группа</th>
+        <th>Подгруппа</th>
+        <th width="10%">Активный</th>
         <th class="th-events">Действия</th>
       </tr>
       </thead>
 
-      <tbody class="" v-for="(row, index) in groups">
+      <tbody class="" v-for="(row, index) in catalogs">
       <tr>
-        <th style="font-size: 20px; width: 50px" v-if="row.subgroups.length !== 0 && row.view_child === false" @click="changeViewChild(index)">V</th>
-        <th style="font-size: 20px; width: 50px"  v-else-if="row.subgroups.length !== 0 && row.view_child === true" @click="changeViewChild(index)">X</th>
+        <th style="font-size: 20px; width: 50px" v-if="row.groups.length > 0 && row.view_groups === false"
+            @click="row.view_groups = row.view_groups === false">V</th>
+        <th style="font-size: 20px; width: 50px"  v-else-if="row.groups.length > 0 && row.view_groups === true"
+            @click="row.view_groups = row.view_groups === false">X</th>
         <th v-else></th>
-        <th>{{ row.catalog_name }}</th>
-        <th>{{ row.name }}</th>
-        <th>{{ row.active }}</th>
-        <th>
-          <i class="delete" @click="deleteGr(row)">d</i>
-          <i class="edit" @click="editGr(row)">e</i>
-        </th>
+        <th>{{row.name}}</th>
+        <th colspan="4"></th>
       </tr>
-
-      <tr v-if="row.view_child === true && row.subgroups.length !== 0">
-        <th colspan="5">Подгруппы</th>
-      </tr>
-      <tr class="child-list" v-if="row.view_child === true" v-for="(row2) in row.subgroups">
-        <th colspan="5">{{ row2.name }}</th>
-      </tr>
+      <template v-for="groups in row.groups" v-if="row.groups.length > 0 && row.view_groups === true">
+        <tr class="grey-tr">
+          <th></th>
+          <th style="font-size: 20px; width: 50px" v-if="groups.subgroups.length > 0 && groups.view_subgroups === false"
+              @click="groups.view_subgroups = groups.view_subgroups === false;">V</th>
+          <th style="font-size: 20px; width: 50px"  v-else-if="groups.subgroups.length > 0 && groups.view_subgroups === true"
+              @click="groups.view_subgroups = groups.view_subgroups === false">X</th>
+          <th v-else></th>
+          <th>{{groups.name}}</th>
+          <th></th>
+          <th>{{groups.active}}</th>
+          <th>
+            <i class="delete" @click="deleteGr(groups)">d</i>
+            <i class="edit" @click="editGr(groups)">e</i>
+          </th>
+        </tr>
+        <tr class="white-tr" v-for="subgroups in groups.subgroups" v-if="groups.subgroups.length > 0 && groups.view_subgroups === true">
+          <th colspan="3"></th>
+          <th>{{subgroups.name}}</th>
+          <th colspan="2"></th>
+        </tr>
+      </template>
       </tbody>
     </table>
     <span id="group-message"></span>
@@ -48,36 +59,32 @@
 </template>
 
 <script>
-// import NavBar from "../NavBar.vue";
 import axios from "axios";
 import GroupModal from "./GroupModal.vue";
 
 export default {
   name: "Groups",
   components: {
-    // NavBar,
     GroupModal
   },
   data() {
     return {
-      loading: false,
-      groups: null,
-      groupType: null,
+      loading: true,
+      catalogs: null,
       modal: false,
       modalGroup: null,
-      arrayChild: [],
     }
   },
   methods: {
     async getData() {
-      // this.loading = true
+      this.loading = true
 
-      await axios.get('http://back.ey/api/v1/groups/parents', {
+      await axios.get('http://back.ey/api/v1/catalogs', {
         params: {
           token: localStorage.access_token
         }
       }).then(response => (
-          this.groups = response.data
+          this.catalogs = response.data
       ))
 
       this.loading = false
@@ -99,9 +106,8 @@ export default {
         await this.getData()
       }
     },
-    async deleteGr(object, type) {
-      type = type === 'parent' ? 'группу' : 'подгруппу'
-      if (confirm(`Вы действителдьно хотите удалить ${type} "` + object.name + '"')) {
+    async deleteGr(object) {
+      if (confirm(`Вы действителдьно хотите удалить группу "` + object.name + '"')) {
         try {
           await axios.delete('http://back.ey/api/v1/groups/' + object.id, {
             params: {
@@ -126,15 +132,6 @@ export default {
       this.modal = true
       this.modalGroup = this.newGroup()
     },
-    changeViewChild(index){
-      if (this.groups[index].view_child === false) {
-        this.groups[index].view_child = true;
-        this.arrayChild[index] = this.groups[index]
-      }
-      else {
-        this.groups[index].view_child = false;
-      }
-    }
   },
   async mounted() {
     await this.getData()
@@ -143,4 +140,7 @@ export default {
 </script>
 
 <style scoped>
+tbody:nth-child(odd){
+  background-color:  rgba(0, 0, 0, 0);
+}
 </style>

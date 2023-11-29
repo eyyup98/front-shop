@@ -40,6 +40,7 @@ select{
 /*_____________TABLE______________*/
 .table{
     background-color: rgba(255, 255, 255, 0.34);
+    border-collapse: collapse;
 }
 tbody:nth-child(odd){
     background-color:  rgba(0, 0, 0, 0.1);;
@@ -50,14 +51,24 @@ tbody:nth-child(odd){
     line-height: 2;
 }
 th {
-    /*min-width: 50px;*/
-    /*max-width: 100px;*/
+    line-height:24px;
 }
 .child-list {
     background-color: white;
 }
 .th-events{
     width: 10%;
+}
+tbody:nth-child(odd){
+    background-color:  rgba(0, 0, 0, 0);
+}
+.grey-tr{
+    background-color: rgba(149, 149, 149, 0.22);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.white-tr{
+    background-color: rgba(255, 255, 255, 0.4);
 }
 /*_____________________________*/
 
