@@ -1,6 +1,4 @@
 <template>
-<!--  <NavBar></NavBar>-->
-
   <CatModal v-if="modal === true" :catalog="modalCat" @updateParent="updateParentMethod"></CatModal>
 
   <div class="container-block">
@@ -14,17 +12,24 @@
         <thead class="thead-dark">
         <tr>
           <th>Название</th>
-          <th>Активный</th>
-          <th class="th-events">Действия</th>
+          <th width="10%">Активный</th>
+          <th width="10%">Действия</th>
         </tr>
         </thead>
-        <tbody class="" v-for="(row, index) in catalogs">
-        <tr @dblclick="editCat(index)" class="my-click">
+        <tbody v-for="(row, index) in catalogs">
+        <tr class="select-none-click">
           <th>{{ row.name }}</th>
-          <th v-if="row.active === 1" class="active-icon">✔</th>
-          <th v-if="row.active === 0" class="none-active-icon">✘</th>
-          <th class="d-flex justify-content-center">
-            <img class="delete-icon" src="@/assets/icons/delete.png" width="25"  @click="deleteCat(index)"/>
+          <th v-if="row.active === 1">
+            <i class="d-flex justify-content-center active-icon">✔</i>
+          </th>
+          <th v-if="row.active === 0">
+            <i class="d-flex justify-content-center none-active-icon">✘</i>
+          </th>
+          <th>
+            <div class="d-flex justify-content-center">
+              <img src="@/assets/icons/edit.png" width="25"  @click="editCat(index)"/>
+              <img class="ml-2" src="@/assets/icons/delete.png" width="25"  @click="deleteCat(index)"/>
+            </div>
           </th>
         </tr>
         </tbody>
@@ -114,10 +119,4 @@ export default {
 </script>
 
 <style scoped>
-.my-click{
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
 </style>

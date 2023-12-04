@@ -3,59 +3,62 @@
   </GroupModal>
 
   <div class="container-block">
-    <h1 class="h1 m">Группы</h1>
+    <div class="d-flex flex-column">
+      <h1 class="h1 m">Группы</h1>
+      <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addGroup">Добавить</button>
 
-    <button class="button" @click="addGroup">Добавить</button>
+      <div class="form-control loading" v-if="loading === true">Загрузка данных...</div>
 
-    <div class="loading" v-if="loading === true">Загрузка данных...</div>
-    <table class="table" v-if="loading === false">
-      <thead class="thead">
-      <tr>
-        <th width="10%">#</th>
-        <th width="25%">Каталог</th>
-        <th width="25%">Группа</th>
-        <th>Подгруппа</th>
-        <th width="10%">Активный</th>
-        <th class="th-events">Действия</th>
-      </tr>
-      </thead>
+      <table class="table table-bordered table-hover" v-if="loading === false">
+        <thead class="thead-dark">
+        <tr>
+          <th width="10%">#</th>
+          <th width="25%">Каталог</th>
+          <th width="25%">Группа</th>
+          <th>Подгруппа</th>
+          <th width="10%">Активный</th>
+          <th class="th-events">Действия</th>
+        </tr>
+        </thead>
 
-      <tbody class="" v-for="(row, index) in catalogs">
-      <tr>
-        <th style="font-size: 20px; width: 50px" v-if="row.groups.length > 0 && row.view_groups === false"
-            @click="row.view_groups = row.view_groups === false">↓</th>
-        <th style="font-size: 20px; width: 50px"  v-else-if="row.groups.length > 0 && row.view_groups === true"
-            @click="row.view_groups = row.view_groups === false">✕</th>
-        <th v-else></th>
-        <th>{{row.name}}</th>
-        <th colspan="4"></th>
-      </tr>
-      <template v-for="groups in row.groups" v-if="row.groups.length > 0 && row.view_groups === true">
-        <tr class="grey-tr">
-          <th></th>
-          <th style="font-size: 18px; width: 50px; text-align: end" v-if="groups.subgroups.length > 0 && groups.view_subgroups === false"
-              @click="groups.view_subgroups = groups.view_subgroups === false;">↓</th>
-          <th style="font-size: 18px; width: 50px; text-align: end"  v-else-if="groups.subgroups.length > 0 && groups.view_subgroups === true"
-              @click="groups.view_subgroups = groups.view_subgroups === false">✕</th>
+        <tbody class="select-none-click" v-for="(row, index) in catalogs">
+        <tr class="table-light">
+          <th style="font-size: 20px; width: 50px" v-if="row.groups.length > 0 && row.view_groups === false"
+              @click="row.view_groups = row.view_groups === false">↓</th>
+          <th style="font-size: 20px; width: 50px"  v-else-if="row.groups.length > 0 && row.view_groups === true"
+              @click="row.view_groups = row.view_groups === false">✕</th>
           <th v-else></th>
-          <th>{{groups.name}}</th>
-          <th></th>
-          <th v-if="groups.active === 1" class="active-icon">✔</th>
-          <th v-if="groups.active === 0" class="none-active-icon">✘</th>
-          <th>
-            <i class="delete" @click="deleteGr(groups)">d</i>
-            <i class="edit" @click="editGr(groups)">e</i>
-          </th>
+          <th>{{row.name}}</th>
+          <th colspan="4"></th>
         </tr>
-        <tr class="white-tr" v-for="subgroups in groups.subgroups" v-if="groups.subgroups.length > 0 && groups.view_subgroups === true">
-          <th colspan="3"></th>
-          <th>{{subgroups.name}}</th>
-          <th colspan="2"></th>
-        </tr>
-      </template>
-      </tbody>
-    </table>
-    <span id="group-message"></span>
+        <template v-for="groups in row.groups" v-if="row.groups.length > 0 && row.view_groups === true">
+          <tr class="grey-tr">
+            <th></th>
+            <th style="font-size: 18px; width: 50px; text-align: end" v-if="groups.subgroups.length > 0 && groups.view_subgroups === false"
+                @click="groups.view_subgroups = groups.view_subgroups === false;">↓</th>
+            <th style="font-size: 18px; width: 50px; text-align: end"  v-else-if="groups.subgroups.length > 0 && groups.view_subgroups === true"
+                @click="groups.view_subgroups = groups.view_subgroups === false">✕</th>
+            <th v-else></th>
+            <th>{{groups.name}}</th>
+            <th></th>
+            <th v-if="groups.active === 1" class="active-icon">✔</th>
+            <th v-if="groups.active === 0" class="none-active-icon">✘</th>
+
+            <div class="d-flex justify-content-center align-items-center р-25" style="border: 2px solid red">
+              <img src="@/assets/icons/edit.png" width="25"  @click="editGr(index)"/>
+              <img class="ml-2" src="@/assets/icons/delete.png" width="25"  @click="deleteGr(index)"/>
+            </div>
+          </tr>
+          <tr class="white-tr" v-for="subgroups in groups.subgroups" v-if="groups.subgroups.length > 0 && groups.view_subgroups === true">
+            <th colspan="3"></th>
+            <th>{{subgroups.name}}</th>
+            <th colspan="2"></th>
+          </tr>
+        </template>
+        </tbody>
+      </table>
+      <span id="group-message"></span>
+    </div>
   </div>
 </template>
 

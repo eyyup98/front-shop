@@ -39,10 +39,10 @@ select{
 }
 
 /*_____________TABLE______________*/
-.table{
-    background-color: rgba(255, 255, 255, 0.34);
-    border-collapse: collapse;
-}
+/*.table{*/
+/*    background-color: rgba(255, 255, 255, 0.34);*/
+/*    border-collapse: collapse;*/
+/*}*/
 tbody:nth-child(odd){
     background-color:  rgba(0, 0, 0, 0.1);;
 }
@@ -57,9 +57,6 @@ th {
 .child-list {
     background-color: white;
 }
-.th-events{
-    width: 10%;
-}
 tbody:nth-child(odd){
     background-color:  rgba(0, 0, 0, 0);
 }
@@ -73,13 +70,19 @@ tbody:nth-child(odd){
 }
 .none-active-icon{
     color: #a80000;
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 600;
 }
 .active-icon{
     color: #008200;
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 600;
+}
+.select-none-click{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 /*.white-tr th:before{*/
 /*    content: "→";*/
