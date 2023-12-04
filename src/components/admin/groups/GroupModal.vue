@@ -2,25 +2,27 @@
 
   <div class="modal">
     <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
-      <div class="window" v-on:keyup.enter="save" v-on:keyup.esc="closeModal" v-else>
-        <label>Каталог</label>
-        <select v-model="group.catalog_id">
-            <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
-        </select>
-        <label>Название группы</label>
-        <input v-model="group.name">
-        <label>Активный</label>
-        <input type="checkbox" :checked="group.active" @click="active">
-        <label>Подгруппы</label>
-        <div v-for="(param, index) in group.subgroups" style="display: flex; flex-wrap:wrap; justify-content: space-between; margin: 5px 0">
-          <input v-model="param.name" style="flex: 0 1 70%;">
-          <button @click="deleteParam(index)" style="flex: 0 1 20%;">d</button>
-        </div>
+      <div class="card bg-light mb-3 window" v-on:keyup.enter="save" v-on:keyup.esc="closeModal" v-else>
+        <div class="form-group">
+          <label>Каталог</label>
+          <select class="form-control" v-model="group.catalog_id">
+              <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
+          </select>
+          <label>Название группы</label>
+          <input class="form-control" v-model="group.name">
+          <label>Активный</label>
+          <input class="form-control" type="checkbox" :checked="group.active" @click="active">
+          <label>Подгруппы</label>
+          <div v-for="(param, index) in group.subgroups" style="display: flex; flex-wrap:wrap; justify-content: space-between; margin: 5px 0">
+            <input class="form-control" v-model="param.name" style="flex: 0 1 70%;">
+            <button @click="deleteParam(index)" style="flex: 0 1 20%;">d</button>
+          </div>
 
-        <button @click="addParam">+</button>
-        <button class="button" @click="closeModal">Отмена</button>
-        <button class="button" @click="save">Сохранить</button>
-        <span id="modal-message"></span>
+          <button @click="addParam">+</button>
+          <button class="button" @click="closeModal">Отмена</button>
+          <button class="button" @click="save">Сохранить</button>
+          <span id="modal-message"></span>
+        </div>
       </div>
   </div>
 

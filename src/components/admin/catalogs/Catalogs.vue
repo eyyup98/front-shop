@@ -20,7 +20,8 @@
       <tbody class="" v-for="(row, index) in catalogs">
       <tr>
         <th>{{ row.name }}</th>
-        <th>{{ row.active }}</th>
+        <th v-if="row.active === 1" class="active-icon">✔</th>
+        <th v-if="row.active === 0" class="none-active-icon">✘</th>
         <th>
           <i class="delete" @click="deleteCat(index)">d</i>
           <i class="edit" @click="editCat(index)">e</i>

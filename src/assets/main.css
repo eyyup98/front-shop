@@ -13,14 +13,14 @@
 .h1 {
     text-align: center;
 }
-.container {
-    padding: 10px;
-    background-color: rgba(119, 255, 133, 0.3);
-    display: flex;
-    flex-direction:column;
-    height: 80vh;
+/*.container {*/
+    /*padding: 10px;*/
+    /*background-color: rgba(119, 255, 133, 0.3);*/
+    /*display: flex;*/
+    /*flex-direction:column;*/
+    /*height: 80vh;*/
     /*margin: 5% auto 0;*/
-}
+/*}*/
 input {
     height: 25px;
     font-size: 14px;
@@ -64,38 +64,34 @@ tbody:nth-child(odd){
 }
 .grey-tr{
     background-color: rgba(149, 149, 149, 0.22);
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    /*border-top: 1px solid rgba(0, 0, 0, 0.05);*/
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 .white-tr{
     background-color: rgba(255, 255, 255, 0.4);
 }
+.none-active-icon{
+    color: #a80000;
+    font-size: 20px;
+    font-weight: 600;
+}
+.active-icon{
+    color: #008200;
+    font-size: 20px;
+    font-weight: 600;
+}
+/*.white-tr th:before{*/
+/*    content: "→";*/
+/*    text-align: end;*/
+/*}*/
 /*_____________________________*/
 
 /*________________MODAL__________________*/
-.modal {
-    font-size: 24px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 100;
-    background-color: rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-}
-.window{
-    padding: 10px;
-    background-color: white;
-    width: 50%;
-    min-height: 50%;
-    max-height: 80%;
-    align-self:center;
-    display: flex;
-    flex-direction:column;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+.p-mod {
+    padding: 3%;
+    max-height: 90vh;
     overflow-x:scroll;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 /*____________________________________________*/
 

@@ -1,9 +1,10 @@
 <template>
-  <ProductModal v-if="modal === true" @updateParent="updateParentMethod" :objectParent="modalProduct"></ProductModal>
-<!--  <img v-bind:src="url" alt="" :height="100" />-->
+  <ProductModal v-if="this.modal === true" @updateParent="updateParentMethod" :objectParent="modalProduct">
+  </ProductModal>
   <div class="container-list">
     <h1 class="h1 m">Товары</h1>
-    <button class="button" @click="addProduct">Добавить</button>
+    <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addProduct">Добавить</button>
+
     <div class="loading" v-if="loading === true">Загрузка данных...</div>
     <div class="products-container" v-else>
       <div class="product-block" v-for="row in products" @click="editProduct(row)">
@@ -46,7 +47,6 @@ export default {
     },
     editProduct(object){
       this.modalProduct = {id: object.id}
-      console.log(this.modalProduct.id)
       this.modal = true
     },
     async getData() {
@@ -97,13 +97,14 @@ export default {
   height: 40vh;
   background-repeat: no-repeat;
   background-position: 50% 50%;
-  background-size: auto 100%;
+  background-size: cover;
   border-radius: 3%;
 }
 .product-block {
   display: flex;
   flex-direction:column;
-  flex: 0 1 25%;
+  /*flex: 0 1 25%;*/
+  width: 280px;
   padding: 10px;
   border-radius: 3%;
 }
@@ -125,6 +126,6 @@ export default {
   padding: 10px;
   display: flex;
   flex-direction:column;
-  background-color: rgba(0, 0, 0, 0.01);
+  /*background-color: rgba(0, 0, 0, 0.01);*/
 }
 </style>

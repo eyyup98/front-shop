@@ -1,29 +1,20 @@
 <template>
-    <nav class="nav">
-        <p class="navbar-p"><router-link class="nav-link" to="/">SHOP</router-link></p>
+    <nav class="navbar navbar-dark bg-dark  fixed-top bg-light py-1">
+      <div class="container">
+        <router-link to="/">SHOP</router-link>
 
-        <ul class="nav-list">
-            <li class="nav-item active">
-                <router-link class="nav-link" to="/admin/panel/catalogs">Кталог</router-link>
-            </li>
-            <li class="nav-item">
-                <router-link class="nav-link" to="/admin/panel/groups">Группы</router-link>
-            </li>
-            <li class="nav-item">
-                <router-link class="nav-link" to="/admin/panel/params">Параметры товаров</router-link>
-            </li>
-            <li class="nav-item">
-                <router-link class="nav-link" to="/admin/panel/products">Товары</router-link>
-            </li>
-            <li class="nav-item">
-                <button @click="logout">Выход</button>
-            </li>
-        </ul>
+        <div class="d-flex justify-content-between">
+          <router-link class="nav-link" to="/admin/panel/catalogs">Кталог</router-link>
+          <router-link class="nav-link" to="/admin/panel/groups">Группы</router-link>
+          <router-link class="nav-link" to="/admin/panel/params">Параметры товаров</router-link>
+          <router-link class="nav-link" to="/admin/panel/products">Товары</router-link>
+          <button @click="logout" class="btn btn-dark">Выход</button>
+        </div>
+      </div>
     </nav>
 </template>
 
 <script>
-
 import router from "../../router";
 import axios from "axios";
 
@@ -64,13 +55,18 @@ export default {
 .nav {
   display: flex;
   justify-content:space-evenly;
-  font-size: 18px;
+  background-color: white;
+  /*position: fixed;*/
+
+  /*top: 0;*/
+  /*left: 0;*/
+  /*font-size: 18px;*/
 }
 .nav-list{
   display: flex;
   list-style-type: none;
 }
 .nav-item {
-  padding: 0 10px 0;
+  /*padding: 0 10px 0;*/
 }
 </style>

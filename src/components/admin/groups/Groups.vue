@@ -23,9 +23,9 @@
       <tbody class="" v-for="(row, index) in catalogs">
       <tr>
         <th style="font-size: 20px; width: 50px" v-if="row.groups.length > 0 && row.view_groups === false"
-            @click="row.view_groups = row.view_groups === false">V</th>
+            @click="row.view_groups = row.view_groups === false">↓</th>
         <th style="font-size: 20px; width: 50px"  v-else-if="row.groups.length > 0 && row.view_groups === true"
-            @click="row.view_groups = row.view_groups === false">X</th>
+            @click="row.view_groups = row.view_groups === false">✕</th>
         <th v-else></th>
         <th>{{row.name}}</th>
         <th colspan="4"></th>
@@ -33,14 +33,15 @@
       <template v-for="groups in row.groups" v-if="row.groups.length > 0 && row.view_groups === true">
         <tr class="grey-tr">
           <th></th>
-          <th style="font-size: 20px; width: 50px" v-if="groups.subgroups.length > 0 && groups.view_subgroups === false"
-              @click="groups.view_subgroups = groups.view_subgroups === false;">V</th>
-          <th style="font-size: 20px; width: 50px"  v-else-if="groups.subgroups.length > 0 && groups.view_subgroups === true"
-              @click="groups.view_subgroups = groups.view_subgroups === false">X</th>
+          <th style="font-size: 18px; width: 50px; text-align: end" v-if="groups.subgroups.length > 0 && groups.view_subgroups === false"
+              @click="groups.view_subgroups = groups.view_subgroups === false;">↓</th>
+          <th style="font-size: 18px; width: 50px; text-align: end"  v-else-if="groups.subgroups.length > 0 && groups.view_subgroups === true"
+              @click="groups.view_subgroups = groups.view_subgroups === false">✕</th>
           <th v-else></th>
           <th>{{groups.name}}</th>
           <th></th>
-          <th>{{groups.active}}</th>
+          <th v-if="groups.active === 1" class="active-icon">✔</th>
+          <th v-if="groups.active === 0" class="none-active-icon">✘</th>
           <th>
             <i class="delete" @click="deleteGr(groups)">d</i>
             <i class="edit" @click="editGr(groups)">e</i>

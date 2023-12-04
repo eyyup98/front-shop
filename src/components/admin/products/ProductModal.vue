@@ -1,78 +1,90 @@
 <template>
 
-  <div class="modal">
-    <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
-    <div class="window" v-on:keyup.esc="closeModal" v-else>
+  <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" @click="eventHide">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content card bg-light mb-3">
+        <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
+        <div class="card bg-light p-mod" v-else>
+          <label>Каталог</label>
+          <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.catalog_id" @change="product.group_id = null; product.subgroup_id = null">
+            <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
+          </select>
+          <span class="ml-3" v-else>{{product.catalog_name}}</span>
+          <label class="mt-2">Группа</label>
+          <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.group_id" @change="product.subgroup_id = null">
+            <option v-if="product.catalog_id === null" :value="null">Сперва выберите каталог</option>
+            <template v-for="item in groups">
+              <option v-if="item.catalog_id === product.catalog_id" :value="item.id">{{ item.name}}</option>
+            </template>
+          </select>
+          <span class="ml-3" v-else>{{product.group_name}}</span>
+          <label class="mt-2" v-if="product.subgroup_name || product.id === ''">Подгруппа</label>
+          <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.subgroup_id">
+            <template v-for="item in subgroups">
+              <option v-if="item.parent_id === product.group_id" :value="item.id">{{ item.name}}</option>
+            </template>
+          </select>
+          <span class="ml-3" v-else>{{product.subgroup_name}}</span>
 
-      <label>Каталог</label>
-      <select v-if="product.id === ''" v-model="product.catalog_id" @change="product.group_id = null; product.subgroup_id = null">
-        <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
-      </select>
-      <span v-else>{{product.catalog_name}}</span>
-      <label>Группа</label>
-      <select v-if="product.id === ''" v-model="product.group_id" @change="product.subgroup_id = null">
-        <option v-if="product.catalog_id === null" :value="null">Сперва выберите каталог</option>
-        <template v-for="item in groups">
-          <option v-if="item.catalog_id === product.catalog_id" :value="item.id">{{ item.name}}</option>
-        </template>
-      </select>
-      <span v-else>{{product.group_name}}</span>
-      <label v-if="product.subgroup_name || product.id === ''">Подгруппа</label>
-      <select v-if="product.id === ''" v-model="product.subgroup_id">
-        <template v-for="item in subgroups">
-          <option v-if="item.parent_id === product.group_id" :value="item.id">{{ item.name}}</option>
-        </template>
-      </select>
-      <span v-else>{{product.subgroup_name}}</span>
+          <label class="mt-2">Название товара</label>
+          <input class="form-control form-control-sm px-3  p-2" type="text" v-model="product.name">
 
-      <label>Название товара</label>
-      <input type="text" v-model="product.name">
+          <div style="display: flex; flex-direction:column; margin: 0 0 10px 0;" v-for="(row) in params">
+            <div v-if="row.catalog_id === product.catalog_id && (row.group_id === product.group_id || row.group_id === product.subgroup_id)">
 
-      <div style="display: flex; flex-direction:column; margin: 0 0 10px 0;" v-for="(row) in params">
-        <div v-if="row.catalog_id === product.catalog_id && (row.group_id === product.group_id || row.group_id === product.subgroup_id)">
-          <label v-if="row.params.length > 0">{{ row.name }}</label>
-          <div style=" margin: 5px 0;font-size:18px; display: flex;justify-content:flex-end;" v-for="(row2) in row.params">
-  <!--          <div>{{row2}}</div>-->
-            <div style="width: 95%;display: flex; flex-wrap:wrap;">
-              <label style=" flex: 0 1 50%;">{{ row2.name }}</label>
-              <input style=" flex: 0 1 50%;" type="text" v-model="row2.value">
+              <label class="mt-2" v-if="row.params.length > 0">Параметры</label>
+              <br><label class="ml-5 my-0" v-if="row.params.length > 0">{{ row.name }}</label>
+              <div class="form-group row d-flex justify-content-center ml-5 pl-5 my-0" v-for="(row2) in row.params">
+                <label class="col-sm-6 col-form-label col-form-label-sm">{{ row2.name }}</label>
+                <div class="col-sm-6">
+                  <input class="form-control form-control-sm" type="text" v-model="row2.value">
+                </div>
+              </div>
+
             </div>
           </div>
+          <div class="form-group mt-0">
+            <label>Загрузить изображение</label>
+            <input type="file" class="form-control-file"  ref="file" v-on:change="handleFileUpload($event)">
+          </div>
+
+          <Carousel :wrap-around="false" :breakpoints="breakpoints" v-if="preview_img.length > 0">
+            <Slide v-for="(slide, index) in preview_img" :key="true">
+              <div class="d-flex flex-column align-content-between flex-wrap">
+                <div class="d-flex justify-content-center">
+<!--                    <label style="overflow: hidden; font-size: 10px">{{product.img[index].name}}</label>-->
+                  <button class="btn btn-dark" style="height: 30px" @click="deleteImg(index, product.img[index])">d</button>
+                </div>
+                <div class="carousel__item">
+                  <div class="img" v-bind:style="{ backgroundImage: 'url(' + slide + ')' }"></div>
+                </div>
+              </div>
+            </Slide>
+            <template #addons>
+              <Navigation />
+              <Pagination />
+            </template>
+          </Carousel>
+
+          <label class="">Цена</label>
+          <input class="form-control form-control-sm px-3  p-2" type="text" v-model="product.price">
+
+          <label class="mt-2">Скидка (указывается старая цена для разницы)</label>
+          <input class="form-control form-control-sm px-3  p-2" type="text" v-model="product.discount">
+
+
+          <div class="form-check form-check-inline mt-2">
+            <input class="form-check-input" type="checkbox" name="catalog-active" :checked="product.active" @click="active">
+            <label class="form-check-label">Активный</label>
+          </div>
+
+          <div class="d-flex justify-content-center mt-3">
+            <button class="btn btn-secondary btn-sm w-25 " @click="closeModal">Отмена</button>
+            <button class="btn btn-primary btn-sm w-25 ml-5" @click="save">Сохранить</button>
+          </div>
+          <span id="modal-message"></span>
         </div>
       </div>
-      <label>File
-        <input type="file" ref="file" v-on:change="handleFileUpload($event)"/>
-      </label>
-
-      <Carousel :wrap-around="false" :breakpoints="breakpoints" v-if="preview_img.length > 0">
-        <Slide v-for="(slide, index) in preview_img" :key="true">
-          <div class="img-slide">
-            <div class="img-title">
-              <label style="overflow: hidden; max-width: 100px">{{product.img[index].name}}</label>
-              <button @click="deleteImg(index, product.img[index])">d</button>
-            </div>
-            <div class="carousel__item">
-              <img v-if="slide" :src="slide" class="img" alt=""/>
-            </div>
-          </div>
-        </Slide>
-        <template #addons>
-          <Navigation />
-          <Pagination />
-        </template>
-      </Carousel>
-
-      <label>Цена</label>
-      <input type="text" v-model="product.price">
-      <label>Скидка (указывается старая цена для разницы)</label>
-      <input type="text" v-model="product.discount">
-
-      <label>Активный</label>
-      <input type="checkbox" name="catalog-active" :checked="product.active" @click="active">
-
-      <button class="button" @click="closeModal">Отмена</button>
-      <button class="button" @click="save">Сохранить</button>
-      <span id="modal-message"></span>
     </div>
   </div>
 </template>
@@ -102,29 +114,41 @@ export default {
       params: null,
       product: null,
       loading: true,
+      modal: true,
       input_text: null,
       deleteImgArr: [],
       preview_img: [],
       breakpoints: {
-        670: {
+        100: {
           itemsToShow: 1,
           snapAlign: 'start',
         },
-        980: {
-          itemsToShow: 2,
+        380: {
+          itemsToShow: 3,
           snapAlign: 'start',
         },
-        1024: {
-          itemsToShow: 3,
+        992: {
+          itemsToShow: 5,
           snapAlign: 'start',
         },
       }
     }
   },
+  watch: {
+    modal: function () {
+      this.closeModal()
+    }
+  },
   methods: {
-    closeModal() {
+    eventHide(){
+      $('#myModal').on('hide.bs.modal',( function (e) {
+        this.modal = false
+      }).bind(this))
+    },
+    closeModal(changed = false) {
+      $('#myModal').modal('hide')
       this.$emit('updateParent', {
-        changed: false,
+        changed: changed
       })
     },
     async save() {
@@ -189,16 +213,12 @@ export default {
         return;
       }
 
-      this.$emit('updateParent', {
-        changed: true
-      })
+      this.closeModal(true)
     },
     handleFileUpload(e){
       let index = this.product.img.length
       this.product.img[index] = this.$refs.file.files[0];
       this.preview_img[index] = URL.createObjectURL(e.target.files[0]);
-      // console.log(this.product.img)
-      // console.log(this.preview_img[index])
     },
     deleteImg(index, object){
       if (confirm(`Вы действителдьно хотите удалить изображение "` + object.name + '"')) {
@@ -277,6 +297,7 @@ export default {
     },
   },
   async mounted() {
+    $('#myModal').modal('show')
     this.loading = true
     if (this.objectParent.id === '') {
       this.product = JSON.parse(JSON.stringify(this.objectParent));
@@ -289,7 +310,8 @@ export default {
     await this.getGroups();
     await this.getSubgroups();
     this.loading = false
-    console.log(this.product)
+    // console.log('this.product')
+    // console.log(this.product)
   }
 }
 </script>
@@ -299,10 +321,9 @@ span{
   font-size: 18px;
 }
 .carousel__item {
-  max-height: 150px;
+  height: 120px;
   margin: 5px 0 0 0;
-  width: 100%;
-  border-radius: 8px;
+  width: 100px;
   justify-content: center;
   display: flex;
   flex-direction:column;
@@ -317,7 +338,13 @@ span{
 /*  box-sizing: content-box;*/
 /*}*/
 .img{
-  /*width: 150px;*/
+  /*width: 100%;*/
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  /*background-size: auto 100%;*/
+  background-size: cover;
+  border-radius: 8px;
 }
 .img-title{
   display: flex; justify-content: space-between;
@@ -328,6 +355,8 @@ span{
   font-size: 16px;
   margin: 0 auto;
   width: 100%;
+  min-width: 100px;
+  max-width: 150px;
   /*align-items:flex-start;*/
 }
 button{

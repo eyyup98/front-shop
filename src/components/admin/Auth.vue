@@ -64,9 +64,6 @@ export default {
 </script>
 
 <style scoped>
-.template {
-  /*border: 10px solid red;*/
-}
 .h1 {
   text-align: center;
 }
