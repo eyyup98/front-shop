@@ -2,7 +2,7 @@
   <GroupModal v-if="modal === true" @updateParent="updateParentMethod" :object="modalGroup">
   </GroupModal>
 
-  <div class="container">
+  <div class="container-block">
     <h1 class="h1 m">Группы</h1>
 
     <button class="button" @click="addGroup">Добавить</button>

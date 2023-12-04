@@ -51,9 +51,11 @@
           <Carousel :wrap-around="false" :breakpoints="breakpoints" v-if="preview_img.length > 0">
             <Slide v-for="(slide, index) in preview_img" :key="true">
               <div class="d-flex flex-column align-content-between flex-wrap">
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-end">
+
+                  <img class="delete-icon" src="@/assets/icons/delete.png" width="25"  @click="deleteImg(index, product.img[index])"/>
 <!--                    <label style="overflow: hidden; font-size: 10px">{{product.img[index].name}}</label>-->
-                  <button class="btn btn-dark" style="height: 30px" @click="deleteImg(index, product.img[index])">d</button>
+<!--                  <button class="btn btn-dark" style="height: 30px" @click="deleteImg(index, product.img[index])">d</button>-->
                 </div>
                 <div class="carousel__item">
                   <div class="img" v-bind:style="{ backgroundImage: 'url(' + slide + ')' }"></div>

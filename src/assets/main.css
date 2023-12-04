@@ -13,14 +13,15 @@
 .h1 {
     text-align: center;
 }
-/*.container {*/
+.container-block {
+    min-height: 100vh;
     /*padding: 10px;*/
     /*background-color: rgba(119, 255, 133, 0.3);*/
     /*display: flex;*/
     /*flex-direction:column;*/
     /*height: 80vh;*/
     /*margin: 5% auto 0;*/
-/*}*/
+}
 input {
     height: 25px;
     font-size: 14px;

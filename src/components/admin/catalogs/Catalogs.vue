@@ -3,34 +3,35 @@
 
   <CatModal v-if="modal === true" :catalog="modalCat" @updateParent="updateParentMethod"></CatModal>
 
-  <div class="container">
-    <h1 class="h1 m">Каталог</h1>
+  <div class="container-block">
+    <div class="d-flex flex-column">
+      <h1 class="h1 m">Каталог</h1>
 
-    <button class="button" @click="addCat">Добавить категорию</button>
+      <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addCat">Добавить категорию</button>
 
-    <div class="loading" v-if="loading === true">Загрузка данных...</div>
-    <table class="table" v-if="loading === false">
-      <thead class="thead">
-      <tr>
-        <th>Название</th>
-        <th>Активный</th>
-        <th class="th-events">Действия</th>
-      </tr>
-      </thead>
-      <tbody class="" v-for="(row, index) in catalogs">
-      <tr>
-        <th>{{ row.name }}</th>
-        <th v-if="row.active === 1" class="active-icon">✔</th>
-        <th v-if="row.active === 0" class="none-active-icon">✘</th>
-        <th>
-          <i class="delete" @click="deleteCat(index)">d</i>
-          <i class="edit" @click="editCat(index)">e</i>
-        </th>
-      </tr>
-      </tbody>
-    </table>
-    <span id="catalog-message"></span>
+      <div class="form-control loading" v-if="loading === true">Загрузка данных...</div>
+      <table class="table table-bordered table-hover" v-if="loading === false">
+        <thead class="thead-dark">
+        <tr>
+          <th>Название</th>
+          <th>Активный</th>
+          <th class="th-events">Действия</th>
+        </tr>
+        </thead>
+        <tbody class="" v-for="(row, index) in catalogs">
+        <tr @dblclick="editCat(index)" class="my-click">
+          <th>{{ row.name }}</th>
+          <th v-if="row.active === 1" class="active-icon">✔</th>
+          <th v-if="row.active === 0" class="none-active-icon">✘</th>
+          <th class="d-flex justify-content-center">
+            <img class="delete-icon" src="@/assets/icons/delete.png" width="25"  @click="deleteCat(index)"/>
+          </th>
+        </tr>
+        </tbody>
+      </table>
+      <span id="catalog-message"></span>
 
+    </div>
   </div>
 </template>
 
@@ -113,4 +114,10 @@ export default {
 </script>
 
 <style scoped>
+.my-click{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 </style>
