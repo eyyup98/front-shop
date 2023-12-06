@@ -10,7 +10,7 @@
               <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
           </select>
           <label class="mt-2">Название группы</label>
-          <input class="form-control" v-model="group.name">
+          <input class="form-control form-control-sm px-3  p-2 w-50" v-model="group.name">
           <div class="form-check form-check-inline mt-2">
             <input class="form-check-input" type="checkbox" name="catalog-active" :checked="group.active" @click="active">
             <label class="form-check-label">Активный</label>

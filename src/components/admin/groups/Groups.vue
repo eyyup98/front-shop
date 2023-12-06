@@ -4,7 +4,7 @@
 
   <div class="container-block">
     <div class="d-flex flex-column">
-      <h1 class="h1 m">Группы</h1>
+      <h1 class="h1">Группы</h1>
       <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addGroup">Добавить</button>
 
       <div class="form-control loading" v-if="loading === true">Загрузка данных...</div>
@@ -21,23 +21,20 @@
         </tr>
         </thead>
 
-        <tbody class="select-none-click" v-for="(row, index) in catalogs">
-        <tr class="table-light">
+        <tbody v-for="(row, index) in catalogs">
+        <tr class="table-light" @click="row.view_groups = row.view_groups === false">
           <th style="font-size: 20px; width: 50px" v-if="row.groups.length > 0 && row.view_groups === false"
-              @click="row.view_groups = row.view_groups === false">↓</th>
+              >↓</th>
           <th style="font-size: 20px; width: 50px"  v-else-if="row.groups.length > 0 && row.view_groups === true"
-              @click="row.view_groups = row.view_groups === false">✕</th>
+              >✕</th>
           <th v-else></th>
           <th>{{row.name}}</th>
           <th colspan="4"></th>
         </tr>
         <template v-for="groups in row.groups" v-if="row.groups.length > 0 && row.view_groups === true">
-          <tr>
-<!--            <th></th>-->
-            <th colspan="2" style="font-size: 18px; width: 50px; text-align: end" v-if="groups.subgroups.length > 0 && groups.view_subgroups === false"
-                @click="groups.view_subgroups = groups.view_subgroups === false;">↓</th>
-            <th colspan="2" style="font-size: 18px; width: 50px; text-align: end"  v-else-if="groups.subgroups.length > 0 && groups.view_subgroups === true"
-                @click="groups.view_subgroups = groups.view_subgroups === false">✕</th>
+          <tr @click="groups.view_subgroups = groups.view_subgroups === false;">
+            <th colspan="2" style="font-size: 18px; width: 50px; text-align: end" v-if="groups.subgroups.length > 0 && groups.view_subgroups === false">↓</th>
+            <th colspan="2" style="font-size: 18px; width: 50px; text-align: end"  v-else-if="groups.subgroups.length > 0 && groups.view_subgroups === true">✕</th>
             <th colspan="2" v-else></th>
             <th>{{groups.name}}</th>
             <th></th>
@@ -140,8 +137,8 @@ export default {
       this.modal = true
     },
     addGroup() {
-      this.modal = true
       this.modalGroup = this.newGroup()
+      this.modal = true
     },
   },
   async mounted() {

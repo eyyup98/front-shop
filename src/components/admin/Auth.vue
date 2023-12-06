@@ -1,10 +1,10 @@
 <template class="template">
     <div class="container">
-      <h1 class="h1 m">Sign in</h1>
-      <label class="label m">User name</label>
-      <input class="input m" required v-model="login" type="text" placeholder="Snoopy"/>
-      <label class="label m">Password</label>
-      <input class="input m" required v-model="password" type="password" placeholder="Password"/>
+      <h1 class="h1">Sign in</h1>
+      <label class="label">User name</label>
+      <input class="input" required v-model="login" type="text" placeholder="Snoopy"/>
+      <label class="label">Password</label>
+      <input class="input" required v-model="password" type="password" placeholder="Password"/>
       <button class="button" type="submit" @click="auth">Login</button>
       <span v-if="text !== null" class="span">{{text}}</span>
     </div>
@@ -78,9 +78,6 @@ export default {
   border-radius: 5px;
   color: white;
   font-size: 18px;
-}
-.m {
-  margin: 0 0 10px 0;
 }
 .span {
   text-align: center;

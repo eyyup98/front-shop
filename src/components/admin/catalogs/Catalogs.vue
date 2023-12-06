@@ -3,7 +3,7 @@
 
   <div class="container-block">
     <div class="d-flex flex-column">
-      <h1 class="h1 m">Каталог</h1>
+      <h1 class="h1">Каталог</h1>
 
       <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addCat">Добавить категорию</button>
 
@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody v-for="(row, index) in catalogs">
-        <tr class="select-none-click">
+        <tr>
           <th>{{ row.name }}</th>
           <th v-if="row.active === 1">
             <i class="d-flex justify-content-center active-icon">✔</i>

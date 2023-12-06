@@ -78,12 +78,6 @@ tbody:nth-child(odd){
     font-size: 26px;
     font-weight: 600;
 }
-.select-none-click{
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
 /*.white-tr th:before{*/
 /*    content: "→";*/
 /*    text-align: end;*/

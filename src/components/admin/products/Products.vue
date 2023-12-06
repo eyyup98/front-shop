@@ -2,7 +2,7 @@
   <ProductModal v-if="this.modal === true" @updateParent="updateParentMethod" :objectParent="modalProduct">
   </ProductModal>
   <div class="container-list">
-    <h1 class="h1 m">Товары</h1>
+    <h1 class="h1">Товары</h1>
     <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addProduct">Добавить</button>
 
     <div class="loading" v-if="loading === true">Загрузка данных...</div>
