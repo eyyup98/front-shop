@@ -1,5 +1,5 @@
 <template>
-  <CatModal v-if="modal === true" :catalog="modalCat" @updateParent="updateParentMethod"></CatModal>
+  <CatModal v-if="modal === true" :object="modalCat" @updateParent="updateParentMethod"></CatModal>
 
   <div class="container-block">
     <div class="d-flex flex-column">
@@ -28,13 +28,36 @@
           <th>
             <div class="d-flex justify-content-center">
               <img src="@/assets/icons/edit.png" width="25"  @click="editCat(index)"/>
-              <img class="ml-2" src="@/assets/icons/delete.png" width="25"  @click="deleteCat(index)"/>
+              <img class="ms-2" src="@/assets/icons/delete.png" width="25"  @click="deleteCat(index)"/>
             </div>
           </th>
         </tr>
         </tbody>
       </table>
       <span id="catalog-message"></span>
+
+      <!-- Modal -->
+<!--      <div class="modal fade" id="catModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">-->
+<!--        <div class="modal-dialog modal-dialog-scrollable modal-lg">-->
+<!--          <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--              <h1 class="modal-title fs-5">Modal title</h1>-->
+<!--              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--              ...-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+<!--              <button type="button" class="btn btn-primary">Understood</button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+
+
+
 
     </div>
   </div>
@@ -114,6 +137,13 @@ export default {
   },
   async mounted() {
     await this.getData()
+    // const myModal = document.getElementById('myModal')
+    // const myInput = document.getElementById('myInput')
+    //
+    // myModal.addEventListener('shown.bs.modal', () => {
+    //   myInput.focus()
+    // })
+
   }
 }
 </script>

@@ -3,19 +3,21 @@
   </ProductModal>
   <div class="container-list">
     <h1 class="h1">Товары</h1>
-    <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addProduct">Добавить</button>
+    <button class="btn btn-success w-25 my-3 mx-auto" @click="addProduct">Добавить</button>
 
     <div class="loading" v-if="loading === true">Загрузка данных...</div>
     <div class="products-container" v-else>
-      <div class="product-block" v-for="row in products" @click="editProduct(row)">
+      <div class="product-block my-2" v-for="row in products" @click="editProduct(row)">
         <div class="div-img" style="background-color: #f8f8f8">
           <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
           <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
         </div>
-        <div class="product-block-text">
-          <label>{{row.name}}</label>
-          <label>{{row.price}}</label>
-          <label>{{row.discount}}</label>
+        <div class="product-block-text px-2">
+          <h4 class="d-inline-block text-truncate py-2">{{row.name}}</h4>
+          <div class="d-flex justify-content-between">
+            <span>{{row.price}}</span>
+            <span class="text-decoration-line-through" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+          </div>
         </div>
       </div>
     </div>

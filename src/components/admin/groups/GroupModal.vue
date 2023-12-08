@@ -5,7 +5,7 @@
       <div class="modal-content card bg-light mb-3">
         <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
         <div class="card bg-light p-mod" v-else>
-          <label>Каталог</label>
+          <label class="">Каталог</label>
           <select class="form-control form-control-sm" v-model="group.catalog_id">
               <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
           </select>
@@ -22,14 +22,14 @@
           </div>
           <div class="d-flex justify-content-center mt-3" v-for="(param, index) in group.subgroups">
             <input class="form-control form-control-sm px-3  p-2 w-50" v-model="param.name" style="flex: 0 1 70%;">
-            <div class="d-flex justify-content-start ml-4">
+            <div class="d-flex justify-content-start ms-4">
               <img class="delete-icon" src="@/assets/icons/delete.png" width="25"  @click="deleteParam(index)"/>
             </div>
           </div>
 
           <div class="d-flex justify-content-center mt-3">
             <button class="btn btn-secondary btn-sm w-25 " @click="closeModal">Отмена</button>
-            <button class="btn btn-primary btn-sm w-25 ml-5" @click="save">Сохранить</button>
+            <button class="btn btn-primary btn-sm w-25 ms-5" @click="save">Сохранить</button>
           </div>
           <span id="modal-message"></span>
         </div>

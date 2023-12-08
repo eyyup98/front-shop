@@ -12,7 +12,7 @@
       <table class="table table-hover" v-if="loading === false">
         <thead class="thead-dark">
         <tr>
-          <th width="10%">#</th>
+          <th width="5%">#</th>
           <th width="25%">Каталог</th>
           <th width="25%">Группа</th>
           <th>Подгруппа</th>
@@ -49,7 +49,7 @@
             <th>
               <div class="d-flex justify-content-center align-items-center р-25">
                 <img src="@/assets/icons/edit.png" width="25"  @click="editGr(groups)"/>
-                <img class="ml-2" src="@/assets/icons/delete.png" width="25"  @click="deleteGr(groups)"/>
+                <img class="ms-2" src="@/assets/icons/delete.png" width="25"  @click="deleteGr(groups)"/>
               </div>
             </th>
           </tr>

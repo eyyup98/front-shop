@@ -40,7 +40,7 @@
           <th>
             <div class="d-flex justify-content-center align-items-center р-25">
               <img src="@/assets/icons/edit.png" width="25"  @click="editParam(row)"/>
-              <img class="ml-2" src="@/assets/icons/delete.png" width="25"  @click="deleteParam(row)"/>
+              <img class="ms-2" src="@/assets/icons/delete.png" width="25"  @click="deleteParam(row)"/>
             </div>
           </th>
         </tr>

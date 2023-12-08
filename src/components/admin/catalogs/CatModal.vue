@@ -1,29 +1,29 @@
 <template>
+  <div class="modal fade" id="catModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
+      <div class="modal-content" v-else>
+        <div class="modal-header">
+          <h1 v-if="catalog.id === ''" class="modal-title fs-5">Создание каталога</h1>
+          <h1 v-else class="modal-title fs-5">Редактирование каталога</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
+        </div>
+        <div class="modal-body">
+          <label>Название каталога</label>
+          <input class="form-control p-3" type="text" v-model="catalog.name" v-on:keyup.enter="save" v-on:keyup.esc="closeModal">
 
-  <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" @click="eventHide">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content card bg-light mb-3">
-          <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
-          <div class="card bg-light p-mod" v-else>
-            <label>Название каталога</label>
-            <input class="form-control form-control-bg px-3 p-2 h-25" type="text" v-model="catalog.name" v-on:keyup.enter="save" v-on:keyup.esc="closeModal">
-
-            <div class="form-check form-check-inline mt-2">
-              <input class="form-check-input" type="checkbox" name="catalog-active" :checked="catalog.active" @click="active">
-              <label class="form-check-label">Активный</label>
-            </div>
-
-            <div class="d-flex justify-content-center mt-3">
-              <button class="btn btn-secondary btn-sm w-25 " @click="closeModal">Отмена</button>
-              <button class="btn btn-primary btn-sm w-25 ml-5" @click="save">Сохранить</button>
-            </div>
-
-            <span id="modal-message"></span>
+          <div class="form-check form-check-inline mt-2">
+            <input class="form-check-input" type="checkbox" name="catalog-active" :checked="catalog.active" @click="active">
+            <label class="form-check-label">Активный</label>
           </div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Отмена</button>
+          <button type="button" class="btn btn-primary" @click="save">Сохранить</button>
+        </div>
       </div>
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -31,34 +31,23 @@ import axios from "axios";
 
 export default {
   name: "CatModal",
-  components: {
-    catalog: null
-  },
   props: {
-    catalog: {
+    object: {
       required: false
     }
   },
   data(){
     return {
       response: null,
-      loading: false,
+      loading: true,
       modal: true,
-    }
-  },
-  watch: {
-    modal: function () {
-      this.closeModal()
+      modalObject: null,
+      catalog: null
     }
   },
   methods: {
-    eventHide(){
-      $('#myModal').on('hide.bs.modal',( function (e) {
-        this.modal = false
-      }).bind(this))
-    },
     closeModal(changed = false) {
-      $('#myModal').modal('hide')
+      this.modalObject.hide();
       this.$emit('updateParent', {
         changed: changed
       })
@@ -100,10 +89,12 @@ export default {
     }
   },
   async mounted() {
-    $('#myModal').modal('show')
+    this.catalog = JSON.parse(JSON.stringify(this.object));
+    this.modalObject = new bootstrap.Modal(document.getElementById('catModal'), {
+      show:true
+    });
+    this.modalObject.show()
+    this.loading = false
   }
 }
 </script>
-
-<style scoped>
-</style>

@@ -9,7 +9,7 @@
           <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.catalog_id" @change="product.group_id = null; product.subgroup_id = null">
             <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
           </select>
-          <span class="ml-3" v-else>{{product.catalog_name}}</span>
+          <span class="ms-3" v-else>{{product.catalog_name}}</span>
           <label class="mt-2">Группа</label>
           <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.group_id" @change="product.subgroup_id = null">
             <option v-if="product.catalog_id === null" :value="null">Сперва выберите каталог</option>
@@ -17,14 +17,14 @@
               <option v-if="item.catalog_id === product.catalog_id" :value="item.id">{{ item.name}}</option>
             </template>
           </select>
-          <span class="ml-3" v-else>{{product.group_name}}</span>
+          <span class="ms-3" v-else>{{product.group_name}}</span>
           <label class="mt-2" v-if="product.subgroup_name || product.id === ''">Подгруппа</label>
           <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.subgroup_id">
             <template v-for="item in subgroups">
               <option v-if="item.parent_id === product.group_id" :value="item.id">{{ item.name}}</option>
             </template>
           </select>
-          <span class="ml-3" v-else>{{product.subgroup_name}}</span>
+          <span class="ms-3" v-else>{{product.subgroup_name}}</span>
 
           <label class="mt-2">Название товара</label>
           <input class="form-control form-control-sm px-3  p-2" type="text" v-model="product.name">
@@ -33,8 +33,8 @@
             <div v-if="row.catalog_id === product.catalog_id && (row.group_id === product.group_id || row.group_id === product.subgroup_id)">
 
               <label class="mt-2" v-if="row.params.length > 0">Параметры</label>
-              <br><label class="ml-5 my-0" v-if="row.params.length > 0">{{ row.name }}</label>
-              <div class="form-group row d-flex justify-content-center ml-5 pl-5 my-0" v-for="(row2) in row.params">
+              <br><label class="ms-5 my-0" v-if="row.params.length > 0">{{ row.name }}</label>
+              <div class="form-group row d-flex justify-content-center ms-5 ps-5 my-0" v-for="(row2) in row.params">
                 <label class="col-sm-6 col-form-label col-form-label-sm">{{ row2.name }}</label>
                 <div class="col-sm-6">
                   <input class="form-control form-control-sm" type="text" v-model="row2.value">
@@ -50,17 +50,19 @@
 
           <Carousel :wrap-around="false" :breakpoints="breakpoints" v-if="preview_img.length > 0">
             <Slide v-for="(slide, index) in preview_img" :key="true">
-              <div class="d-flex flex-column align-content-between flex-wrap">
-                <div class="d-flex justify-content-end">
+<!--              <div class="d-flex flex-column align-content-between flex-wrap">-->
+<!--                <div class="d-flex justify-content-end">-->
 
-                  <img class="delete-icon" src="@/assets/icons/delete.png" width="25"  @click="deleteImg(index, product.img[index])"/>
+<!--                  <img class="delete-icon" src="@/assets/icons/delete.png" width="25"  @click="deleteImg(index, product.img[index])"/>-->
 <!--                    <label style="overflow: hidden; font-size: 10px">{{product.img[index].name}}</label>-->
 <!--                  <button class="btn btn-dark" style="height: 30px" @click="deleteImg(index, product.img[index])">d</button>-->
-                </div>
+<!--                </div>-->
                 <div class="carousel__item">
                   <div class="img" v-bind:style="{ backgroundImage: 'url(' + slide + ')' }"></div>
+                  <div class="delete-img" @click="deleteImg(index, product.img[index])"
+                       v-bind:style="{ backgroundImage: 'url(\'../../src/assets/icons/delete-img2.png\')' }"></div>
                 </div>
-              </div>
+<!--              </div>-->
             </Slide>
             <template #addons>
               <Navigation />
@@ -82,7 +84,7 @@
 
           <div class="d-flex justify-content-center mt-3">
             <button class="btn btn-secondary btn-sm w-25 " @click="closeModal">Отмена</button>
-            <button class="btn btn-primary btn-sm w-25 ml-5" @click="save">Сохранить</button>
+            <button class="btn btn-success btn-sm w-25 ms-5" @click="save">Сохранить</button>
           </div>
           <span id="modal-message"></span>
         </div>
@@ -153,6 +155,13 @@ export default {
         changed: changed
       })
     },
+    active(){
+      if (this.group.active === 1) {
+        this.group.active = 0
+      } else if (this.group.active === 0) {
+        this.group.active = 1
+      }
+    },
     async save() {
       this.product.params = []
       this.params.forEach((function(eachEle) {
@@ -200,16 +209,16 @@ export default {
         let formData = new FormData();
         formData.append("images", this.product.img);
         await axios.post(`http://back.ey/api/v1/products-img${id}`,
-          this.product.img
-        , {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          params: {
-            token: localStorage.access_token,
-            delete: this.deleteImgArr
-          },
-        })
+            this.product.img
+            , {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              },
+              params: {
+                token: localStorage.access_token,
+                delete: this.deleteImgArr
+              },
+            })
       } catch (exception) {
         this.errorMessage(exception.response.data.msg ?? 'Ошибка при сохранении')
         return;
@@ -223,12 +232,13 @@ export default {
       this.preview_img[index] = URL.createObjectURL(e.target.files[0]);
     },
     deleteImg(index, object){
+      console.log(this.preview_img)
       if (confirm(`Вы действителдьно хотите удалить изображение "` + object.name + '"')) {
         this.product.img.splice(index, 1);
         this.preview_img.splice(index, 1);
         this.deleteImgArr[this.deleteImgArr.length] = {id: object.id}
-        console.log(this.deleteImgArr)
       }
+      console.log(this.preview_img)
     },
     errorMessage(msg = 'Необходимо все поля'){
       document.getElementById('modal-message').innerHTML  = msg
@@ -281,8 +291,6 @@ export default {
           this.product = response.data
       ))
       this.params = this.product.params
-      console.log('this.params')
-      console.log(this.params)
     },
     async getProductImg(id) {
       await axios.get(`http://back.ey/api/v1/products-img`, {
@@ -312,8 +320,6 @@ export default {
     await this.getGroups();
     await this.getSubgroups();
     this.loading = false
-    // console.log('this.product')
-    // console.log(this.product)
   }
 }
 </script>
@@ -330,36 +336,21 @@ span{
   display: flex;
   flex-direction:column;
 }
-
-.carousel__slide {
-  padding: 10px;
-}
-/*.carousel__prev,*/
-/*.carousel__next {*/
-/*  background-color: #2c3e50;*/
-/*  box-sizing: content-box;*/
-/*}*/
 .img{
-  /*width: 100%;*/
   height: 100%;
   background-repeat: no-repeat;
   background-position: 50% 50%;
-  /*background-size: auto 100%;*/
   background-size: cover;
   border-radius: 8px;
 }
-.img-title{
-  display: flex; justify-content: space-between;
-}
-.img-slide{
-  display: flex;
-  flex-direction:column;
-  font-size: 16px;
-  margin: 0 auto;
-  width: 100%;
-  min-width: 100px;
-  max-width: 150px;
-  /*align-items:flex-start;*/
+.delete-img{
+  position: absolute;
+  width: 40px;
+  min-height: 40px;
+  bottom: 0;
+  right: 0;
+  background-position: 50% 50%;
+  background-size: cover;
 }
 button{
   box-shadow: none;
