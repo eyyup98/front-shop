@@ -20,10 +20,10 @@
         <tr>
           <th>{{ row.name }}</th>
           <th v-if="row.active === 1">
-            <i class="d-flex justify-content-center active-icon">✔</i>
+            <i class="d-flex justify-content-center active-icon select-none-click">✔</i>
           </th>
           <th v-if="row.active === 0">
-            <i class="d-flex justify-content-center none-active-icon">✘</i>
+            <i class="d-flex justify-content-center none-active-icon select-none-click">✘</i>
           </th>
           <th>
             <div class="d-flex justify-content-center">
@@ -34,44 +34,18 @@
         </tr>
         </tbody>
       </table>
-      <span id="catalog-message"></span>
-
-      <!-- Modal -->
-<!--      <div class="modal fade" id="catModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">-->
-<!--        <div class="modal-dialog modal-dialog-scrollable modal-lg">-->
-<!--          <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--              <h1 class="modal-title fs-5">Modal title</h1>-->
-<!--              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--              ...-->
-<!--            </div>-->
-<!--            <div class="modal-footer">-->
-<!--              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-<!--              <button type="button" class="btn btn-primary">Understood</button>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
-
-
-
-
     </div>
   </div>
 </template>
 
 <script>
-// import NavBar from "../NavBar.vue";
+import func from "../../../js/functions"
 import CatModal from "./CatModal.vue";
 import axios from "axios";
 
 export default {
   name: "Catalogs",
   components: {
-    // NavBar,
     CatModal
   },
   data(){
@@ -102,6 +76,7 @@ export default {
       if (data.changed === true) {
         this.loading = true
         await this.getData()
+        func.toastElList('Сохранено');
       }
     },
     addCat() {
@@ -121,10 +96,7 @@ export default {
             }
           })
         } catch (exception) {
-          document.getElementById('catalog-message').innerHTML  = exception.response.data.msg
-          setTimeout(() => {
-            document.getElementById('catalog-message').innerHTML  = ''
-          }, 3000);
+          func.toastElList(exception.response.data.msg);
           return;
         }
         await this.getData()
@@ -137,13 +109,6 @@ export default {
   },
   async mounted() {
     await this.getData()
-    // const myModal = document.getElementById('myModal')
-    // const myInput = document.getElementById('myInput')
-    //
-    // myModal.addEventListener('shown.bs.modal', () => {
-    //   myInput.focus()
-    // })
-
   }
 }
 </script>

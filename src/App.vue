@@ -43,39 +43,20 @@ export default {
 </script>
 
 <template>
-<!--  <h1>{{now_route}}</h1>-->
   <NavBar v-if="now_route === 'admin'"></NavBar>
-<!--  <header id="header-access_token">-->
-<!--  <header>-->
-<!--    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />-->
 
-<!--    <div class="wrapper">-->
-<!--      <h1>{{this.localStorage.access_token}}</h1>-->
-<!--      <nav>-->
-<!--        <RouterLink to="/admin/panel/catalogs">Catalog</RouterLink>-->
-<!--        <RouterLink to="/about">About</RouterLink>-->
-<!--        <RouterLink to="/admin/auth">Вход</RouterLink>-->
-<!--      </nav>-->
-<!--    </div>-->
-<!--  </header>-->
-<!--  <header>-->
-<!--    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />-->
-
-<!--    <div class="wrapper">-->
-<!--      <HelloWorld msg="You did it!" />-->
-
-<!--      <nav>-->
-<!--        <RouterLink to="/">Home</RouterLink>-->
-<!--        <RouterLink to="/about">About</RouterLink>-->
-<!--        <RouterLink to="/admin/auth">Вход</RouterLink>-->
-<!--      </nav>-->
-<!--    </div>-->
-<!--  </header>-->
-<!--  <div>-->
-    <div class="all-content">
-      <RouterView />
+  <div class="toast text-white bg-primary" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 9999 !important;position: absolute; right: 5px; bottom: 5px;opacity: 1;">
+    <div class="d-flex">
+      <div class="toast-body">
+        <span id="messageText"></span>
+      </div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
     </div>
-<!--  </div>-->
+  </div>
+
+  <div class="all-content">
+    <RouterView />
+  </div>
 </template>
 
 <style scoped>

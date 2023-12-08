@@ -28,6 +28,7 @@
 
 <script>
 import axios from "axios";
+import func from "../../../js/functions"
 
 export default {
   name: "CatModal",
@@ -38,11 +39,11 @@ export default {
   },
   data(){
     return {
-      response: null,
       loading: true,
       modal: true,
       modalObject: null,
-      catalog: null
+      catalog: null,
+      message: null
     }
   },
   methods: {
@@ -61,10 +62,7 @@ export default {
     },
     async save() {
       if (this.catalog.name.replace(/\s/g, "") === '') {
-        document.getElementById('modal-message').innerHTML  = 'Необходимо заполнить название'
-        setTimeout(() => {
-          document.getElementById('modal-message').innerHTML  = ''
-        }, 2000);
+        func.toastElList('Необходимо заполнить название');
         return;
       }
 
@@ -77,11 +75,7 @@ export default {
           }
         })
       } catch (exception) {
-        this.response = exception.response.data
-        document.getElementById('modal-message').innerHTML  = exception.response.data.msg
-        setTimeout(() => {
-          document.getElementById('modal-message').innerHTML  = ''
-        }, 2000);
+        func.toastElList(exception.response.data.msg);
         return;
       }
 
@@ -90,9 +84,7 @@ export default {
   },
   async mounted() {
     this.catalog = JSON.parse(JSON.stringify(this.object));
-    this.modalObject = new bootstrap.Modal(document.getElementById('catModal'), {
-      show:true
-    });
+    this.modalObject = new bootstrap.Modal(document.getElementById('catModal'), {});
     this.modalObject.show()
     this.loading = false
   }
