@@ -8,16 +8,16 @@
       <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addCat">Добавить категорию</button>
 
       <div class="form-control loading" v-if="loading === true">Загрузка данных...</div>
-      <table class="table table-bordered table-hover" v-if="loading === false">
-        <thead class="thead-dark">
+      <table class="table table-striped table-bordered table-hover" v-if="loading === false">
+        <thead class="table-dark">
         <tr>
-          <th>Название</th>
+          <th scope="col">Название</th>
           <th width="10%">Активный</th>
           <th width="10%">Действия</th>
         </tr>
         </thead>
-        <tbody v-for="(row, index) in catalogs">
-        <tr>
+        <tbody class=" table-group-divider">
+        <tr v-for="(row, index) in catalogs">
           <th>{{ row.name }}</th>
           <th v-if="row.active === 1">
             <i class="d-flex justify-content-center active-icon select-none-click">✔</i>
@@ -69,6 +69,7 @@ export default {
         ))
         this.loading = false
       } catch (exception) {
+        func.toastElList(exception.response.data.msg);
       }
     },
     async updateParentMethod(data) {

@@ -1,13 +1,18 @@
 <template>
 
-  <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" @click="eventHide">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content card bg-light mb-3">
-        <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
-        <div class="card bg-light p-mod" v-else>
+  <div class="modal fade" id="catModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
+      <div class="modal-content" v-else>
+        <div class="modal-header">
+          <h1 v-if="group.id === ''" class="modal-title fs-5">Создание группы</h1>
+          <h1 v-else class="modal-title fs-5">Редактирование группы</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
+        </div>
+        <div class="modal-body">
           <label class="">Каталог</label>
           <select class="form-control form-control-sm" v-model="group.catalog_id">
-              <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
+            <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
           </select>
           <label class="mt-2">Название группы</label>
           <input class="form-control form-control-sm px-3  p-2 w-50" v-model="group.name">
@@ -16,22 +21,21 @@
             <label class="form-check-label">Активный</label>
           </div>
 
-          <div class="d-flex justify-content-between mt-2">
+          <div class="d-flex justify-content-between mt-2 mb-3">
             <label class="mt-2">Подгруппы</label>
             <button class="btn btn-outline-primary w-25 btn-sm" @click="addParam">+</button>
           </div>
-          <div class="d-flex justify-content-center mt-3" v-for="(param, index) in group.subgroups">
-            <input class="form-control form-control-sm px-3  p-2 w-50" v-model="param.name" style="flex: 0 1 70%;">
-            <div class="d-flex justify-content-start ms-4">
+          <div class="d-flex justify-content-center mt-1" v-for="(param, index) in group.subgroups">
+            <input class="form-control form-control-sm px-3 p-2 w-50" v-model="param.name" style="flex: 0 1 70%;">
+            <div class="d-flex justify-content-start ms-4 py-1">
               <img class="delete-icon" src="@/assets/icons/delete.png" width="25"  @click="deleteParam(index)"/>
             </div>
           </div>
+        </div>
 
-          <div class="d-flex justify-content-center mt-3">
-            <button class="btn btn-secondary btn-sm w-25 " @click="closeModal">Отмена</button>
-            <button class="btn btn-primary btn-sm w-25 ms-5" @click="save">Сохранить</button>
-          </div>
-          <span id="modal-message"></span>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Отмена</button>
+          <button type="button" class="btn btn-primary" @click="save">Сохранить</button>
         </div>
       </div>
     </div>
@@ -41,6 +45,7 @@
 
 <script>
 import axios from "axios";
+import func from "../../../js/functions"
 
 export default {
   name: "GroupModal",
@@ -56,22 +61,12 @@ export default {
       loading: true,
       deleteArray: [],
       readySave: true,
-      modal: true,
-    }
-  },
-  watch: {
-    modal: function () {
-      this.closeModal()
+      modalObject: null,
     }
   },
   methods: {
-    eventHide(){
-      $('#myModal').on('hide.bs.modal',( function (e) {
-        this.modal = false
-      }).bind(this))
-    },
     closeModal(changed = false) {
-      $('#myModal').modal('hide')
+      this.modalObject.hide();
       this.$emit('updateParent', {
         changed: changed
       })
@@ -108,28 +103,22 @@ export default {
       } catch (exception) {
       }
     },
-    errorMessage(msg = ''){
-      document.getElementById('modal-message').innerHTML  = msg
-      setTimeout(() => {
-        document.getElementById('modal-message').innerHTML  = ''
-      }, 2000);
-    },
     async save() {
       this.readySave = true
 
       if (this.group.catalog_id === null) {
-        this.errorMessage('Необходимо выбрать категорию')
+        func.toastElList('Необходимо выбрать категорию');
         return;
       }
 
       if (this.group.name.replace(/\s/g, "") === '') {
-        this.errorMessage('Необходимо заполнить название группы')
+        func.toastElList('Необходимо заполнить название группы');
         return;
       }
 
       this.group.subgroups.forEach((function(eachEle) {
         if (eachEle.name.replace(/\s/g, "") === '') {
-          this.errorMessage('Название не должно быть пустым')
+          func.toastElList('Название не должно быть пустым');
           this.readySave = false
         }
       }).bind(this))
@@ -144,7 +133,7 @@ export default {
           delete: this.deleteArray
         })
       } catch (exception) {
-        this.errorMessage(exception.response.data.msg ?? 'Ошибка при сохранении')
+        func.toastElList(exception.response.data.msg ?? 'Ошибка при сохранении');
         return;
       }
 
@@ -152,7 +141,8 @@ export default {
     }
   },
   async mounted() {
-    $('#myModal').modal('show')
+    this.modalObject = new bootstrap.Modal(document.getElementById('catModal'), {});
+    this.modalObject.show()
     this.group = JSON.parse(JSON.stringify(this.object));
     await this.getCatalogs();
     this.loading = false

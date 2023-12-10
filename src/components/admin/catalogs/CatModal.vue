@@ -40,10 +40,8 @@ export default {
   data(){
     return {
       loading: true,
-      modal: true,
       modalObject: null,
-      catalog: null,
-      message: null
+      catalog: null
     }
   },
   methods: {
