@@ -9,16 +9,15 @@
 
       <div class="form-control loading" v-if="loading === true">Загрузка данных...</div>
 
-      <table class="table table-hover" v-if="loading === false">
+      <table class="table table-bordered table-hover" v-if="loading === false">
         <thead class="thead-dark">
         <tr>
-          <th width="5%">#</th>
-          <th width="20%">Каталог</th>
-          <th width="20%">Группа</th>
-          <th width="20%">Подгруппа</th>
-          <th>Заголовок</th>
-          <th width="5%">Активный</th>
-          <th width="5%">Действия</th>
+          <th class="fw-bold" width="5%">#</th>
+          <th class="fw-bold" width="20%">Каталог</th>
+          <th class="fw-bold" width="20%">Группа</th>
+          <th class="fw-bold" width="20%">Подгруппа</th>
+          <th class="fw-bold">Заголовок</th>
+          <th class="fw-bold" width="5%">Действия</th>
         </tr>
         </thead>
 
@@ -31,12 +30,6 @@
           <th>{{ row.group_parent_name }}</th>
           <th>{{ row.group_child_name }}</th>
           <th>{{ row.name }}</th>
-          <th v-if="row.group_active === 1">
-            <i class="d-flex justify-content-center active-icon">✔</i>
-          </th>
-          <th v-if="row.group_active === 0">
-            <i class="d-flex justify-content-center none-active-icon">✘</i>
-          </th>
           <th>
             <div class="d-flex justify-content-center align-items-center р-25">
               <img src="@/assets/icons/edit.png" width="25"  @click="editParam(row)"/>
@@ -46,7 +39,7 @@
         </tr>
 
         <tr v-if="row.view_params === true && row.params.length !== 0">
-          <th colspan="7" class="text-center table-info">Параметры</th>
+          <th colspan="7" class="text-center fw-bold">Параметры</th>
         </tr>
         <tr class="child-list" v-if="row.view_params === true" v-for="(row2) in row.params">
           <th colspan="7" class="text-center">{{ row2.name }}</th>
@@ -62,6 +55,7 @@
 <script>
 import axios from "axios";
 import ParamModal from "./ParamModal.vue";
+import func from "../../../js/functions"
 
 export default {
   name: "Params",
@@ -80,6 +74,7 @@ export default {
     async getData() {
       this.loading = true
 
+      try {
       await axios.get('http://back.ey/api/v1/params-title', {
         params: {
           token: localStorage.access_token
@@ -87,6 +82,10 @@ export default {
       }).then(response => (
           this.paramsTitle = response.data
       ))
+    } catch (exception) {
+      func.toastElList(exception.response.data.msg);
+      return;
+    }
 
       this.loading = false
     },
@@ -108,8 +107,8 @@ export default {
       this.modal = false
 
       if (data.changed === true) {
-        this.loading = true
         await this.getData()
+        func.toastElList('Сохранено');
       }
     },
     editParam(object) {
@@ -125,12 +124,10 @@ export default {
             }
           })
         } catch (exception) {
-          document.getElementById('param-message').innerHTML = exception.response.data.msg
-          setTimeout(() => {
-            document.getElementById('param-message').innerHTML = ''
-          }, 3000);
+          func.toastElList(exception.response.data.msg);
           return;
         }
+        func.toastElList('Удалено');
         await this.getData()
       }
     }

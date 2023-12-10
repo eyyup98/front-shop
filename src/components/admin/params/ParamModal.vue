@@ -1,10 +1,15 @@
 <template>
 
-  <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" @click="eventHide">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content card bg-light mb-3">
+  <div class="modal fade" id="paramModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
-        <div class="card bg-light p-mod" v-else>
+      <div class="modal-content" v-else>
+        <div class="modal-header">
+          <h1 v-if="object.id === ''" class="modal-title fs-5">Создание параметров</h1>
+          <h1 v-else class="modal-title fs-5">Редактирование параметров</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
+        </div>
+        <div class="modal-body">
           <label>Каталог</label>
             <select class="form-control form-control-sm" v-model="object.catalog_id" @change="object.group_parent_id = null; object.group_child_id = null">
               <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
@@ -25,31 +30,31 @@
             <label class="mt-2">Заголовок параметров</label>
             <input class="form-control form-control-sm px-3  p-2" v-model="object.name">
 
-            <div class="d-flex justify-content-between mt-2">
-              <label class="mt-2">Параметры</label>
+            <div class="d-flex justify-content-between mt-2 mb-3">
+              <label class="">Параметры</label>
               <button class="btn btn-outline-primary w-25 btn-sm" @click="addParam">+</button>
             </div>
-            <div class="d-flex justify-content-center mt-3" v-for="(param, index) in object.params">
+            <div class="d-flex justify-content-center mt-1" v-for="(param, index) in object.params">
               <input class="form-control form-control-sm px-3  p-2 w-50" v-model="param.name" style="flex: 0 1 70%;">
-              <div class="d-flex justify-content-start ms-4">
+              <div class="d-flex justify-content-start ms-4 py-1">
                 <img class="delete-icon" src="@/assets/icons/delete.png" width="25"  @click="deleteParam(index)"/>
               </div>
             </div>
+        </div>
 
-            <div class="d-flex justify-content-center mt-3">
-              <button class="btn btn-secondary btn-sm w-25 " @click="closeModal">Отмена</button>
-              <button class="btn btn-primary btn-sm w-25 ms-5" @click="save">Сохранить</button>
-            </div>
-            <span id="modal-message"></span>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Отмена</button>
+          <button type="button" class="btn btn-primary" @click="save">Сохранить</button>
+        </div>
           </div>
       </div>
     </div>
-  </div>
 
 </template>
 
 <script>
 import axios from "axios";
+import func from "../../../js/functions"
 
 export default {
   name: "ParamModal",
@@ -66,23 +71,13 @@ export default {
       loading: true,
       object: null,
       readySave: true,
-      modal: true,
-      deleteParamsArray: []
-    }
-  },
-  watch: {
-    modal: function () {
-      this.closeModal()
+      modalObject: null,
+      deleteArray: []
     }
   },
   methods: {
-    eventHide(){
-      $('#myModal').on('hide.bs.modal',( function (e) {
-        this.modal = false
-      }).bind(this))
-    },
     closeModal(changed = false) {
-      $('#myModal').modal('hide')
+      this.modalObject.hide();
       this.$emit('updateParent', {
         changed: changed
       })
@@ -93,28 +88,32 @@ export default {
     deleteParam(index) {
       if (confirm(`Вы действителдьно хотите удалить параметр "` + (this.object.params[index].name ?? '') + '"')) {
         if (this.object.params[index].id !== null) {
-          this.deleteParamsArray[this.deleteParamsArray.length] = this.object.params[index].id;
+          this.deleteArray[this.deleteArray.length] = this.object.params[index].id;
         }
         this.object.params.splice(index, 1);
       }
     },
-    errorMessage(msg = 'Необходимо все поля'){
-      document.getElementById('modal-message').innerHTML  = msg
-      setTimeout(() => {
-        document.getElementById('modal-message').innerHTML  = ''
-      }, 2000);
-    },
     async save() {
       this.readySave = true
 
+      if (this.object.catalog_id === null) {
+        func.toastElList('Необходимо выбрать категорию');
+        return;
+      }
+
+      if (this.object.group_parent_id === null) {
+        func.toastElList('Необходимо выбрать группу');
+        return;
+      }
+
       if (this.object.name.replace(/\s/g, "") === '') {
-        this.errorMessage()
+        func.toastElList('Необходимо заполнить заголовок');
         this.readySave = false
       }
 
       this.object.params.forEach((function(eachEle) {
         if (eachEle.name.replace(/\s/g, "") === '') {
-          this.errorMessage()
+          func.toastElList('Необходимо все поля');
           this.readySave = false
         }
       }).bind(this))
@@ -145,16 +144,14 @@ export default {
         await axios.post(`http://back.ey/api/v1/params`, {
           token: localStorage.access_token,
           params: this.object.params,
-          delete: this.deleteParamsArray
+          delete: this.deleteArray
         })
       } catch (exception) {
-        this.errorMessage(exception.response.data.msg ?? 'Ошибка при сохранении')
+        func.toastElList(exception.response.data.msg ?? 'Ошибка при сохранении');
         return;
       }
 
-      this.$emit('updateParent', {
-        changed: true
-      })
+      this.closeModal(true)
     },
     async getCatalogs() {
       await axios.get('http://back.ey/api/v1/catalogs', {
@@ -185,8 +182,8 @@ export default {
     },
   },
   async mounted() {
-    $('#myModal').modal('show')
-    this.loading = true
+    this.modalObject = new bootstrap.Modal(document.getElementById('paramModal'), {});
+    this.modalObject.show()
     this.object = JSON.parse(JSON.stringify(this.objectParent));
     await this.getCatalogs();
     await this.getGroupsParent();

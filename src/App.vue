@@ -67,7 +67,7 @@ export default {
   background-color: rgb(255, 255, 255);
   margin: 0 auto;
   padding: 90px 20px 0;
-  max-width: 1200px;
+  max-width: 1600px;
   /*padding: 20px;*/
 }
 header {

@@ -1,6 +1,6 @@
 <template>
 
-  <div class="modal fade" id="catModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="groupModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
       <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
       <div class="modal-content" v-else>
@@ -22,7 +22,7 @@
           </div>
 
           <div class="d-flex justify-content-between mt-2 mb-3">
-            <label class="mt-2">Подгруппы</label>
+            <label class="">Подгруппы</label>
             <button class="btn btn-outline-primary w-25 btn-sm" @click="addParam">+</button>
           </div>
           <div class="d-flex justify-content-center mt-1" v-for="(param, index) in group.subgroups">
@@ -141,7 +141,7 @@ export default {
     }
   },
   async mounted() {
-    this.modalObject = new bootstrap.Modal(document.getElementById('catModal'), {});
+    this.modalObject = new bootstrap.Modal(document.getElementById('groupModal'), {});
     this.modalObject.show()
     this.group = JSON.parse(JSON.stringify(this.object));
     await this.getCatalogs();

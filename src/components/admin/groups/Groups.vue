@@ -79,7 +79,6 @@
             </table>
           </td>
         </tr>
-        <!--        </template>-->
         </tbody>
       </table>
       <span id="group-message"></span>
@@ -153,6 +152,7 @@ export default {
           func.toastElList(exception.response.data.msg);
           return;
         }
+        func.toastElList('Удалено');
         await this.getData()
       }
     },

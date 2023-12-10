@@ -1,10 +1,15 @@
 <template>
 
-  <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" @click="eventHide">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content card bg-light mb-3">
+  <div class="modal fade" id="productModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
-        <div class="card bg-light p-mod" v-else>
+      <div class="modal-content" v-else>
+        <div class="modal-header">
+          <h1 v-if="product.id === ''" class="modal-title fs-5">Создание товара</h1>
+          <h1 v-else class="modal-title fs-5">Редактирование товара</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
+        </div>
+        <div class="modal-body d-flex flex-column">
           <label>Каталог</label>
           <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.catalog_id" @change="product.group_id = null; product.subgroup_id = null">
             <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
@@ -43,9 +48,9 @@
 
             </div>
           </div>
-          <div class="form-group mt-0">
-            <label>Загрузить изображение</label>
-            <input type="file" class="form-control-file"  ref="file" v-on:change="handleFileUpload($event)">
+          <div class="form-group mt-0 mb-2">
+            <label>Загрузить изображение</label><br>
+            <input type="file" class="form-control-file h-25"  ref="file" v-on:change="handleFileUpload($event)">
           </div>
 
           <Carousel :wrap-around="false" :breakpoints="breakpoints" v-if="preview_img.length > 0">
@@ -81,14 +86,13 @@
             <input class="form-check-input" type="checkbox" name="catalog-active" :checked="product.active" @click="active">
             <label class="form-check-label">Активный</label>
           </div>
-
-          <div class="d-flex justify-content-center mt-3">
-            <button class="btn btn-secondary btn-sm w-25 " @click="closeModal">Отмена</button>
-            <button class="btn btn-success btn-sm w-25 ms-5" @click="save">Сохранить</button>
-          </div>
-          <span id="modal-message"></span>
         </div>
-      </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Отмена</button>
+          <button type="button" class="btn btn-primary" @click="save">Сохранить</button>
+        </div>
+        </div>
     </div>
   </div>
 </template>
@@ -118,6 +122,7 @@ export default {
       params: null,
       product: null,
       loading: true,
+      modalObject: null,
       modal: true,
       input_text: null,
       deleteImgArr: [],
@@ -138,19 +143,9 @@ export default {
       }
     }
   },
-  watch: {
-    modal: function () {
-      this.closeModal()
-    }
-  },
   methods: {
-    eventHide(){
-      $('#myModal').on('hide.bs.modal',( function (e) {
-        this.modal = false
-      }).bind(this))
-    },
     closeModal(changed = false) {
-      $('#myModal').modal('hide')
+      this.modalObject.hide();
       this.$emit('updateParent', {
         changed: changed
       })
@@ -307,7 +302,9 @@ export default {
     },
   },
   async mounted() {
-    $('#myModal').modal('show')
+    this.modalObject = new bootstrap.Modal(document.getElementById('productModal'), {});
+    this.modalObject.show()
+
     this.loading = true
     if (this.objectParent.id === '') {
       this.product = JSON.parse(JSON.stringify(this.objectParent));
@@ -357,5 +354,12 @@ button{
 }
 button:hover {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.all-content{
+  background-color: rgb(255, 255, 255);
+  margin: 0 auto;
+  padding: 90px 20px 0;
+  max-width: 1600px;
+  /*padding: 20px;*/
 }
 </style>

@@ -100,6 +100,7 @@ export default {
           func.toastElList(exception.response.data.msg);
           return;
         }
+        func.toastElList('Удалено');
         await this.getData()
       }
     },
