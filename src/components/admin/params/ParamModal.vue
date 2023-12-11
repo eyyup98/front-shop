@@ -11,22 +11,16 @@
         </div>
         <div class="modal-body">
           <label>Каталог</label>
-            <select class="form-control form-control-sm" v-model="object.catalog_id" @change="object.group_parent_id = null; object.group_child_id = null">
+            <select class="form-control form-control-sm" v-model="object.catalog_id" @change="object.group_id = null">
               <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
             </select>
               <label class="mt-2">Группа</label>
-              <select class="form-control form-control-sm" v-model="object.group_parent_id" @change="object.group_child_id = null">
+              <select class="form-control form-control-sm" v-model="object.group_id">
                 <option v-if="object.catalog_id === null" :value="null">Сперва выберите каталог</option>
-                <template v-for="item in groupsParent">
+                <template v-for="item in groups">
                   <option v-if="item.catalog_id === object.catalog_id" :value="item.id">{{ item.name}}</option>
                 </template>
               </select>
-              <label class="mt-2">Подгруппа</label>
-            <select class="form-control form-control-sm" v-model="object.group_child_id">
-              <template v-for="item in groupsChild">
-                <option v-if="item.parent_id === object.group_parent_id" :value="item.id">{{ item.name}}</option>
-              </template>
-            </select>
             <label class="mt-2">Заголовок параметров</label>
             <input class="form-control form-control-sm px-3  p-2" v-model="object.name">
 
@@ -65,8 +59,7 @@ export default {
   },
   data(){
     return {
-      groupsParent: null,
-      groupsChild: null,
+      groups: null,
       catalogs: null,
       loading: true,
       object: null,
@@ -101,7 +94,7 @@ export default {
         return;
       }
 
-      if (this.object.group_parent_id === null) {
+      if (this.object.group_id === null) {
         func.toastElList('Необходимо выбрать группу');
         return;
       }
@@ -128,8 +121,7 @@ export default {
           params: {
             name: this.object.name,
             catalog_id: this.object.catalog_id,
-            group_parent_id: this.object.group_parent_id,
-            group_child_id: this.object.group_child_id,
+            group_id: this.object.group_id,
           }
         }).then(response => (
             title_id = response.data.title_id
@@ -162,32 +154,12 @@ export default {
           this.catalogs = response.data
       ))
     },
-    async getGroupsParent() {
-      await axios.get('http://back.ey/api/v1/groups/parents', {
-        params: {
-          token: localStorage.access_token
-        }
-      }).then(response => (
-            this.groupsParent = response.data
-      ))
-    },
-    async getGroupsChild() {
-      await axios.get('http://back.ey/api/v1/groups/childs', {
-        params: {
-          token: localStorage.access_token
-        }
-      }).then(response => (
-            this.groupsChild = response.data
-      ))
-    },
   },
   async mounted() {
     this.modalObject = new bootstrap.Modal(document.getElementById('paramModal'), {});
     this.modalObject.show()
     this.object = JSON.parse(JSON.stringify(this.objectParent));
     await this.getCatalogs();
-    await this.getGroupsParent();
-    await this.getGroupsChild();
     this.loading = false
   }
 }

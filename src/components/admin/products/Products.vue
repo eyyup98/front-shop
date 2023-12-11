@@ -11,27 +11,17 @@
       <div class="d-flex justify-content-center">
         <div class="d-flex flex-column me-2 w-25">
           <h5>Каталог</h5>
-          <select class="form-select h-100 w-100" v-model="search.catalog_index" @change="search.group_index = null; search.subgroup_index = null">
+          <select class="form-select h-100 w-100" v-model="search.catalog_index" @change="search.group_index = null">
             <option :value="null" selected>Все</option>
             <option v-for="(item, index) in catalogs" :value="index">{{item.name}}</option>
           </select>
         </div>
         <div class="d-flex flex-column me-2 w-25">
           <h5>Группа</h5>
-          <select class="form-select h-100 w-100" v-model="search.group_index" @change="search.subgroup_index = null">
+          <select class="form-select h-100 w-100" v-model="search.group_index">
             <option :value="null" selected>Все</option>
             <option v-if="search.catalog_index !== null" v-for="(item, index) in catalogs[search.catalog_index].groups"
                     :value="index">{{item.name}}</option>
-          </select>
-        </div>
-        <div class="d-flex flex-column me-2 w-25">
-          <h5>Подгруппа</h5>
-          <select class="form-select h-100 w-100" v-model="search.subgroup_index">
-            <option :value="null" selected>Все</option>
-            <option v-if="search.group_index !== null"
-                    v-for="(item, index) in catalogs[search.catalog_index].groups[search.group_index].subgroups"
-                    :value="index">{{item.name}}
-            </option>
           </select>
         </div>
         <div class="d-flex align-items-end">
@@ -74,8 +64,7 @@ export default {
       catalogs: null,
       search: {
         catalog_index: null,
-        group_index: null,
-        subgroup_index: null,
+        group_index: null
       },
       modalProduct: null,
       modal: null,
@@ -96,22 +85,17 @@ export default {
 
       let catalog_id = null;
       let group_id = null;
-      let subgroup_id = null;
 
       try {
           catalog_id = this.catalogs[this.search.catalog_index].id;
           group_id = this.catalogs[this.search.catalog_index].groups[this.search.group_index].id;
-          subgroup_id = this.catalogs[this.search.catalog_index].groups[this.search.group_index].subgroups[this.search.subgroup_index].id;
-      } catch (s) {
-
-      }
+      } catch (exception) {}
 
         await axios.get('http://back.ey/api/v1/products', {
           params: {
             token: localStorage.access_token,
             catalog_id: catalog_id,
-            group_id: group_id,
-            subgroup_id: subgroup_id
+            group_id: group_id
           }
         }).then(response => (
             this.products = response.data
@@ -146,7 +130,6 @@ export default {
         id: '',
         catalog_id: null,
         group_id: null,
-        subgroup_id: null,
         name: '',
         price: 0,
         discount: 0,

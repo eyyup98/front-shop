@@ -36,11 +36,9 @@
                 <th class="fw-bold" width="10%">Действия</th>
               </tr>
               </thead>
-              <tbody v-for="groups in row.groups" @click="groups.view_subgroups = groups.view_subgroups === false;">
+              <tbody v-for="groups in row.groups">
               <tr>
-                <th style="font-size: 18px; width: 50px; text-align: center" v-if="groups.subgroups.length > 0 && groups.view_subgroups === false">↓</th>
-                <th style="font-size: 18px; width: 50px; text-align: center"  v-else-if="groups.subgroups.length > 0 && groups.view_subgroups === true">✕</th>
-                <th v-else></th>
+                <th></th>
                 <th>{{groups.name}}</th>
 
                 <th v-if="groups.active === 1">
@@ -57,24 +55,6 @@
                   </div>
                 </th>
               </tr>
-
-              <tr v-if="groups.subgroups.length > 0 && groups.view_subgroups === true" style="text-align: center">
-                <td colspan="4" class="p-0">
-                  <table class="table table-sm table-borderless m-0" v-if="loading === false">
-                    <thead>
-                    <tr>
-                      <th colspan="3" class="fw-bold">Подгруппы</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="subgroups in groups.subgroups">
-                      <th>{{subgroups.name}}</th>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-
               </tbody>
             </table>
           </td>
@@ -128,8 +108,7 @@ export default {
         catalog_id: null,
         parent_id: null,
         name: '',
-        active: 1,
-        subgroups: []
+        active: 1
       }
     },
     async updateParentMethod(data) {

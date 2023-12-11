@@ -20,17 +20,6 @@
             <input class="form-check-input" type="checkbox" name="catalog-active" :checked="group.active" @click="active">
             <label class="form-check-label">Активный</label>
           </div>
-
-          <div class="d-flex justify-content-between mt-2 mb-3">
-            <label class="">Подгруппы</label>
-            <button class="btn btn-outline-primary w-25 btn-sm" @click="addParam">+</button>
-          </div>
-          <div class="d-flex justify-content-center mt-1" v-for="(param, index) in group.subgroups">
-            <input class="form-control form-control-sm px-3 p-2 w-50" v-model="param.name" style="flex: 0 1 70%;">
-            <div class="d-flex justify-content-start ms-4 py-1">
-              <img class="delete-icon" src="@/assets/icons/delete.png" width="25"  @click="deleteParam(index)"/>
-            </div>
-          </div>
         </div>
 
         <div class="modal-footer">
@@ -60,7 +49,6 @@ export default {
       group: null,
       loading: true,
       deleteArray: [],
-      readySave: true,
       modalObject: null,
     }
   },
@@ -78,17 +66,6 @@ export default {
         this.group.active = 1
       }
     },
-    addParam() {
-      this.group.subgroups[this.group.subgroups.length] = {name: ''}
-    },
-    deleteParam(index) {
-      if (confirm(`Вы действителдьно хотите удалить параметр "` + (this.group.subgroups[index].name ?? '') + '"')) {
-        if (this.group.subgroups[index].id !== null) {
-          this.deleteArray[this.deleteArray.length] = this.group.subgroups[index].id;
-        }
-        this.group.subgroups.splice(index, 1);
-      }
-    },
     async getCatalogs() {
       this.loading = true
       try {
@@ -104,8 +81,6 @@ export default {
       }
     },
     async save() {
-      this.readySave = true
-
       if (this.group.catalog_id === null) {
         func.toastElList('Необходимо выбрать категорию');
         return;
@@ -115,16 +90,6 @@ export default {
         func.toastElList('Необходимо заполнить название группы');
         return;
       }
-
-      this.group.subgroups.forEach((function(eachEle) {
-        if (eachEle.name.replace(/\s/g, "") === '') {
-          func.toastElList('Название не должно быть пустым');
-          this.readySave = false
-        }
-      }).bind(this))
-
-      if (!this.readySave)
-        return
 
       try {
         await axios.post(`http://back.ey/api/v1/groups/${this.group.id}`, {

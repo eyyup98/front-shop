@@ -11,31 +11,24 @@
         </div>
         <div class="modal-body d-flex flex-column">
           <label>Каталог</label>
-          <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.catalog_id" @change="product.group_id = null; product.subgroup_id = null">
+          <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.catalog_id" @change="product.group_id = null">
             <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
           </select>
           <span class="ms-3" v-else>{{product.catalog_name}}</span>
           <label class="mt-2">Группа</label>
-          <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.group_id" @change="product.subgroup_id = null">
+          <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.group_id">
             <option v-if="product.catalog_id === null" :value="null">Сперва выберите каталог</option>
             <template v-for="item in groups">
               <option v-if="item.catalog_id === product.catalog_id" :value="item.id">{{ item.name}}</option>
             </template>
           </select>
           <span class="ms-3" v-else>{{product.group_name}}</span>
-          <label class="mt-2" v-if="product.subgroup_name || product.id === ''">Подгруппа</label>
-          <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.subgroup_id">
-            <template v-for="item in subgroups">
-              <option v-if="item.parent_id === product.group_id" :value="item.id">{{ item.name}}</option>
-            </template>
-          </select>
-          <span class="ms-3" v-else>{{product.subgroup_name}}</span>
 
           <label class="mt-2">Название товара</label>
           <input class="form-control form-control-sm px-3 p-2" type="text" v-model="product.name">
 
           <div v-for="(row) in params">
-            <div v-if="row.catalog_id === product.catalog_id && (row.group_id === product.group_id || row.group_id === product.subgroup_id)">
+            <div v-if="row.catalog_id === product.catalog_id && row.group_id === product.group_id">
 
               <label class="mt-2" v-if="row.params.length > 0">Параметры</label>
               <br><label class="ms-5 my-0" v-if="row.params.length > 0">{{ row.name }}</label>
@@ -110,7 +103,6 @@ export default {
     return {
       catalogs: null,
       groups: null,
-      subgroups: null,
       params: null,
       product: null,
       loading: true,
@@ -183,7 +175,6 @@ export default {
             name: this.product.name,
             catalog_id: this.product.catalog_id,
             group_id: this.product.group_id,
-            subgroup_id: this.product.subgroup_id,
             price: this.product.price,
             discount: this.product.discount,
             active: this.product.active,
@@ -245,21 +236,12 @@ export default {
       ))
     },
     async getGroups() {
-      await axios.get('http://back.ey/api/v1/groups/parents', {
+      await axios.get('http://back.ey/api/v1/groups', {
         params: {
           token: localStorage.access_token
         }
       }).then(response => (
           this.groups = response.data
-      ))
-    },
-    async getSubgroups() {
-      await axios.get('http://back.ey/api/v1/groups/childs', {
-        params: {
-          token: localStorage.access_token
-        }
-      }).then(response => (
-          this.subgroups = response.data
       ))
     },
     async getParams() {
@@ -309,7 +291,6 @@ export default {
     }
     await this.getCatalogs();
     await this.getGroups();
-    await this.getSubgroups();
     this.loading = false
   }
 }

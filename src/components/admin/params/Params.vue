@@ -15,7 +15,6 @@
           <th class="fw-bold" width="5%">#</th>
           <th class="fw-bold" width="20%">Каталог</th>
           <th class="fw-bold" width="20%">Группа</th>
-          <th class="fw-bold" width="20%">Подгруппа</th>
           <th class="fw-bold">Заголовок</th>
           <th class="fw-bold" width="5%">Действия</th>
         </tr>
@@ -27,8 +26,7 @@
           <th style="font-size: 20px; width: 50px"  v-else-if="row.params.length !== 0 && row.view_params === true">✕</th>
           <th v-else></th>
           <th>{{ row.catalog_name }}</th>
-          <th>{{ row.group_parent_name }}</th>
-          <th>{{ row.group_child_name }}</th>
+          <th>{{ row.group_name }}</th>
           <th>{{ row.name }}</th>
           <th>
             <div class="d-flex justify-content-center align-items-center р-25">
@@ -93,8 +91,7 @@ export default {
       return {
         id: '',
         catalog_id: null,
-        group_parent_id: null,
-        group_child_id: null,
+        group_id: null,
         name: '',
         params: [],
       }
