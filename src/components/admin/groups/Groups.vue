@@ -88,7 +88,7 @@ export default {
     async getData() {
       this.loading = true
       try {
-        await axios.get('http://back.ey/api/v1/catalogs', {
+        await axios.get('http://back.ey/api/v1/catalogs/for-groups', {
           params: {
             token: localStorage.access_token
           }
@@ -106,7 +106,6 @@ export default {
       return {
         id: '',
         catalog_id: null,
-        parent_id: null,
         name: '',
         active: 1
       }

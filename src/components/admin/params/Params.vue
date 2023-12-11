@@ -20,28 +20,49 @@
         </tr>
         </thead>
 
-        <tbody class="" v-for="(row, index) in paramsTitle">
-        <tr @click="row.view_params = row.view_params === false">
-          <th style="font-size: 20px; width: 50px" v-if="row.params.length !== 0 && row.view_params === false">↓</th>
-          <th style="font-size: 20px; width: 50px"  v-else-if="row.params.length !== 0 && row.view_params === true">✕</th>
+        <tbody class="" v-for="(catalog, index) in object">
+        <tr @click="catalog.view_groups = catalog.view_groups === false">
+          <th style="font-size: 20px; width: 50px" v-if="catalog.groups.length !== 0 && catalog.view_groups === false">↓</th>
+          <th style="font-size: 20px; width: 50px"  v-else-if="catalog.groups.length !== 0 && catalog.view_groups === true">✕</th>
           <th v-else></th>
-          <th>{{ row.catalog_name }}</th>
-          <th>{{ row.group_name }}</th>
-          <th>{{ row.name }}</th>
-          <th>
-            <div class="d-flex justify-content-center align-items-center р-25">
-              <img src="@/assets/icons/edit.png" width="25"  @click="editParam(row)"/>
-              <img class="ms-2" src="@/assets/icons/delete.png" width="25"  @click="deleteParam(row)"/>
-            </div>
-          </th>
+          <th>{{ catalog.name }}</th>
+          <th colspan="3"></th>
+
+<!--          <th>{{ row.group_name }}</th>-->
+<!--          <th>{{ row.name }}</th>-->
+<!--          <th>-->
+<!--            <div class="d-flex justify-content-center align-items-center р-25">-->
+<!--              <img src="@/assets/icons/edit.png" width="25"  @click="editParam(row)"/>-->
+<!--              <img class="ms-2" src="@/assets/icons/delete.png" width="25"  @click="deleteParam(row)"/>-->
+<!--            </div>-->
+<!--          </th>-->
         </tr>
 
-        <tr v-if="row.view_params === true && row.params.length !== 0">
-          <th colspan="7" class="text-center fw-bold">Параметры</th>
+        <tr v-if="catalog.groups.length !== 0 && catalog.view_groups === true" v-for="(group, index2) in catalog.groups"
+            @click="group.view_params = group.view_params === false">
+          <th colspan="2" style="font-size: 20px; width: 50px" v-if="group.param_title.length !== 0 && group.view_params === false">↓</th>
+          <th colspan="2" style="font-size: 20px; width: 50px"  v-else-if="group.param_title.length !== 0 && group.view_params === true">✕</th>
+          <th colspan="2" v-else></th>
+          <th>{{ group.name }}</th>
+          <th colspan="2"></th>
         </tr>
-        <tr class="child-list" v-if="row.view_params === true" v-for="(row2) in row.params">
-          <th colspan="7" class="text-center">{{ row2.name }}</th>
+
+        <tr v-if="catalog.groups.length !== 0 && catalog.view_groups === true" v-for="(group, index2) in catalog.groups"
+            @click="group.view_params = group.view_params === false">
+          <th colspan="2" style="font-size: 20px; width: 50px" v-if="group.param_title.length !== 0 && group.view_params === false">↓</th>
+          <th colspan="2" style="font-size: 20px; width: 50px"  v-else-if="group.param_title.length !== 0 && group.view_params === true">✕</th>
+          <th colspan="2" v-else></th>
+          <th>{{ group.name }}</th>
+          <th colspan="2"></th>
         </tr>
+
+
+<!--        <tr v-if="row.view_params === true && row.params.length !== 0">-->
+<!--          <th colspan="7" class="text-center fw-bold">Параметры</th>-->
+<!--        </tr>-->
+<!--        <tr class="child-list" v-if="row.view_params === true" v-for="(row2) in row.params">-->
+<!--          <th colspan="7" class="text-center">{{ row2.name }}</th>-->
+<!--        </tr>-->
         </tbody>
       </table>
 
@@ -63,7 +84,7 @@ export default {
   data() {
     return {
       loading: true,
-      paramsTitle: null,
+      object: null,
       modalParam: null,
       modal: null,
     }
@@ -73,12 +94,12 @@ export default {
       this.loading = true
 
       try {
-      await axios.get('http://back.ey/api/v1/params-title', {
+      await axios.get('http://back.ey/api/v1/catalogs/for-params', {
         params: {
           token: localStorage.access_token
         }
       }).then(response => (
-          this.paramsTitle = response.data
+          this.object = response.data
       ))
     } catch (exception) {
       func.toastElList(exception.response.data.msg);
