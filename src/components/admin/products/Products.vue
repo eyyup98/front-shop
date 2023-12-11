@@ -6,18 +6,52 @@
     <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addProduct">Добавить</button>
 
     <div class="loading" v-if="loading === true">Загрузка данных...</div>
-    <div class="products-container" v-else>
-      <div class="product-block my-3" v-for="row in products" @click="editProduct(row)">
-        <div class="div-img" style="background-color: #f8f8f8">
-          <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
-          <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
+    <div class="" v-else>
+
+      <div class="d-flex justify-content-center">
+        <div class="d-flex flex-column me-2 w-25">
+          <h5>Каталог</h5>
+          <select class="form-select h-100 w-100" v-model="search.catalog_index" @change="search.group_index = null; search.subgroup_index = null">
+            <option :value="null" selected>Все</option>
+            <option v-for="(item, index) in catalogs" :value="index">{{item.name}}</option>
+          </select>
         </div>
-        <div class="product-block-text px-2">
-          <div class="d-flex justify-content-between pb-0 mb-0">
-            <span class="h4">{{row.price}}</span>
-            <span class="text-decoration-line-through" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+        <div class="d-flex flex-column me-2 w-25">
+          <h5>Группа</h5>
+          <select class="form-select h-100 w-100" v-model="search.group_index" @change="search.subgroup_index = null">
+            <option :value="null" selected>Все</option>
+            <option v-if="search.catalog_index !== null" v-for="(item, index) in catalogs[search.catalog_index].groups"
+                    :value="index">{{item.name}}</option>
+          </select>
+        </div>
+        <div class="d-flex flex-column me-2 w-25">
+          <h5>Подгруппа</h5>
+          <select class="form-select h-100 w-100" v-model="search.subgroup_index">
+            <option :value="null" selected>Все</option>
+            <option v-if="search.group_index !== null"
+                    v-for="(item, index) in catalogs[search.catalog_index].groups[search.group_index].subgroups"
+                    :value="index">{{item.name}}
+            </option>
+          </select>
+        </div>
+        <div class="d-flex align-items-end">
+          <button type="button" class="btn btn-success w-100" @click="getData">Найти</button>
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap">
+        <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="row in products" @click="editProduct(row)">
+          <div>
+            <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
+            <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
           </div>
-          <h6 class="d-inline-block text-truncate mt-0 pt-0">{{row.name}}</h6>
+          <div class="px-2">
+            <div class="d-flex justify-content-between pb-0 mb-0">
+              <span class="h4">{{row.price}}</span>
+              <span class="text-decoration-line-through" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+            </div>
+            <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100">{{row.name}}</h6>
+          </div>
         </div>
       </div>
     </div>
@@ -37,6 +71,12 @@ export default {
     return {
       loading: true,
       products: null,
+      catalogs: null,
+      search: {
+        catalog_index: null,
+        group_index: null,
+        subgroup_index: null,
+      },
       modalProduct: null,
       modal: null,
       baseUrl: 'http://back-img.ey'
@@ -54,13 +94,28 @@ export default {
     async getData() {
       this.loading = true
 
-      await axios.get('http://back.ey/api/v1/products', {
-        params: {
-          token: localStorage.access_token
-        }
-      }).then(response => (
-          this.products = response.data
-      ))
+      let catalog_id = null;
+      let group_id = null;
+      let subgroup_id = null;
+
+      try {
+          catalog_id = this.catalogs[this.search.catalog_index].id;
+          group_id = this.catalogs[this.search.catalog_index].groups[this.search.group_index].id;
+          subgroup_id = this.catalogs[this.search.catalog_index].groups[this.search.group_index].subgroups[this.search.subgroup_index].id;
+      } catch (s) {
+
+      }
+
+        await axios.get('http://back.ey/api/v1/products', {
+          params: {
+            token: localStorage.access_token,
+            catalog_id: catalog_id,
+            group_id: group_id,
+            subgroup_id: subgroup_id
+          }
+        }).then(response => (
+            this.products = response.data
+        ))
 
       this.loading = false
     },
@@ -72,22 +127,38 @@ export default {
         await this.getData()
       }
     },
-    newProduct() {
-        return {
-          id: '',
-          catalog_id: null,
-          group_id: null,
-          subgroup_id: null,
-          name: '',
-          price: 0,
-          discount: 0,
-          active: true,
-          img: [],
-          params: [],
-        }
+    async getCatalogs() {
+      this.loading = true
+      try {
+        await axios.get('http://back.ey/api/v1/catalogs', {
+          params: {
+            token: localStorage.access_token
+          }
+        }).then(response => (
+            this.catalogs = response.data
+        ))
+        this.loading = false
+      } catch (exception) {
       }
+    },
+    newProduct() {
+      return {
+        id: '',
+        catalog_id: null,
+        group_id: null,
+        subgroup_id: null,
+        name: '',
+        price: 0,
+        discount: 0,
+        search: null,
+        active: true,
+        img: [],
+        params: [],
+      }
+    }
   },
   async mounted() {
+    await this.getCatalogs();
     await this.getData()
   }
 }
@@ -101,6 +172,7 @@ export default {
   background-position: 50% 50%;
   background-size: cover;
   border-radius: 3%;
+  /*border: 3px saddlebrown solid;*/
 }
 .product-block {
   display: flex;
@@ -111,19 +183,15 @@ export default {
   border-radius: 3%;
 }
 .product-block:hover{
-  transform: scale(1.1, 1.1);
+  transform: scale(1.01, 1.01);
   background-color: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  border-radius: 3%;
 }
-.products-container{
-  display:flex;
-  flex-wrap:wrap;
-  position: relative;
-}
-.product-block-text{
-  display: flex;
-  flex-direction: column;
-}
+/*.product-block-text{*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*}*/
 .container-list{
   padding: 10px;
   display: flex;
