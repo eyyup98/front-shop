@@ -3,21 +3,23 @@
   </ProductModal>
   <div class="container-list">
     <h1 class="h1">Товары</h1>
-    <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addProduct">Добавить</button>
+    <div class="d-flex justify-content-center w-25 m-auto my-3">
+      <button class="btn btn-outline-dark w-75" @click="addProduct">Добавить товар</button>
+    </div>
 
     <div class="loading" v-if="loading === true">Загрузка данных...</div>
     <div class="" v-else>
 
       <div class="d-flex justify-content-center">
         <div class="d-flex flex-column me-2 w-25">
-          <h5>Каталог</h5>
+          <h5 class="fw-semibold">Каталог</h5>
           <select class="form-select h-100 w-100" v-model="search.catalog_index" @change="search.group_index = null">
             <option :value="null" selected>Все</option>
             <option v-for="(item, index) in catalogs" :value="index">{{item.name}}</option>
           </select>
         </div>
         <div class="d-flex flex-column me-2 w-25">
-          <h5>Группа</h5>
+          <h5 class="fw-semibold">Группа</h5>
           <select class="form-select h-100 w-100" v-model="search.group_index">
             <option :value="null" selected>Все</option>
             <option v-if="search.catalog_index !== null" v-for="(item, index) in catalogs[search.catalog_index].groups"

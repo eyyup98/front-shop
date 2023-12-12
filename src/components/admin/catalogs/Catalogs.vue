@@ -5,7 +5,7 @@
     <div class="d-flex flex-column">
       <h1 class="h1">Каталог</h1>
 
-      <button class="btn btn-outline-primary w-25 my-3 mx-auto" @click="addCat">Добавить категорию</button>
+      <button class="btn btn-outline-dark w-25 my-3 mx-auto" @click="addCat">Добавить категорию</button>
 
       <div class="form-control loading" v-if="loading === true">Загрузка данных...</div>
       <table class="table table-striped table-bordered table-hover" v-if="loading === false">
