@@ -20,10 +20,14 @@
         <tr v-for="(row, index) in catalogs">
           <th>{{ row.name }}</th>
           <th v-if="row.active === 1">
-            <i class="d-flex justify-content-center active-icon select-none-click">✔</i>
+            <i class="d-flex justify-content-center active-icon">
+              <img src="@/assets/icons/active.png" width="30" height="30"/>
+            </i>
           </th>
           <th v-if="row.active === 0">
-            <i class="d-flex justify-content-center none-active-icon select-none-click">✘</i>
+            <i class="d-flex justify-content-center none-active-icon">
+              <img src="@/assets/icons/disactive.png" width="30" height="30"/>
+            </i>
           </th>
           <th>
             <div class="d-flex justify-content-center">

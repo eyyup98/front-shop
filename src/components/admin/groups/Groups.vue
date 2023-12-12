@@ -22,22 +22,26 @@
         <tbody v-for="(row, index) in catalogs" style="border: #dedede solid 1px">
         <tr @click="row.view_groups = row.view_groups === false">
           <th class="fw-semibold">{{row.name}}</th>
-          <th v-if="row.groups.length > 0 && row.view_groups === false">
+          <th class="ps-4" v-if="row.groups.length > 0 && row.view_groups === false">
             <img src="@/assets/icons/up.png" width="25" height="25"/>
           </th>
-          <th  v-else-if="row.groups.length > 0 && row.view_groups === true">
+          <th class="ps-4" v-else-if="row.groups.length > 0 && row.view_groups === true">
             <img src="@/assets/icons/down.png" width="25" height="25"/>
           </th>
           <th v-else></th>
           <th v-if="row.active === 1">
-            <i class="d-flex justify-content-center active-icon">✔</i>
+            <i class="d-flex justify-content-center active-icon">
+              <img src="@/assets/icons/active.png" width="30" height="30"/>
+            </i>
           </th>
           <th v-if="row.active === 0">
-            <i class="d-flex justify-content-center none-active-icon">✘</i>
+            <i class="d-flex justify-content-center none-active-icon">
+              <img src="@/assets/icons/disactive.png" width="30" height="30"/>
+            </i>
           </th>
           <th>
             <div class="d-flex justify-content-center align-items-center р-25">
-              <img src="@/assets/icons/edit.png" width="25"  @click="editGr(row)"/>
+              <img class="shadow-edit" src="@/assets/icons/edit.png" width="30"  @click="editGr(row)"/>
             </div>
           </th>
         </tr>
@@ -49,7 +53,6 @@
           </template>
         </tbody>
       </table>
-      <span id="group-message"></span>
     </div>
   </div>
 </template>
@@ -105,6 +108,7 @@ export default {
       }
     },
     editGr(object) {
+      object.view_groups = object.view_groups === false
       this.modalGroup = object
       this.modal = true
     },

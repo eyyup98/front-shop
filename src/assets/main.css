@@ -24,6 +24,13 @@
     /*height: 80vh;*/
     /*margin: 5% auto 0;*/
 }
+.delete-icon:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+}
+.shadow-edit:hover{
+    opacity: 0.6;
+}
 input {
     height: 25px;
     font-size: 14px;
