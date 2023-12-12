@@ -5,20 +5,24 @@
       <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
       <div class="modal-content" v-else>
         <div class="modal-header">
-          <h1 v-if="group.id === ''" class="modal-title fs-5">Создание группы</h1>
+          <h1 v-if="object.catalog_id === null" class="modal-title fs-5">Создание группы</h1>
           <h1 v-else class="modal-title fs-5">Редактирование группы</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
         </div>
         <div class="modal-body">
           <label class="">Каталог</label>
-          <select class="form-control form-control-sm" v-model="group.catalog_id">
+          <select class="form-control form-control-sm" v-model="object.catalog_id">
             <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
           </select>
-          <label class="mt-2">Название группы</label>
-          <input class="form-control form-control-sm px-3  p-2 w-50" v-model="group.name">
-          <div class="form-check form-check-inline mt-2">
-            <input class="form-check-input" type="checkbox" name="catalog-active" :checked="group.active" @click="active">
-            <label class="form-check-label">Активный</label>
+          <div class="d-flex justify-content-between mt-2 mb-3">
+            <label>Группы</label>
+            <button class="btn btn-outline-primary w-25 btn-sm" @click="addGroup">+</button>
+          </div>
+          <div class="d-flex justify-content-center mt-1" v-for="(groups, index) in object.groups">
+            <input class="form-control form-control-sm px-3 p-2 w-50" v-model="object.groups[index].name">
+            <div class="d-flex justify-content-start ms-4 py-1">
+              <img class="delete-icon" src="@/assets/icons/delete-img.png" width="25" height="25"  @click="deleteGroup(index)"/>
+            </div>
           </div>
         </div>
 
@@ -39,17 +43,18 @@ import func from "../../../js/functions"
 export default {
   name: "GroupModal",
   props: {
-    object: {
+    objectParen: {
       required: true
     },
   },
   data(){
     return {
       catalogs: null,
-      group: null,
+      object: null,
       loading: true,
       deleteArray: [],
       modalObject: null,
+      readySave: true
     }
   },
   methods: {
@@ -59,11 +64,15 @@ export default {
         changed: changed
       })
     },
-    active(){
-      if (this.group.active === 1) {
-        this.group.active = 0
-      } else if (this.group.active === 0) {
-        this.group.active = 1
+    addGroup() {
+      this.object.groups[this.object.groups.length] = {id: null, name: '', active: true}
+    },
+    deleteGroup(index) {
+      if (confirm(`Вы действителдьно хотите удалить параметр "` + (this.object.groups[index].name ?? '') + '"')) {
+        if (this.object.groups[index].id !== null) {
+          this.deleteArray[this.deleteArray.length] = this.object.groups[index].id;
+        }
+        this.object.groups.splice(index, 1);
       }
     },
     async getCatalogs() {
@@ -81,20 +90,28 @@ export default {
       }
     },
     async save() {
-      if (this.group.catalog_id === null) {
+      console.log(this.object)
+      if (this.object.catalog_id === null) {
         func.toastElList('Необходимо выбрать категорию');
         return;
       }
 
-      if (this.group.name.replace(/\s/g, "") === '') {
-        func.toastElList('Необходимо заполнить название группы');
+      this.readySave = true
+
+      this.object.groups.forEach((function(eachEle) {
+        if (eachEle.name.replace(/\s/g, "") === '') {
+          func.toastElList('Необходимо все поля');
+          this.readySave = false
+        }
+      }).bind(this))
+
+      if (!this.readySave)
         return;
-      }
 
       try {
-        await axios.post(`http://back.ey/api/v1/groups/${this.group.id}`, {
+        await axios.post(`http://back.ey/api/v1/groups`, {
           token: localStorage.access_token,
-          params: this.group,
+          params: this.object,
           delete: this.deleteArray
         })
       } catch (exception) {
@@ -108,7 +125,7 @@ export default {
   async mounted() {
     this.modalObject = new bootstrap.Modal(document.getElementById('groupModal'), {});
     this.modalObject.show()
-    this.group = JSON.parse(JSON.stringify(this.object));
+    this.object = JSON.parse(JSON.stringify(this.objectParen));
     await this.getCatalogs();
     this.loading = false
   }

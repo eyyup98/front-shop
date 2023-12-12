@@ -1,5 +1,5 @@
 <template class="template">
-  <GroupModal v-if="modal === true" @updateParent="updateParentMethod" :object="modalGroup">
+  <GroupModal v-if="modal === true" @updateParent="updateParentMethod" :objectParen="modalGroup">
   </GroupModal>
 
   <div class="container-block">
@@ -13,7 +13,7 @@
         <thead >
         <tr class=" table-dark">
           <th width="30%">Каталог</th>
-          <th>Группа</th>
+          <th>Группы</th>
           <th width="10%">Активный</th>
           <th width="10%">Действия</th>
         </tr>
@@ -22,26 +22,29 @@
         <tbody v-for="(row, index) in catalogs" style="border: #dedede solid 1px">
         <tr @click="row.view_groups = row.view_groups === false">
           <th class="fw-semibold">{{row.name}}</th>
-          <th colspan="3" v-if="row.groups.length > 0 && row.view_groups === false">↓</th>
-          <th colspan="3"  v-else-if="row.groups.length > 0 && row.view_groups === true">✕</th>
-          <th colspan="3" v-else></th>
+          <th v-if="row.groups.length > 0 && row.view_groups === false">
+            <img src="@/assets/icons/up.png" width="25" height="25"/>
+          </th>
+          <th  v-else-if="row.groups.length > 0 && row.view_groups === true">
+            <img src="@/assets/icons/down.png" width="25" height="25"/>
+          </th>
+          <th v-else></th>
+          <th v-if="row.active === 1">
+            <i class="d-flex justify-content-center active-icon">✔</i>
+          </th>
+          <th v-if="row.active === 0">
+            <i class="d-flex justify-content-center none-active-icon">✘</i>
+          </th>
+          <th>
+            <div class="d-flex justify-content-center align-items-center р-25">
+              <img src="@/assets/icons/edit.png" width="25"  @click="editGr(row)"/>
+            </div>
+          </th>
         </tr>
           <template v-if="row.groups.length > 0 && row.view_groups === true" v-for="groups in row.groups">
             <tr>
               <th colspan="1"></th>
-              <th>{{groups.name}}</th>
-              <th v-if="groups.active === 1">
-                <i class="d-flex justify-content-center active-icon">✔</i>
-              </th>
-              <th v-if="groups.active === 0">
-                <i class="d-flex justify-content-center none-active-icon">✘</i>
-              </th>
-              <th>
-                <div class="d-flex justify-content-center align-items-center р-25">
-                  <img src="@/assets/icons/edit.png" width="25"  @click="editGr(groups)"/>
-                  <img class="ms-2" src="@/assets/icons/delete.png" width="25"  @click="deleteGr(groups)"/>
-                </div>
-              </th>
+              <th colspan="3">{{groups.name}}</th>
             </tr>
           </template>
         </tbody>
@@ -89,10 +92,8 @@ export default {
     },
     newGroup(){
       return {
-        id: '',
         catalog_id: null,
-        name: '',
-        active: 1
+        groups: []
       }
     },
     async updateParentMethod(data) {
@@ -101,22 +102,6 @@ export default {
       if (data.changed === true) {
         await this.getData()
         func.toastElList('Сохранено');
-      }
-    },
-    async deleteGr(object) {
-      if (confirm(`Вы действителдьно хотите удалить группу "` + object.name + '"')) {
-        try {
-          await axios.delete('http://back.ey/api/v1/groups/' + object.id, {
-            params: {
-              token: localStorage.access_token
-            }
-          })
-        } catch (exception) {
-          func.toastElList(exception.response.data.msg);
-          return;
-        }
-        func.toastElList('Удалено');
-        await this.getData()
       }
     },
     editGr(object) {
