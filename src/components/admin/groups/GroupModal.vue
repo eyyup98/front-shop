@@ -100,7 +100,7 @@ export default {
 
       this.object.groups.forEach((function(eachEle) {
         if (eachEle.name.replace(/\s/g, "") === '') {
-          func.toastElList('Необходимо все поля');
+          func.toastElList('Необходимо заполнить все поля');
           this.readySave = false
         }
       }).bind(this))

@@ -220,7 +220,7 @@ export default {
       }
       console.log(this.preview_img)
     },
-    errorMessage(msg = 'Необходимо все поля'){
+    errorMessage(msg = 'Необходимо заполнить все поля'){
       document.getElementById('modal-message').innerHTML  = msg
       setTimeout(() => {
         document.getElementById('modal-message').innerHTML  = ''

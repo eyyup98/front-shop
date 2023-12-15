@@ -45,12 +45,12 @@
             </div>
           </th>
         </tr>
-          <template v-if="row.groups.length > 0 && row.view_groups === true" v-for="groups in row.groups">
-            <tr>
-              <th colspan="1"></th>
-              <th colspan="3">{{groups.name}}</th>
-            </tr>
-          </template>
+        <template v-if="row.groups.length > 0 && row.view_groups === true" v-for="groups in row.groups">
+          <tr>
+            <th colspan="1"></th>
+            <th colspan="3">{{groups.name}}</th>
+          </tr>
+        </template>
         </tbody>
       </table>
     </div>

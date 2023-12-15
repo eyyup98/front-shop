@@ -27,7 +27,7 @@
           </select>
         </div>
         <div class="d-flex align-items-end">
-          <button type="button" class="btn btn-success w-100" @click="getData">Найти</button>
+          <button type="button" class="btn btn-secondary w-100" @click="getData">Найти</button>
         </div>
       </div>
 
@@ -173,10 +173,6 @@ export default {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
   border-radius: 3%;
 }
-/*.product-block-text{*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*}*/
 .container-list{
   padding: 10px;
   display: flex;

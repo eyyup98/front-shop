@@ -5,31 +5,33 @@
       <div class="loading" v-if="loading === true" style="background-color: white; height: 50px">Загрузка данных...</div>
       <div class="modal-content" v-else>
         <div class="modal-header">
-          <h1 v-if="object.id === ''" class="modal-title fs-5">Создание параметров</h1>
+          <h1 v-if="object.catalog_id === null" class="modal-title fs-5">Создание параметров</h1>
           <h1 v-else class="modal-title fs-5">Редактирование параметров</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body d-flex flex-column">
           <label>Каталог</label>
-          <select class="form-control form-control-sm" v-model="select.catalog_ind" @change="select.group_ind = null">
-            <option v-for="(item, index) in catalogs" :value="index">{{item.name}}</option>
+          <select class="form-control form-control-sm" v-model="object.catalog_id" :disabled="objectParent.catalog_id !== null">
+            <option v-for="item in catalogs" :value="item.catalog_id">{{item.name}}</option>
           </select>
           <label class="mt-2">Группа</label>
-          <select class="form-control form-control-sm" v-model="select.group_ind">
-            <option v-if="select.catalog_ind === null" :value="null">Сперва выберите каталог</option>
-            <option v-else v-for="(item, index) in catalogs[select.catalog_ind].groups" :value="index">{{ item.name}}</option>
+          <select class="form-control form-control-sm" v-model="object.group_id" :disabled="objectParent.catalog_id !== null">
+            <option v-if="object.catalog_id === null" :value="null">Сперва выберите каталог</option>
+            <template v-else v-for="catalog in catalogs">
+              <option v-if="object.catalog_id === catalog.catalog_id" v-for="item in catalog.groups" :value="item.id">{{item.name}}</option>
+            </template>
           </select>
-          <label class="mt-2">Заголовок параметров</label>
-          <input class="form-control form-control-sm px-3  p-2" v-model="object.name">
 
           <div class="d-flex justify-content-between mt-2 mb-3">
-            <label class="">Параметры</label>
-            <button class="btn btn-outline-primary w-25 btn-sm" @click="addParam">+</button>
+            <label>Параметры</label>
+            <div class="d-flex justify-content-end w-25">
+              <button class="btn btn-success w-50 btn-sm" @click="addParam">+</button>
+            </div>
           </div>
-          <div class="d-flex justify-content-center mt-1" v-for="(param, index) in paramsRow">
-            <input class="form-control form-control-sm px-3 p-2 w-50" v-model="paramsRow[index].name">
+          <div class="d-flex justify-content-center mt-1" v-for="(param, index) in object.params">
+            <input class="form-control form-control-sm px-3 p-2 w-50" v-model="param.name">
             <div class="d-flex justify-content-start ms-4 py-1">
-              <img class="delete-icon" src="@/assets/icons/delete.png" width="25"  @click="deleteParam(index)"/>
+              <img class="delete-icon" src="@/assets/icons/delete-img.png" width="30" height="30"  @click="deleteParam(index)"/>
             </div>
           </div>
         </div>
@@ -64,11 +66,6 @@ export default {
       readySave: true,
       modalObject: null,
       deleteArray: [],
-      paramsRow: [],
-      select: {
-        catalog_ind: null,
-        group_ind: null,
-      }
     }
   },
   methods: {
@@ -79,18 +76,17 @@ export default {
       })
     },
     addParam() {
-      this.paramsRow[this.paramsRow.length] = {name: ''}
+      this.object.params[this.object.params.length] = {name: ''}
     },
     deleteParam(index) {
-      if (confirm(`Вы действителдьно хотите удалить параметр "` + (this.paramsRow[index].name ?? '') + '"')) {
-        if (this.paramsRow[index].id !== null) {
-          this.deleteArray[this.deleteArray.length] = this.paramsRow[index].id;
+      if (confirm(`Вы действителдьно хотите удалить параметр "` + (this.object.params[index].name ?? '') + '"')) {
+        if (this.object.params[index].id !== null) {
+          this.deleteArray[this.deleteArray.length] = this.object.params[index].id;
         }
-        this.paramsRow.splice(index, 1);
+        this.object.params.splice(index, 1);
       }
     },
     async save() {
-      // console.log(this.paramsRow)
       this.readySave = true
 
       if (this.object.catalog_id === null) {
@@ -103,14 +99,9 @@ export default {
         return;
       }
 
-      if (this.object.name.replace(/\s/g, "") === '') {
-        func.toastElList('Необходимо заполнить заголовок');
-        this.readySave = false
-      }
-
-      this.paramsRow.forEach((function(eachEle) {
+      this.object.params.forEach((function(eachEle) {
         if (eachEle.name.replace(/\s/g, "") === '') {
-          func.toastElList('Необходимо все поля');
+          func.toastElList('Необходимо заполнить все поля');
           this.readySave = false
         }
       }).bind(this))
@@ -118,39 +109,23 @@ export default {
       if (!this.readySave)
         return
 
-      // try {
-      //   let title_id = null
-      //   await axios.post(`http://back.ey/api/v1/params-title/${this.object.id}`, {
-      //     token: localStorage.access_token,
-      //     params: {
-      //       name: this.object.name,
-      //       catalog_id: this.object.catalog_id,
-      //       group_id: this.object.group_id,
-      //     }
-      //   }).then(response => (
-      //       title_id = response.data.title_id
-      //   ))
-      //
-      //   this.object.params.forEach(function(param) {
-      //     if (param.title_id === '') {
-      //       param.title_id = title_id
-      //     }
-      //   });
-      //
-      //   await axios.post(`http://back.ey/api/v1/params`, {
-      //     token: localStorage.access_token,
-      //     params: this.object.params,
-      //     delete: this.deleteArray
-      //   })
-      // } catch (exception) {
-      //   func.toastElList(exception.response.data.msg ?? 'Ошибка при сохранении');
-      //   return;
-      // }
-      //
-      // this.closeModal(true)
+      try {
+        await axios.post(`http://back.ey/api/v1/params`, {
+          token: localStorage.access_token,
+          catalog_id: this.objectParent.catalog_id ?? this.object.catalog_id,
+          group_id: this.objectParent.group_id ?? this.object.group_id,
+          params: this.object.params,
+          delete: this.deleteArray
+        })
+      } catch (exception) {
+        func.toastElList(exception.response.data.msg ?? 'Ошибка при сохранении');
+        return;
+      }
+
+      this.closeModal(true)
     },
     async getCatalogs() {
-      await axios.get('http://back.ey/api/v1/catalogs/for-params', {
+      await axios.get('http://back.ey/api/v1/catalogs/for-groups', {
         params: {
           token: localStorage.access_token
         }
