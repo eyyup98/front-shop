@@ -7,29 +7,47 @@
       <button class="btn btn-outline-dark w-75" @click="addProduct">Добавить товар</button>
     </div>
 
-    <div class="loading" v-if="loading === true">Загрузка данных...</div>
-    <div class="" v-else>
+    <div class="d-flex justify-content-center">
+      <div class="d-flex flex-column me-2 w-25">
+        <h5 class="fw-semibold">Каталог</h5>
+        <select class="form-select h-100 w-100" v-model="search.catalog_index" @change="changeData(); search.group_index = null">
+          <option :value="null" selected>Все</option>
+          <option v-for="(item, index) in catalogs" :value="index">{{item.name}}</option>
+        </select>
+      </div>
+      <div class="d-flex flex-column me-2 w-25">
+        <h5 class="fw-semibold">Группа</h5>
+        <select class="form-select h-100 w-100" v-model="search.group_index" @change="changeData">
+          <option :value="null" selected>Все</option>
+          <option v-if="search.catalog_index !== null" v-for="(item, index) in catalogs[search.catalog_index].groups"
+                  :value="index">{{item.name}}</option>
+        </select>
+      </div>
 
-      <div class="d-flex justify-content-center">
-        <div class="d-flex flex-column me-2 w-25">
-          <h5 class="fw-semibold">Каталог</h5>
-          <select class="form-select h-100 w-100" v-model="search.catalog_index" @change="search.group_index = null">
-            <option :value="null" selected>Все</option>
-            <option v-for="(item, index) in catalogs" :value="index">{{item.name}}</option>
-          </select>
-        </div>
-        <div class="d-flex flex-column me-2 w-25">
-          <h5 class="fw-semibold">Группа</h5>
-          <select class="form-select h-100 w-100" v-model="search.group_index">
-            <option :value="null" selected>Все</option>
-            <option v-if="search.catalog_index !== null" v-for="(item, index) in catalogs[search.catalog_index].groups"
-                    :value="index">{{item.name}}</option>
-          </select>
-        </div>
-        <div class="d-flex align-items-end">
-          <button type="button" class="btn btn-secondary w-100" @click="getData">Найти</button>
+      <div class="d-flex flex-column me-2 w-25">
+        <h5 class="fw-semibold">Поиск товара</h5>
+        <div class="w-100 h-100 d-flex flex-row">
+          <div class="form-outline w-100 position-relative" data-mdb-input-init>
+            <input type="search" class="form-control h-100" @input="searchMethod" @keyup.enter="getData" v-model="search.searchInput"/>
+            <div class="w-100 position-absolute z-1">
+              <div class="dropdown">
+                <ul class="dropdown-menu d-inline-block w-100" v-if="searchList.length > 0">
+                  <li><a class="dropdown-item d-inline-block text-truncate" v-for="item in searchList" @click="checkProduct(item)">{{ item.name }}</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <div class="d-flex align-items-end flex-row">
+        <button type="button" class="btn btn-secondary ms-2" @click="getData">Найти</button>
+        <button type="button" class="btn btn-secondary ms-2" @click="clearSearch">Очистить фильтр</button>
+      </div>
+    </div>
+
+    <div class="loading" v-if="loading === true">Загрузка данных...</div>
+    <div class="" v-else>
 
       <div class="d-flex flex-wrap">
         <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="row in products" @click="editProduct(row)">
@@ -64,16 +82,50 @@ export default {
       loading: true,
       products: null,
       catalogs: null,
+      catalog_id: null,
+      group_id: null,
       search: {
         catalog_index: null,
-        group_index: null
+        group_index: null,
+        searchInput: '',
+        searchWord: null,
       },
+      searchList: [],
       modalProduct: null,
       modal: null,
       baseUrl: 'http://back-img.ey'
     }
   },
   methods: {
+    async searchMethod() {
+      if (this.search.searchInput !== '') {
+        await axios.get('http://back.ey/api/v1/products/search', {
+          params: {
+            token: localStorage.access_token,
+            catalog_id: this.catalog_id,
+            group_id: this.group_id,
+            search: this.search.searchInput
+          }
+        }).then(response => (
+            this.searchList = response.data
+        ))
+      }
+    },
+    checkProduct(product){
+      this.getData(product.id)
+      this.search.searchInput = product.name
+      this.searchList = []
+    },
+    clearSearch() {
+      this.search = {
+        catalog_index: null,
+        group_index: null,
+        searchInput: ''
+      }
+      this.catalog_id = null
+      this.group_id = null
+      this.getData()
+    },
     addProduct(){
       this.modalProduct = this.newProduct()
       this.modal = true
@@ -82,26 +134,27 @@ export default {
       this.modalProduct = {id: object.id}
       this.modal = true
     },
-    async getData() {
+    changeData(){
+      try {
+        this.catalog_id = this.catalogs[this.search.catalog_index].catalog_id;
+        this.group_id = this.catalogs[this.search.catalog_index].groups[this.search.group_index].id;
+      } catch (exception) {}
+    },
+    async getData(id) {
+      this.searchList = []
       this.loading = true
 
-      let catalog_id = null;
-      let group_id = null;
-
-      try {
-          catalog_id = this.catalogs[this.search.catalog_index].id;
-          group_id = this.catalogs[this.search.catalog_index].groups[this.search.group_index].id;
-      } catch (exception) {}
-
-        await axios.get('http://back.ey/api/v1/products', {
-          params: {
-            token: localStorage.access_token,
-            catalog_id: catalog_id,
-            group_id: group_id
-          }
-        }).then(response => (
-            this.products = response.data
-        ))
+      await axios.get(`http://back.ey/api/v1/products`, {
+        params: {
+          token: localStorage.access_token,
+          catalog_id: this.catalog_id,
+          group_id: this.group_id,
+          product_id: typeof id !== 'number' ? null : id,
+          search: this.search.searchInput === '' ? null : this.search.searchInput
+        }
+      }).then(response => (
+          this.products = response.data
+      ))
 
       this.loading = false
     },
