@@ -24,7 +24,7 @@
     /*height: 80vh;*/
     /*margin: 5% auto 0;*/
 }
-.delete-icon:hover{
+.shadow-icon:hover{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
     border-radius: 50%;
 }

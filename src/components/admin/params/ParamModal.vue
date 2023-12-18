@@ -11,7 +11,7 @@
         </div>
         <div class="modal-body d-flex flex-column">
           <label>Каталог</label>
-          <select class="form-control form-control-sm" v-model="object.catalog_id" :disabled="objectParent.catalog_id !== null">
+          <select class="form-control form-control-sm" v-model="object.catalog_id" :disabled="objectParent.catalog_id !== null" @change="object.group_id = null">
             <option v-for="item in catalogs" :value="item.catalog_id">{{item.name}}</option>
           </select>
           <label class="mt-2">Группа</label>
@@ -31,7 +31,7 @@
           <div class="d-flex justify-content-center mt-1" v-for="(param, index) in object.params">
             <input class="form-control form-control-sm px-3 p-2 w-50" v-model="param.name">
             <div class="d-flex justify-content-start ms-4 py-1">
-              <img class="delete-icon" src="@/assets/icons/delete-img.png" width="30" height="30"  @click="deleteParam(index)"/>
+              <img class="shadow-icon" src="@/assets/icons/delete-img.png" width="30" height="30"  @click="deleteParam(index)"/>
             </div>
           </div>
         </div>

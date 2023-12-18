@@ -10,7 +10,7 @@
       <div class="form-control loading" v-if="loading === true">Загрузка данных...</div>
 
       <table class="table table-hover" v-if="loading === false">
-        <thead >
+        <thead>
         <tr class=" table-dark">
           <th width="30%">Каталог</th>
           <th>Группы</th>

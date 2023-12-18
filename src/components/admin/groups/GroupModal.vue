@@ -19,9 +19,9 @@
             <button class="btn btn-outline-primary w-25 btn-sm" @click="addGroup">+</button>
           </div>
           <div class="d-flex justify-content-center mt-1" v-for="(groups, index) in object.groups">
-            <input class="form-control form-control-sm px-3 p-2 w-50" v-model="object.groups[index].name">
+            <input class="form-control form-control-sm px-3 p-2 w-50" v-model="groups.name">
             <div class="d-flex justify-content-start ms-4 py-1">
-              <img class="delete-icon" src="@/assets/icons/delete-img.png" width="30" height="30"  @click="deleteGroup(index)"/>
+              <img class="shadow-icon" src="@/assets/icons/delete-img.png" width="30" height="30"  @click="deleteGroup(index)"/>
             </div>
           </div>
         </div>

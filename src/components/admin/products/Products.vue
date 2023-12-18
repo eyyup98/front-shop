@@ -116,7 +116,7 @@ export default {
     async getCatalogs() {
       this.loading = true
       try {
-        await axios.get('http://back.ey/api/v1/catalogs', {
+        await axios.get('http://back.ey/api/v1/catalogs/for-groups', {
           params: {
             token: localStorage.access_token
           }
@@ -130,15 +130,11 @@ export default {
     newProduct() {
       return {
         id: '',
-        catalog_id: null,
-        group_id: null,
         name: '',
         price: 0,
         discount: 0,
-        search: null,
         active: true,
-        img: [],
-        params: [],
+        img: []
       }
     }
   },
@@ -168,7 +164,7 @@ export default {
   border-radius: 3%;
 }
 .product-block:hover{
-  transform: scale(1.01, 1.01);
+  transform: scale(1.1, 1.1);
   background-color: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
   border-radius: 3%;

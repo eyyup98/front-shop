@@ -11,36 +11,32 @@
         </div>
         <div class="modal-body d-flex flex-column">
           <label>Каталог</label>
-          <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.catalog_id" @change="product.group_id = null">
-            <option v-for="item in catalogs" :value="item.id">{{item.name}}</option>
+          <select class="form-control form-control-sm" v-model="cat_ind" @change="group_ind = null" :disabled="objectParent.id !== ''">
+            <option v-if="objectParent.id === ''" v-for="(item, index) in catalogs" :value="index">{{item.name}}</option>
+            <option v-else :value="null">{{ product.catalog_name }}</option>
           </select>
-          <span class="ms-3" v-else>{{product.catalog_name}}</span>
+
           <label class="mt-2">Группа</label>
-          <select class="form-control form-control-sm" v-if="product.id === ''" v-model="product.group_id">
-            <option v-if="product.catalog_id === null" :value="null">Сперва выберите каталог</option>
-            <template v-for="item in groups">
-              <option v-if="item.catalog_id === product.catalog_id" :value="item.id">{{ item.name}}</option>
-            </template>
+          <select class="form-control form-control-sm" v-model="group_ind" :disabled="objectParent.id !== ''">
+            <option v-if="cat_ind === null && objectParent.id === ''" :value="null">Сперва выберите каталог</option>
+            <option v-else-if="cat_ind !== null" v-for="(item, index) in catalogs[cat_ind].groups" :value="index">{{item.name}}</option>
+            <option v-else :value="null">{{ product.group_name }}</option>
           </select>
-          <span class="ms-3" v-else>{{product.group_name}}</span>
 
           <label class="mt-2">Название товара</label>
           <input class="form-control form-control-sm px-3 p-2" type="text" v-model="product.name">
 
-          <div v-for="(row) in params">
-            <div v-if="row.catalog_id === product.catalog_id && row.group_id === product.group_id">
-
-              <label class="mt-2" v-if="row.params.length > 0">Параметры</label>
-              <br><label class="ms-5 my-0" v-if="row.params.length > 0">{{ row.name }}</label>
-              <div class="form-group row d-flex justify-content-center ms-5 ps-5 mt-1" v-for="(row2) in row.params">
-                <label class="col-sm-6 col-form-label col-form-label-sm">{{ row2.name }}</label>
-                <div class="col-sm-6">
-                  <input class="form-control form-control-sm" type="text" v-model="row2.value">
-                </div>
-              </div>
-
-            </div>
+          <label class="mt-2">Параметры</label>
+          <div class="d-flex justify-content-around mx-5 mb-1" v-if="cat_ind !== null && group_ind !== null && objectParent.id === ''"
+               v-for="param in catalogs[cat_ind].groups[group_ind].params">
+            <label class="w-50">{{ param.name }}</label>
+            <input class="form-control form-control-sm w-50" type="text" v-model="param.product_param_name">
           </div>
+          <div class="d-flex justify-content-around mx-5 mb-1" v-if="objectParent.id !== ''" v-for="param in product.params">
+            <label class="w-50">{{ param.name }}</label>
+            <input class="form-control form-control-sm w-50" type="text" v-model="param.product_param_name">
+          </div>
+
           <div class="mt-2">
             <label class="form-label">Загрузить изображение</label>
             <input class="form-control form-control-sm" type="file" ref="file" v-on:change="handleFileUpload($event)" multiple>
@@ -50,7 +46,7 @@
             <Slide v-for="(slide, index) in preview_img" :key="true" class="mt-2">
                 <div class="carousel__item">
                   <div class="img" v-bind:style="{ backgroundImage: 'url(' + slide + ')' }"></div>
-                  <div class="delete-img" @click="deleteImg(index, product.img[index])"
+                  <div class="delete-img shadow-icon" @click="deleteImg(index, product.img[index])"
                        v-bind:style="{ backgroundImage: 'url(\'../../src/assets/icons/delete-img2.png\')' }"></div>
                 </div>
             </Slide>
@@ -84,9 +80,10 @@
 
 <script>
 import axios from "axios";
-
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+import func from "../../../js/functions"
+
 // ^\d{1,2}(?:\.\d{1,2})?$|^\.\d{1,2}$
 
 export default {
@@ -102,15 +99,14 @@ export default {
   data(){
     return {
       catalogs: null,
-      groups: null,
-      params: null,
       product: null,
       loading: true,
       modalObject: null,
-      modal: true,
-      input_text: null,
       deleteImgArr: [],
       preview_img: [],
+      cat_ind: null,
+      group_ind: null,
+      endData: null,
       breakpoints: {
         100: {
           itemsToShow: 1,
@@ -134,52 +130,47 @@ export default {
         changed: changed
       })
     },
-    active(){
-      if (this.group.active === 1) {
-        this.group.active = 0
-      } else if (this.group.active === 0) {
-        this.group.active = 1
+    active() {
+      if (this.product.active === 1) {
+        this.product.active = 0
+      } else if (this.product.active === 0) {
+        this.product.active = 1
       }
     },
+    sendParams() {
+      try {
+        this.endData = {
+          catalog_id: this.product.catalog_id ?? this.catalogs[this.cat_ind].catalog_id,
+          group_id: this.product.group_id ?? this.catalogs[this.cat_ind].groups[this.group_ind].group_id,
+          name: this.product.name,
+          price: this.product.price,
+          discount: this.product.discount,
+          active: this.product.active,
+          params: this.product.params ?? this.catalogs[this.cat_ind].groups[this.group_ind].params
+        }
+      } catch (exception) {}
+    },
     async save() {
-      this.product.params = []
-      this.params.forEach((function(eachEle) {
-        eachEle.params.forEach((function(eachEle2) {
-          if (typeof eachEle2.value !== "undefined") {
-            this.product.params[this.product.params.length] = {
-              param_id: eachEle2.id,
-              name: eachEle2.value
-            }
-          }
-        }).bind(this))
-      }).bind(this))
-
-      if (this.product.catalog_id === null) {
-        this.errorMessage('Необходимо выбрать каталог')
+      if (this.cat_ind === null && this.objectParent.id === '') {
+        func.toastElList('Необходимо выбрать каталог');
         return
       }
-      if (this.product.group_id === null) {
-        this.errorMessage('Необходимо выбрать группу')
+      if (this.group_ind === null && this.objectParent.id === '') {
+        func.toastElList('Необходимо выбрать группу');
         return
       }
       if (this.product.name.replace(/\s/g, "") === '') {
-        this.errorMessage('Необходимо заполнить название')
+        func.toastElList('Необходимо заполнить название');
         return
       }
+
+      this.sendParams();
 
       try {
         let id = ''
         await axios.post(`http://back.ey/api/v1/products/${this.product.id}`, {
           token: localStorage.access_token,
-          params: {
-            name: this.product.name,
-            catalog_id: this.product.catalog_id,
-            group_id: this.product.group_id,
-            price: this.product.price,
-            discount: this.product.discount,
-            active: this.product.active,
-            params: this.product.params,
-          }
+          product: this.endData
         }).then(response => (
             id = '/' + response.data.product_id
         ))
@@ -198,59 +189,33 @@ export default {
               },
             })
       } catch (exception) {
-        this.errorMessage(exception.response.data.msg ?? 'Ошибка при сохранении')
+        func.toastElList(exception.response.data.msg ?? 'Ошибка при сохранении');
         return;
       }
 
       this.closeModal(true)
     },
-    handleFileUpload(e){
-      for (let i = 0; i < this.$refs.file.files.length; i++ ){
+    handleFileUpload(e) {
+      for (let i = 0; i < this.$refs.file.files.length; i++) {
         let index = this.product.img.length
         this.product.img[index] = this.$refs.file.files[i];
         this.preview_img[index] = URL.createObjectURL(e.target.files[i]);
       }
     },
-    deleteImg(index, object){
-      console.log(this.preview_img)
+    deleteImg(index, object) {
       if (confirm(`Вы действителдьно хотите удалить изображение "` + object.name + '"')) {
         this.product.img.splice(index, 1);
         this.preview_img.splice(index, 1);
         this.deleteImgArr[this.deleteImgArr.length] = {id: object.id}
       }
-      console.log(this.preview_img)
-    },
-    errorMessage(msg = 'Необходимо заполнить все поля'){
-      document.getElementById('modal-message').innerHTML  = msg
-      setTimeout(() => {
-        document.getElementById('modal-message').innerHTML  = ''
-      }, 2000);
     },
     async getCatalogs() {
-      await axios.get('http://back.ey/api/v1/catalogs', {
+      await axios.get('http://back.ey/api/v1/catalogs/for-params', {
         params: {
           token: localStorage.access_token
         }
       }).then(response => (
           this.catalogs = response.data
-      ))
-    },
-    async getGroups() {
-      await axios.get('http://back.ey/api/v1/groups', {
-        params: {
-          token: localStorage.access_token
-        }
-      }).then(response => (
-          this.groups = response.data
-      ))
-    },
-    async getParams() {
-      await axios.get('http://back.ey/api/v1/params-title', {
-        params: {
-          token: localStorage.access_token
-        }
-      }).then(response => (
-          this.params = response.data
       ))
     },
     async getProduct(id) {
@@ -261,18 +226,7 @@ export default {
       }).then(response => (
           this.product = response.data
       ))
-      this.params = this.product.params
-    },
-    async getProductImg(id) {
-      await axios.get(`http://back.ey/api/v1/products-img`, {
-        params: {
-          token: localStorage.access_token,
-          product_id: id
-        }
-      }).then(response => (
-          this.product.img = response.data
-      ))
-      this.product.img.forEach((function(eachEle) {
+      this.product.img.forEach((function (eachEle) {
         this.preview_img[this.preview_img.length] = 'http://back-img.ey' + eachEle.src
       }).bind(this))
     },
@@ -284,13 +238,10 @@ export default {
     this.loading = true
     if (this.objectParent.id === '') {
       this.product = JSON.parse(JSON.stringify(this.objectParent));
-      await this.getParams();
     } else {
       await this.getProduct(this.objectParent.id);
-      await this.getProductImg(this.objectParent.id);
     }
     await this.getCatalogs();
-    await this.getGroups();
     this.loading = false
   }
 }
