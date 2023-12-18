@@ -1,10 +1,12 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import NavBar from "./components/admin/NavBar.vue";
+import NavBarClient from "./components/client/NavBarClient.vue";
 export default {
   name: "App",
   components: {
-    NavBar
+    NavBar,
+    NavBarClient
   },
   data() {
     return {
@@ -16,34 +18,11 @@ export default {
     }
   },
 }
-
-
-/*import axios from "axios";
-import router from "./router";
-console.log('localStorage.access_token');
-console.log(localStorage.access_token);
-if (localStorage.access_token !== null) {
-  document.getElementsByClassName('wrapper').visibility = 'hidden';
-} /!*else {
-  document.getElementById('wrapper').style.display = 'none';
-}*!/
-export default {
-  name: "App",
-  data(){
-    return {
-      access_token: null
-    }
-  },
-  mounted() {
-    this.access_token = localStorage.access_token;
-    console.log('this.access_token')
-    console.log(this.access_token)
-  }
-}*/
 </script>
 
 <template>
   <NavBar v-if="now_route === 'admin'"></NavBar>
+  <NavBarClient v-else></NavBarClient>
 
   <div class="toast text-white bg-primary" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 9999 !important;position: absolute; right: 5px; bottom: 5px;opacity: 1;">
     <div class="d-flex">

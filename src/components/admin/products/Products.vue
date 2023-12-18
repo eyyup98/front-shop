@@ -41,7 +41,7 @@
       </div>
 
       <div class="d-flex align-items-end flex-row">
-        <button type="button" class="btn btn-secondary ms-2" @click="getData">Найти</button>
+        <button type="button" class="btn btn-success ms-2" @click="getData">Найти</button>
         <button type="button" class="btn btn-secondary ms-2" @click="clearSearch">Очистить фильтр</button>
       </div>
     </div>
