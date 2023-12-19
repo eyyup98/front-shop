@@ -1,66 +1,68 @@
 <template>
   <ProductModal v-if="this.modal === true" @updateParent="updateParentMethod" :objectParent="modalProduct">
   </ProductModal>
-  <div class="container-list">
-    <h1 class="h1">Товары</h1>
-    <div class="d-flex justify-content-center w-25 m-auto my-3">
-      <button class="btn btn-outline-dark w-75" @click="addProduct">Добавить товар</button>
-    </div>
-
-    <div class="d-flex justify-content-center">
-      <div class="d-flex flex-column me-2 w-25">
-        <h5 class="fw-semibold">Каталог</h5>
-        <select class="form-select h-100 w-100" v-model="search.catalog_index" @change="changeData(); search.group_index = null">
-          <option :value="null" selected>Все</option>
-          <option v-for="(item, index) in catalogs" :value="index">{{item.name}}</option>
-        </select>
-      </div>
-      <div class="d-flex flex-column me-2 w-25">
-        <h5 class="fw-semibold">Группа</h5>
-        <select class="form-select h-100 w-100" v-model="search.group_index" @change="changeData">
-          <option :value="null" selected>Все</option>
-          <option v-if="search.catalog_index !== null" v-for="(item, index) in catalogs[search.catalog_index].groups"
-                  :value="index">{{item.name}}</option>
-        </select>
+  <div class="container-block">
+    <div class="container-list">
+      <h1 class="h1">Товары</h1>
+      <div class="d-flex justify-content-center w-25 m-auto my-3">
+        <button class="btn btn-outline-dark w-75" @click="addProduct">Добавить товар</button>
       </div>
 
-      <div class="d-flex flex-column me-2 w-25">
-        <h5 class="fw-semibold">Поиск товара</h5>
-        <div class="w-100 h-100 d-flex flex-row">
-          <div class="form-outline w-100 position-relative" data-mdb-input-init>
-            <input type="search" class="form-control h-100" @input="searchMethod" @keyup.enter="getData" v-model="search.searchInput"/>
-            <div class="w-100 position-absolute z-1">
-              <div class="dropdown">
-                <ul class="dropdown-menu d-inline-block w-100" v-if="searchList.length > 0">
-                  <li><a class="dropdown-item d-inline-block text-truncate" v-for="item in searchList" @click="checkProduct(item)">{{ item.name }}</a></li>
-                </ul>
+      <div class="d-flex justify-content-center">
+        <div class="d-flex flex-column me-2 w-25">
+          <h5 class="fw-semibold">Каталог</h5>
+          <select class="form-select h-100 w-100" v-model="search.catalog_index" @change="changeData(); search.group_index = null">
+            <option :value="null" selected>Все</option>
+            <option v-for="(item, index) in catalogs" :value="index">{{item.name}}</option>
+          </select>
+        </div>
+        <div class="d-flex flex-column me-2 w-25">
+          <h5 class="fw-semibold">Группа</h5>
+          <select class="form-select h-100 w-100" v-model="search.group_index" @change="changeData">
+            <option :value="null" selected>Все</option>
+            <option v-if="search.catalog_index !== null" v-for="(item, index) in catalogs[search.catalog_index].groups"
+                    :value="index">{{item.name}}</option>
+          </select>
+        </div>
+
+        <div class="d-flex flex-column me-2 w-25">
+          <h5 class="fw-semibold">Поиск товара</h5>
+          <div class="w-100 h-100 d-flex flex-row">
+            <div class="form-outline w-100 position-relative" data-mdb-input-init>
+              <input type="search" class="form-control h-100" @input="searchMethod" @keyup.enter="getData" v-model="search.searchInput"/>
+              <div class="w-100 position-absolute z-1">
+                <div class="dropdown">
+                  <ul class="dropdown-menu d-inline-block w-100" v-if="searchList.length > 0">
+                    <li><a class="dropdown-item d-inline-block text-truncate" v-for="item in searchList" @click="checkProduct(item)">{{ item.name }}</a></li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+        <div class="d-flex align-items-end flex-row">
+          <button type="button" class="btn btn-success ms-2" @click="getData">Найти</button>
+          <button type="button" class="btn btn-secondary ms-2 text-nowrap" @click="clearSearch">Очистить фильтр</button>
+        </div>
       </div>
 
-      <div class="d-flex align-items-end flex-row">
-        <button type="button" class="btn btn-success ms-2" @click="getData">Найти</button>
-        <button type="button" class="btn btn-secondary ms-2" @click="clearSearch">Очистить фильтр</button>
-      </div>
-    </div>
+      <div class="loading" v-if="loading === true">Загрузка данных...</div>
+      <div class="" v-else>
 
-    <div class="loading" v-if="loading === true">Загрузка данных...</div>
-    <div class="" v-else>
-
-      <div class="d-flex flex-wrap">
-        <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="row in products" @click="editProduct(row)">
-          <div>
-            <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
-            <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
-          </div>
-          <div class="px-2">
-            <div class="d-flex justify-content-between pb-0 mb-0">
-              <span class="h4">{{row.price}}</span>
-              <span class="text-decoration-line-through" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+        <div class="d-flex flex-wrap">
+          <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="row in products" @click="editProduct(row)">
+            <div>
+              <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
+              <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
             </div>
-            <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100">{{row.name}}</h6>
+            <div class="px-2">
+              <div class="d-flex justify-content-between pb-0 mb-0">
+                <span class="h4">{{row.price}}</span>
+                <span class="text-decoration-line-through" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+              </div>
+              <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100">{{row.name}}</h6>
+            </div>
           </div>
         </div>
       </div>
@@ -88,7 +90,6 @@ export default {
         catalog_index: null,
         group_index: null,
         searchInput: '',
-        searchWord: null,
       },
       searchList: [],
       modalProduct: null,

@@ -45,9 +45,8 @@ export default {
 .all-content{
   background-color: rgb(255, 255, 255);
   margin: 0 auto;
-  padding: 90px 20px 0;
+  padding: 10px 20px 0;
   max-width: 1600px;
-  /*padding: 20px;*/
 }
 header {
   line-height: 1.5;
