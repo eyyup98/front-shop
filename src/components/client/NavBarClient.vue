@@ -95,11 +95,8 @@ export default {
     async getData() {
       this.loading = true
       try {
-        await axios.get('http://back.ey/api/v1/catalogs/for-clients', {
-          params: {
-            token: localStorage.access_token
-          }
-        }).then(response => (
+        await axios.get('http://back.ey/api/v1/client-catalogs', {})
+            .then(response => (
             this.catalogs = response.data
         ))
       } catch (exception) {

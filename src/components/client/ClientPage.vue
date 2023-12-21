@@ -1,11 +1,17 @@
 <template>
   <NavBarClient @updateParent="updateParentMethod"></NavBarClient>
   <div style="width: 90%; margin: 0 auto">
-    <div class="loading" v-if="loading === true">Загрузка данных...</div>
+    <div class="loading" v-if="loading === true">
+      <div class="text-center">
+        <div class="spinner-border mt-5 m-auto" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
     <div v-else>
 
       <div class="d-flex flex-wrap">
-        <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="row in products" @click="editProduct(row)">
+        <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="row in products" @click="openProduct(row)">
           <div>
             <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
             <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
@@ -28,6 +34,13 @@
 import axios from "axios";
 import NavBarClient from "./NavBarClient.vue";
 import func from "../../js/functions";
+import router from "../../router";
+import { useRouter } from 'vue-router'
+
+onscroll = function(){
+  if(window.scrollY+1 >= document.documentElement.scrollHeight-document.documentElement.clientHeight)
+    alert('Конец прокрутки');
+};
 
 export default {
   name: "ClientPage",
@@ -47,6 +60,13 @@ export default {
     }
   },
   methods: {
+    openProduct(row){
+      const routeData = this.$router.resolve({
+        name: "product",
+        query: { id: row.id },
+      });
+      window.open(routeData.href, "_blank");
+    },
     async updateParentMethod(data) {
         this.search = {
           catalog_id: data.search.catalog_id ?? null,
@@ -57,9 +77,8 @@ export default {
     },
     async getData() {
       this.loading = true
-      await axios.get(`http://back.ey/api/v1/products`, {
+      await axios.get(`http://back.ey/api/v1/client-products`, {
         params: {
-          token: localStorage.access_token,
           catalog_id: this.search.catalog_id,
           group_id: this.search.group_id,
         }

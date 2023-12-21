@@ -9,6 +9,11 @@ const router = createRouter({
       component: () => import('../components/client/ClientPage.vue')
     },
     {
+      path: '/product',
+      name: 'product',
+      component: () => import('../components/client/ProductPage.vue')
+    },
+    {
       path: '/auth',
       name: 'auth',
       component: () => import('../components/admin/Auth.vue')
