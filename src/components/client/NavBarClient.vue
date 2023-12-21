@@ -1,33 +1,33 @@
 <template>
   <div class="header" v-bind:style="{ backgroundImage: 'url(\'../../src/assets/fon.jpg\')' }">
-        <nav class="navbar w-100">
-          <div class="container-fluid d-flex flex-nowrap">
-            <a class="navbar-brand">Wildberries</a>
-            <div>
-              <button class="btn cat-btn p-0 " style="font-size:30px" @click="openCat = openCat === false; groups = null" data-bs-toggle="offcanvas"
-                      data-bs-target="#myOffcanvas" aria-controls="offcanvasWithBothOptions">
-                <span v-if="openCat === false">☰</span>
-                <span v-else>✕</span>
+    <nav class="navbar w-100">
+      <div class="container-fluid d-flex flex-nowrap">
+        <a class="navbar-brand">Wildberries</a>
+        <div>
+          <button class="btn cat-btn p-0 " style="font-size:30px" @click="openCat = openCat === false; groups = null" data-bs-toggle="offcanvas"
+                  data-bs-target="#myOffcanvas" aria-controls="offcanvasWithBothOptions">
+            <span v-if="openCat === false">☰</span>
+            <span v-else>✕</span>
+          </button>
+        </div>
+        <div class="w-75 mx-3 position-relative">
+          <input class="form-control me-2 h-100 none-focus" type="search" placeholder="Найти в магазине" aria-label="Search"
+                 v-model="searchInput">
+          <button type="button" class="btn-close position-absolute end-0 top-0 h-75 none-focus" aria-label="Close"
+                  v-if="searchInput !== ''" @click="searchInput = ''"></button>
+        </div>
+        <div>
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li>
+              <button class="btn other-btn m-auto my-0 pt-1 pb-0">
+                <img class="d-block m-auto" src="@/assets/icons/cart.png" width="25"/>
+                <span style="font-size: 14px">Корзина</span>
               </button>
-            </div>
-            <div class="w-75 mx-3 position-relative">
-              <input class="form-control me-2 h-100 none-focus" type="search" placeholder="Найти в магазине" aria-label="Search"
-                     v-model="searchInput">
-              <button type="button" class="btn-close position-absolute end-0 top-0 h-75 none-focus" aria-label="Close"
-                      v-if="searchInput !== ''" @click="searchInput = ''"></button>
-            </div>
-            <div>
-              <ul class="navbar-nav mb-2 mb-lg-0">
-                <li>
-                  <button class="btn other-btn m-auto my-0 pt-1 pb-0">
-                    <img class="d-block m-auto" src="@/assets/icons/cart.png" width="25"/>
-                    <span style="font-size: 14px">Корзина</span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   </div>
 
   <div class="offcanvas offcanvas-start mt-5 w-auto" data-bs-scroll="false" data-bs-backdrop="static" tabindex="-1" id="myOffcanvas"
@@ -35,7 +35,7 @@
     <div class="offcanvas-header mb-0 pb-3 mt-4">
       <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"></h5>
       <a type="button" class="btn-close me-0" data-bs-dismiss="offcanvas" aria-label="Закрыть"
-              @click="openCat = openCat === false; groups = null">
+         @click="openCat = openCat === false; groups = null">
       </a>
     </div>
 
@@ -43,12 +43,13 @@
       <div class=" d-flex flex-nowrap pe-3">
         <div class="list-group list-group-flush w-100">
           <button v-for="(item, index) in catalogs" type="button" class="list-group-item list-group-item-action text-nowrap none-border pe-5"
-                  @mouseover="selectGroups(item.groups, index)" name="cat-btn">{{ item.name }}
+                  @mouseover="selectGroups(item.groups, index)" name="cat-btn" @click="selectSearch(item)">{{ item.name }}
           </button>
         </div>
         <div v-if="loading === false && groups !== null" class="flex-fill w-100 h-100 ps-5">
           <div class="list-group list-group-flush">
-            <button v-for="item in groups" type="button" class="list-group-item list-group-item-action text-nowrap none-border ps-4 p gr-btn">
+            <button v-for="item in groups" type="button" @click="selectSearch(item)"
+                    class="list-group-item list-group-item-action text-nowrap none-border ps-4 p gr-btn">
               {{ item.name }}
             </button>
           </div>
@@ -63,82 +64,55 @@ import router from "../../router";
 import axios from "axios";
 import func from "../../js/functions";
 
-document.addEventListener('DOMContentLoaded', () => { // DOM готов к взаимодейтсвию
-
-  const onScrollHeader = () => { // объявляем основную функцию onScrollHeader
-
-    const header = document.querySelector('.header') // находим header и записываем в константу
-
-    let prevScroll = window.pageYOffset // узнаем на сколько была прокручена страница ранее
-    let currentScroll // на сколько прокручена страница сейчас (пока нет значения)
-
-    window.addEventListener('scroll', () => { // при прокрутке страницы
-
-      currentScroll = window.pageYOffset // узнаем на сколько прокрутили страницу
-
-      const headerHidden = () => header.classList.contains('header_hidden') // узнаем скрыт header или нет
-
-      if (currentScroll > prevScroll && !headerHidden()) { // если прокручиваем страницу вниз и header не скрыт
-        header.classList.add('header_hidden') // то скрываем header
-      }
-      if (currentScroll < prevScroll && headerHidden()) { // если прокручиваем страницу вверх и header скрыт
-        header.classList.remove('header_hidden') // то отображаем header
-      }
-
-      prevScroll = currentScroll // записываем на сколько прокручена страница на данный момент
-
-    })
-
-  }
-
-  onScrollHeader() // вызываем основную функцию onScrollHeader
-
-});
-
-
 export default {
-    name: "NavBarClient",
-    data(){
-      return {
-        searchInput: '',
-        openCat: false,
-        catalogs: null,
-        loading: true,
-        groups: null,
-      }
-    },
-    methods: {
-      selectGroups(groups, index){
-        this.groups = groups
-        let activeBtn = window.document.getElementsByName('cat-btn')
-
-        activeBtn.forEach( (eachEle) => {
-          eachEle.className = eachEle.className.replace(" active","")
-        })
-
-        activeBtn[index].className = activeBtn[index].className + ' active'
-      },
-      async getData() {
-        this.loading = true
-        try {
-          await axios.get('http://back.ey/api/v1/catalogs/for-clients', {
-            params: {
-              token: localStorage.access_token
-            }
-          }).then(response => (
-              this.catalogs = response.data
-          ))
-        } catch (exception) {
-          func.toastElList(exception.response.data.msg);
-          return;
-        }
-
-        this.loading = false
-      },
-    },
-    async mounted() {
-      await this.getData()
+  name: "NavBarClient",
+  data(){
+    return {
+      searchInput: '',
+      openCat: false,
+      catalogs: null,
+      loading: true,
+      groups: null,
     }
+  },
+  emits: ["updateParent"],
+  methods: {
+    selectSearch(object){
+      this.$emit('updateParent', {
+        search: object
+      })
+    },
+    selectGroups(groups, index){
+      this.groups = groups
+      let activeBtn = window.document.getElementsByName('cat-btn')
+
+      activeBtn.forEach( (eachEle) => {
+        eachEle.className = eachEle.className.replace(" active","")
+      })
+
+      activeBtn[index].className = activeBtn[index].className + ' active'
+    },
+    async getData() {
+      this.loading = true
+      try {
+        await axios.get('http://back.ey/api/v1/catalogs/for-clients', {
+          params: {
+            token: localStorage.access_token
+          }
+        }).then(response => (
+            this.catalogs = response.data
+        ))
+      } catch (exception) {
+        func.toastElList(exception.response.data.msg);
+        return;
+      }
+
+      this.loading = false
+    },
+  },
+  async mounted() {
+    await this.getData()
+  }
 }
 </script>
 
@@ -153,32 +127,13 @@ export default {
   top: 0;
   transition: 0.5s;
   color: #fff;
-  z-index: 999999 !important
-}
-.header__logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-.header__phone a {
-  font-size: 18px;
-  color: #fff;
-  font-weight: bold;
-}
-.header_hidden {
-  transform: translateY(-100%);
-}
-.content {
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 60px 30px;
+  z-index: 999999 !important;
+  width: 100%;
+  margin: 0 auto 1%;
+  border-radius: 0 0 10% 10%;
 }
 
 /*_____________________________________________________*/
-.show{
-  overflow: hidden;
-}
-
-
 .cat-btn{
   border: 1px solid #939393;
   color: white;
@@ -193,7 +148,7 @@ export default {
   border-radius: 10px;
 }
 .none-focus:focus {
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0) inset, 0 0 8px rgba(0, 0, 0, 0);
+  box-shadow: 0 1px 1px rgb(255, 255, 255) inset, 0 0 8px rgba(255, 255, 255, 1);
   outline: 0 none;
 }
 .none-border{

@@ -1,12 +1,12 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import NavBar from "./components/admin/NavBar.vue";
-import NavBarClient from "./components/client/NavBarClient.vue";
+// import NavBarClient from "./components/client/NavBarClient.vue";
 export default {
   name: "App",
   components: {
     NavBar,
-    NavBarClient
+    // NavBarClient
   },
   data() {
     return {
@@ -22,7 +22,7 @@ export default {
 
 <template>
   <NavBar v-if="now_route === 'admin'"></NavBar>
-  <NavBarClient v-else></NavBarClient>
+<!--  <NavBarClient v-else></NavBarClient>-->
 
   <div class="toast text-white bg-primary" role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 9999 !important;position: absolute; right: 5px; bottom: 5px;opacity: 1;">
     <div class="d-flex">
@@ -33,9 +33,11 @@ export default {
     </div>
   </div>
 
-  <div class="all-content">
+  <div v-if="now_route === 'admin'" class="all-content">
     <RouterView />
   </div>
+  <RouterView v-else />
+
 </template>
 
 <style scoped>
