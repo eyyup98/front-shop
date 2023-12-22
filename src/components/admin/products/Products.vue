@@ -51,18 +51,21 @@
       <div class="" v-else>
 
         <div class="d-flex flex-wrap">
-          <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="row in products" @click="editProduct(row)">
-            <div>
-              <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
-              <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
-            </div>
-            <div class="px-2">
-              <div class="d-flex justify-content-between pb-0 mb-0">
-                <span class="h4">{{row.price}}</span>
-                <span class="text-decoration-line-through" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+          <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="row in products">
+            <div @click="editProduct(row)">
+              <div>
+                <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
+                <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
               </div>
-              <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100">{{row.name}}</h6>
+              <div class="px-2">
+                <div class="d-flex justify-content-between pb-0 mb-0">
+                  <span class="h4 fw-semibold alignment">{{row.price}}</span>
+                  <span class="text-decoration-line-through alignment discount" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+                </div>
+                <span class="d-inline-block text-truncate mt-0 pt-0 w-100 name">{{row.name}}</span>
+              </div>
             </div>
+            <button type="button" class="btn btn-danger btn-sm mt-2 w-50" @click="deleteProduct(row)">Удалить</button>
           </div>
         </div>
       </div>
@@ -73,6 +76,7 @@
 <script>
 import ProductModal from "./ProductModal.vue";
 import axios from "axios";
+import func from "../../../js/functions";
 
 export default {
   name: "Products",
@@ -98,6 +102,21 @@ export default {
     }
   },
   methods: {
+    async deleteProduct(product){
+      if (confirm(`Вы действителдьно хотите удалить параметр "` + (product.name ?? '') + '"')) {
+        try {
+          await axios.delete(`http://back.ey/api/v1/products/${product.id}`, {
+            params: {
+              token: localStorage.access_token,
+            }
+          })
+        } catch (exception) {
+          func.toastElList(exception.response.data.msg);
+          return;
+        }
+        await this.getData()
+      }
+    },
     async searchMethod() {
       if (this.search.searchInput !== '') {
         await axios.get('http://back.ey/api/v1/products/search', {
@@ -187,6 +206,7 @@ export default {
         name: '',
         price: 0,
         discount: 0,
+        description: null,
         active: true,
         img: []
       }
@@ -202,11 +222,12 @@ export default {
 <style scoped>
 .img{
   width: 100%;
-  height: 40vh;
+  /*height: 40vh;*/
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
   border-radius: 3%;
+  aspect-ratio: 9/12;
   /*border: 3px saddlebrown solid;*/
 }
 .product-block {
@@ -228,5 +249,17 @@ export default {
   display: flex;
   flex-direction:column;
   /*background-color: rgba(0, 0, 0, 0.01);*/
+}
+.alignment{
+  line-height:60px;
+  margin:0;
+  text-align:center;
+  padding: 0;
+}
+.discount{
+  color: #656565;
+}
+.name{
+  color: #939393;
 }
 </style>

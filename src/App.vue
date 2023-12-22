@@ -45,7 +45,7 @@ export default {
 /*  border: #a80000 2px solid;*/
 /*}*/
 .all-content{
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(252, 249, 249, 0.86);
   margin: 0 auto;
   padding: 10px 20px 0;
   max-width: 1600px;

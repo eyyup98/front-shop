@@ -29,12 +29,17 @@
           <label class="mt-2">Параметры</label>
           <div class="d-flex justify-content-around mx-5 mb-1" v-if="cat_ind !== null && group_ind !== null && objectParent.id === ''"
                v-for="param in catalogs[cat_ind].groups[group_ind].params">
-            <label class="w-50">{{ param.name }}</label>
+            <label class="w-50" style="font-size: 18px">{{ param.name }}</label>
             <input class="form-control form-control-sm w-50" type="text" v-model="param.product_param_name">
           </div>
           <div class="d-flex justify-content-around mx-5 mb-1" v-if="objectParent.id !== ''" v-for="param in product.params">
-            <label class="w-50">{{ param.name }}</label>
+            <label class="w-50" style="font-size: 18px">{{ param.name }}</label>
             <input class="form-control form-control-sm w-50" type="text" v-model="param.product_param_name">
+          </div>
+
+          <label class="mt-2">Описание товара</label>
+          <div class="d-flex justify-content-around mb-1">
+            <textarea class="form-control" v-model="product.description" rows="3"></textarea>
           </div>
 
           <div class="mt-2">
@@ -145,6 +150,7 @@ export default {
           name: this.product.name,
           price: this.product.price,
           discount: this.product.discount,
+          description: this.product.description,
           active: this.product.active,
           params: this.product.params ?? this.catalogs[this.cat_ind].groups[this.group_ind].params
         }

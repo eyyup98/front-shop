@@ -79,8 +79,9 @@ export default {
       this.object.params[this.object.params.length] = {name: ''}
     },
     deleteParam(index) {
+      console.log(this.object.params[index])
       if (confirm(`Вы действителдьно хотите удалить параметр "` + (this.object.params[index].name ?? '') + '"')) {
-        if (this.object.params[index].id !== null) {
+        if (this.object.params[index].id) {
           this.deleteArray[this.deleteArray.length] = this.object.params[index].id;
         }
         this.object.params.splice(index, 1);
