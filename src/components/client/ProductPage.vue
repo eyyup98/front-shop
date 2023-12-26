@@ -24,9 +24,13 @@
           </div>
 
           <div class="ps-1 h-100">
-            <div v-if="product.img.length !== 0" class="h-100">
+            <div v-if="product.img.length !== 0" class="h-100 d-flex position-relative">
               <div id="zoom" class="zoom h-100" @mousemove="zoom($event, baseUrl+product.img[img_index].src)" @mouseout="zoomOut">
-                <div class="img-client-first" v-bind:style="{ backgroundImage: 'url(' + baseUrl+product.img[img_index].src + ')' }"> </div>
+                <button class="carousel-btn position-absolute z-1 top-50 start-0 d-flex justify-content-center align-items-center ms-1"
+                        @click="buttonPrevious" id="buttonPrevious">🠔</button>
+                <div class="img-client-first" v-bind:style="{ backgroundImage: 'url(' + baseUrl+product.img[img_index].src + ')' }"></div>
+                <button class="carousel-btn position-absolute z-1 top-50 end-0 d-flex justify-content-center align-items-center me-1"
+                        @click="buttonNext" id="buttonNext">🠖</button>
               </div>
             </div>
             <div v-else class="img-client-first h-100" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
@@ -84,6 +88,7 @@ import NavBarClient from "./NavBarClient.vue";
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import func from "../../js/functions";
+import router from "../../router";
 
 export default {
   name: "ProductPage",
@@ -104,19 +109,35 @@ export default {
     }
   },
   methods: {
+    buttonPrevious(){
+      if (0 === this.img_index)
+        this.img_index = this.product.img.length - 1
+      else
+        this.img_index = this.img_index - 1
+    },
+    buttonNext(){
+      if ((this.product.img.length - 1) === this.img_index)
+        this.img_index = 0
+      else
+        this.img_index = this.img_index + 1
+    },
     zoomOut() {
       document.getElementById('zoom').style.backgroundImage = 'none';
+      document.getElementById('buttonPrevious').style.opacity = '0';
+      document.getElementById('buttonNext').style.opacity = '0';
     },
     zoom(e, url){
       let zoomer = e.currentTarget;
       let offsetX;
       let offsetY
-      e.offsetX ? offsetX = e.offsetX : offsetX = e.touches[0].pageX
-      e.offsetY ? offsetY = e.offsetY : offsetX = e.touches[0].pageX
+      e.offsetX ? offsetX = e.offsetX : 0
+      e.offsetY ? offsetY = e.offsetY : 0
       let x = offsetX/zoomer.offsetWidth*100
       let y = offsetY/zoomer.offsetHeight*100
       zoomer.style.backgroundPosition = x + '% ' + y + '%';
       document.getElementById('zoom').style.backgroundImage = 'url(' + url + ')'
+      document.getElementById('buttonPrevious').style.opacity = '1';
+      document.getElementById('buttonNext').style.opacity = '1';
     },
     async updateParentMethod(data) {
       this.search = {
@@ -124,7 +145,8 @@ export default {
         group_id: data.search.group_id ?? null,
       }
 
-      await this.getData()
+      window.localStorage.setItem('searchParams', JSON.stringify(this.search))
+      await router.push({name: 'home'});
     },
     async getData() {
       this.loading = true
@@ -153,7 +175,7 @@ export default {
   },
   async mounted() {
     await this.getData()
-    window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
+    // window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
   }
 }
 </script>
@@ -249,5 +271,17 @@ div.zoom .img-client-first {
   margin:0;
   text-align:center;
   padding: 0;
+}
+.carousel-btn{
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: white;
+}
+.carousel-btn{
+  opacity: 0;
+}
+.carousel-btn:hover{
+  color: #d946d2;
 }
 </style>

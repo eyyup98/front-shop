@@ -2,7 +2,7 @@
   <div class="header" v-bind:style="{ backgroundImage: 'url(\'../../src/assets/fon.jpg\')' }">
     <nav class="navbar w-100">
       <div class="container-fluid d-flex flex-nowrap">
-        <a class="navbar-brand">Wildberries</a>
+        <router-link class="navbar-brand" to="/">Wildberries</router-link>
         <div>
           <button class="btn cat-btn p-0 " style="font-size:30px" @click="openCat = openCat === false; groups = null" data-bs-toggle="offcanvas"
                   data-bs-target="#myOffcanvas" aria-controls="offcanvasWithBothOptions">
@@ -34,7 +34,7 @@
        aria-labelledby="staticBackdropLabel">
     <div class="offcanvas-header mb-0 pb-3 mt-4">
       <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"></h5>
-      <a type="button" class="btn-close me-0" data-bs-dismiss="offcanvas" aria-label="Закрыть"
+      <a id="closeOffcanvas" class="btn-close me-0" data-bs-dismiss="offcanvas" aria-label="Закрыть"
          @click="openCat = openCat === false; groups = null">
       </a>
     </div>
@@ -78,6 +78,11 @@ export default {
   emits: ["updateParent"],
   methods: {
     selectSearch(object){
+      let hideBtn = document.getElementById('closeOffcanvas')
+      hideBtn.click()
+
+      window.localStorage.removeItem('productsList')
+
       this.$emit('updateParent', {
         search: object
       })

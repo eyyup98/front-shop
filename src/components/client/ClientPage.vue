@@ -39,19 +39,27 @@
 import axios from "axios";
 import NavBarClient from "./NavBarClient.vue";
 import func from "../../js/functions";
+import router from "../../router";
 
 onscroll = function(){
   // if(window.scrollY+1 >= document.documentElement.scrollHeight-document.documentElement.clientHeight)
   //   alert('Конец прокрутки');
 };
 
-window.onbeforeunload = () => {
-  let reloadPage = JSON.parse(window.localStorage.getItem('reloadPage'));
-  if (reloadPage === '/') {
-    localStorage.removeItem('openProductsList');
-    localStorage.removeItem('catalogList');
-  }
+let posLeft;
+let posTop;
+window.onscroll = function() {
+  posLeft = (window.pageXOffset !== undefined) ? window.pageXOffset : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
+  posTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
 }
+
+// window.onbeforeunload = () => {
+//   let reloadPage = JSON.parse(window.localStorage.getItem('reloadPage'));
+//   if (reloadPage === '/') {
+//     localStorage.removeItem('openProductsList');
+//     localStorage.removeItem('catalogList');
+//   }
+// }
 
 export default {
   name: "ClientPage",
@@ -71,6 +79,7 @@ export default {
   },
   methods: {
     openProduct(){
+      // window.localStorage.setItem('pagePosition', JSON.stringify({x: posLeft, y: posTop}))
       window.localStorage.setItem('productsList', JSON.stringify(this.products))
     },
     async updateParentMethod(data) {
@@ -83,8 +92,13 @@ export default {
     },
     async getData() {
       this.loading = true
-      const productsCache = window.localStorage.getItem('productsList')
-      if (productsCache === null) {
+      let productsCache = window.localStorage.getItem('productsList')
+      let searchParams = window.localStorage.getItem('searchParams');
+
+      if (productsCache === null || searchParams !== null) {
+        if (searchParams !== null)
+          this.search = JSON.parse(searchParams)
+
         await axios.get(`http://back.ey/api/v1/client-products`, {
           params: {
             catalog_id: this.search.catalog_id,
@@ -93,6 +107,7 @@ export default {
         }).then(response => (
             this.products = response.data
         ))
+        window.localStorage.removeItem('searchParams')
       } else {
         this.products = JSON.parse(productsCache)
         window.localStorage.removeItem('productsList')
@@ -103,7 +118,17 @@ export default {
   },
   async mounted() {
     await this.getData()
-    window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
+    // let pagePosition = window.localStorage.getItem('pagePosition')
+    // if (pagePosition !== null) {
+    //   pagePosition = JSON.parse(pagePosition)
+    //   posLeft = pagePosition.x
+    //   posTop = pagePosition.y
+    //
+    //   window.scrollTo(posLeft,posTop)
+    //   window.localStorage.removeItem('pagePosition')
+    // }
+
+    // window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
   }
 }
 </script>
