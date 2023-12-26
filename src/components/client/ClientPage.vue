@@ -1,6 +1,7 @@
 <template>
   <div style="background-color: rgba(248,248,248,0.5)" class="pb-4">
     <NavBarClient @updateParent="updateParentMethod"></NavBarClient>
+
     <div style="width: 90%; margin: 0 auto">
       <div class="loading" v-if="loading === true">
         <div class="text-center">
@@ -10,24 +11,26 @@
         </div>
       </div>
       <div v-else>
-
         <div class="d-flex flex-wrap">
           <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="row in products" @click="openProduct(row)">
-            <div>
-              <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
-              <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
-            </div>
-            <div class="px-2 mt-3">
-              <div class="d-flex justify-content-between pb-0 mb-0">
-                <span class="h4 fw-semibold">{{row.price}}</span>
-                <span class="text-decoration-line-through" style="color: #656565;" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+            <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
+              <div>
+                <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
+                <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
               </div>
-              <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100" style="color: #656565;">{{row.name}}</h6>
-            </div>
+              <div class="px-2 mt-3">
+                <div class="d-flex justify-content-between pb-0 mb-0">
+                  <span class="h4 fw-semibold">{{row.price}}</span>
+                  <span class="text-decoration-line-through" style="color: #656565;" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+                </div>
+                <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100" style="color: #656565;">{{row.name}}</h6>
+              </div>
+            </router-link>
           </div>
         </div>
       </div>
     </div>
+
 
   </div>
 </template>
@@ -36,13 +39,19 @@
 import axios from "axios";
 import NavBarClient from "./NavBarClient.vue";
 import func from "../../js/functions";
-import router from "../../router";
-import { useRouter } from 'vue-router'
 
 onscroll = function(){
-  if(window.scrollY+1 >= document.documentElement.scrollHeight-document.documentElement.clientHeight)
-    alert('Конец прокрутки');
+  // if(window.scrollY+1 >= document.documentElement.scrollHeight-document.documentElement.clientHeight)
+  //   alert('Конец прокрутки');
 };
+
+window.onbeforeunload = () => {
+  let reloadPage = JSON.parse(window.localStorage.getItem('reloadPage'));
+  if (reloadPage === '/') {
+    localStorage.removeItem('openProductsList');
+    localStorage.removeItem('catalogList');
+  }
+}
 
 export default {
   name: "ClientPage",
@@ -51,23 +60,18 @@ export default {
   },
   data() {
     return {
-      loading: true,
+      baseUrl: 'http://back-img.ey',
       products: null,
+      loading: true,
       search: {
         catalog_id: null,
         group_id: null
       },
-      searchList: [],
-      baseUrl: 'http://back-img.ey'
     }
   },
   methods: {
-    openProduct(row){
-      const routeData = this.$router.resolve({
-        name: "product",
-        query: { id: row.id },
-      });
-      window.open(routeData.href, "_blank");
+    openProduct(){
+      window.localStorage.setItem('productsList', JSON.stringify(this.products))
     },
     async updateParentMethod(data) {
       this.search = {
@@ -79,20 +83,27 @@ export default {
     },
     async getData() {
       this.loading = true
-      await axios.get(`http://back.ey/api/v1/client-products`, {
-        params: {
-          catalog_id: this.search.catalog_id,
-          group_id: this.search.group_id,
-        }
-      }).then(response => (
-          this.products = response.data
-      ))
+      const productsCache = window.localStorage.getItem('productsList')
+      if (productsCache === null) {
+        await axios.get(`http://back.ey/api/v1/client-products`, {
+          params: {
+            catalog_id: this.search.catalog_id,
+            group_id: this.search.group_id,
+          }
+        }).then(response => (
+            this.products = response.data
+        ))
+      } else {
+        this.products = JSON.parse(productsCache)
+        window.localStorage.removeItem('productsList')
+      }
 
       this.loading = false
     },
   },
   async mounted() {
     await this.getData()
+    window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
   }
 }
 </script>

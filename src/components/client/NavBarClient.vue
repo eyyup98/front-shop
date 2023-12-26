@@ -94,14 +94,20 @@ export default {
     },
     async getData() {
       this.loading = true
-      try {
-        await axios.get('http://back.ey/api/v1/client-catalogs', {})
-            .then(response => (
-            this.catalogs = response.data
-        ))
-      } catch (exception) {
-        func.toastElList(exception.response.data.msg);
-        return;
+      const catalogsCache = window.localStorage.getItem('catalogList')
+      if (catalogsCache === null) {
+        try {
+          await axios.get('http://back.ey/api/v1/client-catalogs', {})
+              .then(response => (
+                  this.catalogs = response.data
+              ))
+        } catch (exception) {
+          func.toastElList(exception.response.data.msg);
+          return;
+        }
+        window.localStorage.setItem('catalogList', JSON.stringify(this.catalogs))
+      } else {
+        this.catalogs = JSON.parse(catalogsCache)
       }
 
       this.loading = false

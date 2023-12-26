@@ -48,8 +48,8 @@
             <div v-if="product.params.length > 3" class="p-0 m-0">
               <span class="p-0 m-0">...</span>
               <p><a data-bs-toggle="offcanvas"
-                 class="btn btn-link link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover p-0 m-0"
-                 data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                    class="btn btn-link link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover p-0 m-0"
+                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                 Все характеристики и описание
               </a></p>
             </div>
@@ -71,7 +71,7 @@
         </div>
         <div class="d-flex flex-column">
           <div class="w-50 mt-2" style="color: #656565">Описание товара</div>
-          <div class="w-50 mt-2 ms-4">{{product.description}}</div>
+          <div class="w-50 mt-2">{{product.description}}</div>
         </div>
       </div>
     </div>
@@ -83,7 +83,7 @@ import axios from "axios";
 import NavBarClient from "./NavBarClient.vue";
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
-import { defineComponent } from 'vue'
+import func from "../../js/functions";
 
 export default {
   name: "ProductPage",
@@ -100,7 +100,7 @@ export default {
       loading: true,
       product: null,
       baseUrl: 'http://back-img.ey',
-      img_index: 0
+      img_index: 0,
     }
   },
   methods: {
@@ -128,17 +128,32 @@ export default {
     },
     async getData() {
       this.loading = true
-      await axios.get(`http://back.ey/api/v1/client-products/${this.id}`, {
-        params: {
-        }
-      }).then(response => (
-          this.product = response.data
-      ))
+      let openProductsList = JSON.parse(window.localStorage.getItem('openProductsList'));
+
+      if (openProductsList !== null) {
+        openProductsList.forEach((function (eachEle) {
+          if (eachEle.id === Number(this.id))
+            this.product = eachEle
+        }).bind(this))
+      } else {
+        openProductsList = []
+      }
+
+      if (this.product === null) {
+        await axios.get(`http://back.ey/api/v1/client-products/${this.id}`, {
+          params: {}
+        }).then(response => (
+            this.product = response.data
+        ))
+        openProductsList.push(this.product)
+        window.localStorage.setItem('openProductsList', JSON.stringify(openProductsList))
+      }
       this.loading = false
     },
   },
   async mounted() {
     await this.getData()
+    window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
   }
 }
 </script>
