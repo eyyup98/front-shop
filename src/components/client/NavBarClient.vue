@@ -11,10 +11,25 @@
           </button>
         </div>
         <div class="w-75 mx-3 position-relative">
-          <input class="form-control me-2 h-100 none-focus" type="search" placeholder="Найти в магазине" aria-label="Search"
-                 v-model="searchInput">
+          <input id="searchInput" class="form-control me-2 h-100 none-focus" type="search" placeholder="Найти в магазине" aria-label="Search"
+                 @input="searchMethod" @keyup.enter="enterSearch" v-model="searchValue" @focus="viewSearchCache">
           <button type="button" class="btn-close position-absolute end-0 top-0 h-75 none-focus" aria-label="Close"
-                  v-if="searchInput !== ''" @click="searchInput = ''"></button>
+                  v-if="searchValue !== ''" @click="searchValue = ''"></button>
+          <div class="dropdown bottom-0 start-0 w-100" v-if="searchValue !== '' || searchCacheList.length > 0">
+            <ul class="dropdown-menu d-inline-block w-100" v-if="searchList.length > 0 || searchCacheList.length > 0">
+              <li class="dropdown-item d-inline-block text-truncate" v-for="item in searchList">
+                <img class="me-2" src="@/assets/icons/search.png" width="20" height="20"/>
+                {{ item.name }}
+              </li>
+              <li class="dropdown-item d-inline-block text-truncate d-flex justify-content-between" v-for="(item, index) in searchCacheList">
+                <div>
+                  <img class="me-2" src="@/assets/icons/searchReset.png" width="20" height="20"/>
+                  {{ item }}
+                </div>
+                <button type="button" class="btn-close" aria-label="Close" @click.native="deleteSearchList(index)"></button>
+              </li>
+            </ul>
+          </div>
         </div>
         <div>
           <ul class="navbar-nav mb-2 mb-lg-0">
@@ -73,19 +88,41 @@ export default {
       catalogs: null,
       loading: true,
       groups: null,
+      searchValue: '',
+      searchList: [],
+      searchCacheList: [],
     }
   },
   emits: ["updateParent"],
   methods: {
+    ttt(){
+      console.log('ttt')
+      // this.searchList = this.searchCacheList = []
+    },
     selectSearch(object){
       let hideBtn = document.getElementById('closeOffcanvas')
       hideBtn.click()
-
       window.localStorage.removeItem('productsList')
-
       this.$emit('updateParent', {
         search: object
       })
+    },
+    viewSearchCache(){
+      console.log('foc')
+      this.searchCacheList = JSON.parse(window.localStorage.getItem('searchCache'));
+    },
+    deleteSearchList(index){
+      console.log('deleteSearchList')
+      this.searchCacheList.splice(index, 1);
+      window.localStorage.setItem('searchCache', JSON.stringify(this.searchCacheList))
+      document.getElementById('searchInput').focus()
+    },
+    enterSearch(){
+      let searchCache = JSON.parse(window.localStorage.getItem('searchCache'));
+      if (searchCache == null)
+        searchCache = []
+      searchCache.unshift(this.searchValue)
+      window.localStorage.setItem('searchCache', JSON.stringify(searchCache))
     },
     selectGroups(groups, index){
       this.groups = groups
@@ -96,6 +133,22 @@ export default {
       })
 
       activeBtn[index].className = activeBtn[index].className + ' active'
+    },
+    async searchMethod() {
+      if (this.searchValue !== '') {
+        this.searchCacheList = []
+        await axios.get('http://back.ey/api/v1/client-products/search', {
+          params: {
+            token: localStorage.access_token,
+            search: this.searchValue
+          }
+        }).then(response => (
+            this.searchList = response.data
+        ))
+      } else {
+        this.searchList = []
+        this.viewSearchCache()
+      }
     },
     async getData() {
       this.loading = true
@@ -165,6 +218,7 @@ export default {
 .none-border:hover{
   background-color: #f1f1f1;
 }
+/* Не удалять. Используется динамически */
 .active, .gr-btn:hover {
   background-color: #f1f1f1;
   color: black;
@@ -178,4 +232,5 @@ export default {
   top: 20%;
   display: block;
 }
+/*_______________________________________*/
 </style>

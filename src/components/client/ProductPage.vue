@@ -175,7 +175,7 @@ export default {
   },
   async mounted() {
     await this.getData()
-    // window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
+    window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
   }
 }
 </script>

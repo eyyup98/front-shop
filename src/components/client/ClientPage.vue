@@ -12,20 +12,25 @@
       </div>
       <div v-else>
         <div class="d-flex flex-wrap">
-          <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="row in products" @click="openProduct(row)">
-            <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
-              <div>
-                <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
-                <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
-              </div>
-              <div class="px-2 mt-3">
-                <div class="d-flex justify-content-between pb-0 mb-0">
-                  <span class="h4 fw-semibold">{{row.price}}</span>
-                  <span class="text-decoration-line-through" style="color: #656565;" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+          <div :name="'product-block'" class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="(row, index) in products" @mousemove="moveBtn(index)" @mouseout="outBtn">
+            <div @click="openProduct(row)" class="mb-0 pb-0">
+              <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
+                <div>
+                  <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
+                  <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
                 </div>
-                <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100" style="color: #656565;">{{row.name}}</h6>
-              </div>
-            </router-link>
+                <div class="px-2 mt-3">
+                  <div class="d-flex justify-content-between pb-0 mb-0">
+                    <span class="h4 fw-semibold">{{row.price}}</span>
+                    <span class="text-decoration-line-through" style="color: #656565;" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+                  </div>
+                  <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100 py-1" style="color: #656565;">{{row.name}}</h6>
+                </div>
+              </router-link>
+            </div>
+            <div class="w-100 bottom-0 py-0 my-0">
+              <button name="hdhdh" type="button" class="btn my-btn-color btn-sm px-4 py-1 my-0" @click="addCart(row)">В корзину</button>
+            </div>
           </div>
         </div>
       </div>
@@ -53,13 +58,13 @@ window.onscroll = function() {
   posTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
 }
 
-// window.onbeforeunload = () => {
-//   let reloadPage = JSON.parse(window.localStorage.getItem('reloadPage'));
-//   if (reloadPage === '/') {
-//     localStorage.removeItem('openProductsList');
-//     localStorage.removeItem('catalogList');
-//   }
-// }
+window.onbeforeunload = () => {
+  let reloadPage = JSON.parse(window.localStorage.getItem('reloadPage'));
+  if (reloadPage === '/') {
+    localStorage.removeItem('openProductsList');
+    localStorage.removeItem('catalogList');
+  }
+}
 
 export default {
   name: "ClientPage",
@@ -78,6 +83,14 @@ export default {
     }
   },
   methods: {
+    moveBtn(e){
+    },
+    outBtn(){
+      // document.getElementById('addCartBtn').style.display = 'none'
+    },
+    addCart(){
+
+    },
     openProduct(){
       // window.localStorage.setItem('pagePosition', JSON.stringify({x: posLeft, y: posTop}))
       window.localStorage.setItem('productsList', JSON.stringify(this.products))
@@ -118,17 +131,8 @@ export default {
   },
   async mounted() {
     await this.getData()
-    // let pagePosition = window.localStorage.getItem('pagePosition')
-    // if (pagePosition !== null) {
-    //   pagePosition = JSON.parse(pagePosition)
-    //   posLeft = pagePosition.x
-    //   posTop = pagePosition.y
-    //
-    //   window.scrollTo(posLeft,posTop)
-    //   window.localStorage.removeItem('pagePosition')
-    // }
 
-    // window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
+    window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
   }
 }
 </script>
@@ -161,5 +165,16 @@ export default {
   background-color: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
   border-radius: 3%;
+}
+.my-btn-color{
+  background-color: #d946d2;
+  color: white;
+}
+.my-btn-color:hover{
+  background-color: #ad2ea9;
+}
+.ttt{
+  /*display: none;*/
+  opacity: 0;
 }
 </style>
