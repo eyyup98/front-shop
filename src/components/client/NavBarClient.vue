@@ -34,10 +34,12 @@
         <div>
           <ul class="navbar-nav mb-2 mb-lg-0">
             <li>
+              <router-link class="navbar-brand" to="/cart">
               <button class="btn other-btn m-auto my-0 pt-1 pb-0">
                 <img class="d-block m-auto" src="@/assets/icons/cart.png" width="25"/>
                 <span style="font-size: 14px">Корзина</span>
               </button>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -95,10 +97,6 @@ export default {
   },
   emits: ["updateParent"],
   methods: {
-    ttt(){
-      console.log('ttt')
-      // this.searchList = this.searchCacheList = []
-    },
     selectSearch(object){
       let hideBtn = document.getElementById('closeOffcanvas')
       hideBtn.click()
@@ -108,11 +106,9 @@ export default {
       })
     },
     viewSearchCache(){
-      console.log('foc')
       this.searchCacheList = JSON.parse(window.localStorage.getItem('searchCache'));
     },
     deleteSearchList(index){
-      console.log('deleteSearchList')
       this.searchCacheList.splice(index, 1);
       window.localStorage.setItem('searchCache', JSON.stringify(this.searchCacheList))
       document.getElementById('searchInput').focus()

@@ -35,8 +35,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
 </template>
 
@@ -88,8 +86,21 @@ export default {
     outBtn(){
       // document.getElementById('addCartBtn').style.display = 'none'
     },
-    addCart(){
+    addCart(product){
+      let productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
+      if (productsCart == null)
+        productsCart = []
 
+      let flag = true
+      productsCart.forEach((row) => {
+        if (row.id === product.id)
+          flag = false
+      })
+
+      if (flag) {
+        productsCart.unshift(product)
+        window.localStorage.setItem('productsCart', JSON.stringify(productsCart))
+      }
     },
     openProduct(){
       // window.localStorage.setItem('pagePosition', JSON.stringify({x: posLeft, y: posTop}))
