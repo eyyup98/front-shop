@@ -10,7 +10,7 @@
   </div>
   <div v-else>
     <div style="width: 95%" class="m-auto">
-      <div class="d-flex m-auto" style="height: 85vh; /*border: #a80000 solid 2px*/">
+      <div class="d-flex m-auto" style="height: 85vh;" id="product-for-height">
         <div class="p-2 w-50 d-flex" style="height: 85vh">
 
           <div class="img-list w-100 d-flex justify-content-around" v-if="product.img.length > 1">
@@ -61,6 +61,11 @@
           </div>
         </div>
       </div>
+
+      <div class="ms-4 mt-4">
+        <h4 class="fw-bold">Смотрите также</h4>
+        <SeeMorePage v-if="productsListModal" :searchParent="search"></SeeMorePage>
+      </div>
     </div>
 
     <div class="offcanvas offcanvas-end pt-5 mt-2" style="width: 40%" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
@@ -85,19 +90,15 @@
 <script>
 import axios from "axios";
 import NavBarClient from "./NavBarClient.vue";
-import 'vue3-carousel/dist/carousel.css'
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import func from "../../js/functions";
 import router from "../../router";
+import SeeMorePage from "./SeeMorePage.vue";
 
 export default {
   name: "ProductPage",
   components: {
     NavBarClient,
-    Carousel,
-    Slide,
-    Pagination,
-    Navigation,
+    SeeMorePage,
   },
   data() {
     return {
@@ -106,6 +107,12 @@ export default {
       product: null,
       baseUrl: 'http://back-img.ey',
       img_index: 0,
+      search: {
+        catalog_id: null,
+        group_id: null
+      },
+      keyTest: 0,
+      productsListModal: false,
     }
   },
   methods: {
@@ -172,10 +179,28 @@ export default {
       }
       this.loading = false
     },
+    handleScroll() {
+      try {
+        let height = document.getElementById('product-for-height').offsetHeight;
+        if (window.scrollY+(height*0.95) >= height) {
+          this.productsListModal = true
+        }
+      } catch (exception){}
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
   async mounted() {
+    window.scrollTo(0, 0);
     await this.getData()
+    this.search = {
+      catalog_id: null,
+      group_id: this.product.group_id
+    }
+    console.log(this.search)
     window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
+    window.addEventListener('scroll', this.handleScroll);
   }
 }
 </script>

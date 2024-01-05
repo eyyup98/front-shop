@@ -13,7 +13,7 @@
       <div v-else>
         <div class="d-flex flex-wrap">
           <div :name="'product-block'" class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="(row, index) in products" @mousemove="moveBtn(index)" @mouseout="outBtn">
-            <div @click="openProduct(row)" class="mb-0 pb-0">
+            <div @click="openProduct(row);" class="mb-0 pb-0">
               <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
                 <div>
                   <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
@@ -81,6 +81,9 @@ export default {
     }
   },
   methods: {
+    refresh(){
+      window.location.href = window.location.href
+    },
     moveBtn(e){
     },
     outBtn(){
@@ -142,6 +145,8 @@ export default {
   },
   async mounted() {
     await this.getData()
+
+    // console.log(products)
 
     window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
   }
