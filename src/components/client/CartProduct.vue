@@ -1,6 +1,9 @@
 <template>
 
   <NavBarClient @updateParent="updateParentMethod" :cartCount="0"></NavBarClient>
+
+  <OrderModal v-if="modal === true" :object="orderObject" @updateParent="updateOrder"></OrderModal>
+
   <div class="p-4">
     <div style="width: 90%; margin: 0 auto">
       <div class="loading" v-if="loading === true">
@@ -56,7 +59,7 @@
                   <h5 class="card-title link-secondary">Товыры</h5>
                   <h5 class="card-title link-secondary">{{ count }} шт.</h5>
                 </div>
-                <button class="btn my-btn-color">Заказать</button>
+                <button class="btn my-btn-color" @click="openOrder">Заказать</button>
               </div>
             </div>
           </div>
@@ -69,12 +72,14 @@
 
 <script>
 import NavBarClient from "./NavBarClient.vue";
+import OrderModal from "./OrderModal.vue";
 import router from "../../router";
 
 export default {
   name: "CartProduct",
   components: {
-    NavBarClient
+    NavBarClient,
+    OrderModal
   },
   data() {
     return {
@@ -83,9 +88,18 @@ export default {
       baseUrl: 'http://back-img.ey',
       count: 0,
       sum: 0,
+      modal: false,
+      orderObject: null
     }
   },
   methods: {
+    updateOrder(){
+      this.modal = false
+    },
+    openOrder(){
+      this.orderObject = this.products
+      this.modal = true
+    },
     deleteProduct(index){
       this.products.splice(index, 1);
       window.localStorage.setItem('productsCart', JSON.stringify(this.products))
@@ -110,7 +124,6 @@ export default {
   },
   mounted() {
     this.products = JSON.parse(window.localStorage.getItem('productsCart'));
-    console.log(this.products)
     this.products.forEach((row) => {
       row.count = 1
       row.price = row.price.replace(' TMT', '');
