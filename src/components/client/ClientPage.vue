@@ -1,6 +1,6 @@
 <template>
   <div style="background-color: rgba(248,248,248,0.5)" class="pb-4">
-    <NavBarClient @updateParent="updateParentMethod"></NavBarClient>
+    <NavBarClient :cartCount="cartCount" @updateParent="updateParentMethod"></NavBarClient>
 
     <div style="width: 90%; margin: 0 auto">
       <div class="loading" v-if="loading === true">
@@ -78,6 +78,7 @@ export default {
         catalog_id: null,
         group_id: null
       },
+      cartCount: 0,
     }
   },
   methods: {
@@ -103,6 +104,7 @@ export default {
       if (flag) {
         productsCart.unshift(product)
         window.localStorage.setItem('productsCart', JSON.stringify(productsCart))
+        this.getCartCount();
       }
     },
     openProduct(){
@@ -142,12 +144,16 @@ export default {
 
       this.loading = false
     },
+    getCartCount() {
+      let productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
+      if (productsCart == null)
+        productsCart = []
+      this.cartCount = productsCart.length
+    },
   },
   async mounted() {
     await this.getData()
-
-    // console.log(products)
-
+    this.getCartCount();
     window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
   }
 }

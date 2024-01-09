@@ -1,6 +1,6 @@
 <template>
 
-  <NavBarClient @updateParent="updateParentMethod"></NavBarClient>
+  <NavBarClient @updateParent="updateParentMethod" :cartCount="0"></NavBarClient>
   <div class="p-4">
     <div style="width: 90%; margin: 0 auto">
       <div class="loading" v-if="loading === true">
@@ -110,6 +110,7 @@ export default {
   },
   mounted() {
     this.products = JSON.parse(window.localStorage.getItem('productsCart'));
+    console.log(this.products)
     this.products.forEach((row) => {
       row.count = 1
       row.price = row.price.replace(' TMT', '');

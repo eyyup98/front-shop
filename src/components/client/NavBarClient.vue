@@ -32,16 +32,13 @@
           </div>
         </div>
         <div>
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <li>
-              <router-link class="navbar-brand" to="/cart">
-              <button class="btn other-btn m-auto my-0 pt-1 pb-0">
-                <img class="d-block m-auto" src="@/assets/icons/cart.png" width="25"/>
-                <span style="font-size: 14px">Корзина</span>
-              </button>
-              </router-link>
-            </li>
-          </ul>
+          <router-link to="/cart">
+            <button class="btn other-btn position-relative d-flex flex-column h-100 pt-0 px-1">
+              <div v-if="cartCount !== 0" class="cart-count d-flex align-items-center justify-content-center"><span>{{ cartCount }}</span></div>
+              <img class="d-block m-auto pb-1" src="@/assets/icons/cart.png" width="30"/>
+              <span style="font-size: 14px; line-height: 0">Корзина</span>
+            </button>
+          </router-link>
         </div>
       </div>
     </nav>
@@ -93,6 +90,11 @@ export default {
       searchValue: '',
       searchList: [],
       searchCacheList: [],
+    }
+  },
+  props:{
+    cartCount: {
+      required: true
     }
   },
   emits: ["updateParent"],
@@ -198,11 +200,14 @@ export default {
 .cat-btn:hover{
   border: 1px solid #ffffff;
 }
+.other-btn{
+  color: #d4d4d4;
+  /*border: 1px solid #939393;*/
+}
 .other-btn:hover {
-  background-color: #f1f1f1;
-  color: black;
-  border-color: #f1f1f1;
   border-radius: 10px;
+  border: 1px solid #939393;
+  color: white;
 }
 .none-focus:focus {
   box-shadow: 0 1px 1px rgb(255, 255, 255) inset, 0 0 8px rgba(255, 255, 255, 1);
@@ -229,4 +234,16 @@ export default {
   display: block;
 }
 /*_______________________________________*/
+.cart-count{
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  position: absolute;
+  font-size: 14px;
+  border-radius: 50%;
+  right: 20%;
+  color: white;
+  top: 0;
+  border: #ff4949 solid 1px;
+}
 </style>

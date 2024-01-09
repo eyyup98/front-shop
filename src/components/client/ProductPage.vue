@@ -1,5 +1,5 @@
 <template>
-  <NavBarClient @updateParent="updateParentMethod"></NavBarClient>
+  <NavBarClient :cartCount="cartCount" @updateParent="updateParentMethod"></NavBarClient>
 
   <div class="loading" v-if="loading === true">
     <div class="text-center">
@@ -57,7 +57,10 @@
                 Все характеристики и описание
               </a></p>
             </div>
-            <button type="button" class="btn px-4" style="background-color: #d946d2; color: white;"><span class="fw-bolder">Добавить в корзину</span></button>
+            <button type="button" class="btn px-4" style="background-color: #d946d2; color: white;" @click="addCart">
+              <span v-if="addedCart() === false" class="fw-bolder">Добавить в корзину</span>
+              <span v-else class="fw-bolder">В корзине</span>
+            </button>
           </div>
         </div>
       </div>
@@ -113,9 +116,44 @@ export default {
       },
       keyTest: 0,
       productsListModal: false,
+      cartCount: 0,
     }
   },
   methods: {
+    addCart(){
+      let productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
+      if (productsCart == null)
+        productsCart = []
+
+      let flag = true
+      productsCart.forEach((row) => {
+        if (row.id === this.product.id)
+          flag = false
+      })
+
+      let addProduct = JSON.parse(JSON.stringify(this.product));
+      addProduct.img = addProduct.img[0].src ?? []
+
+      if (flag) {
+        productsCart.unshift(addProduct)
+        window.localStorage.setItem('productsCart', JSON.stringify(productsCart))
+        this.getCartCount();
+      }
+    },
+    addedCart(){
+      let productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
+      if (productsCart == null)
+        return false;
+
+      let flag = false;
+      productsCart.forEach((function (row) {
+        if (row.id === Number(this.id)) {
+          flag = true
+        }
+      }).bind(this))
+
+      return flag;
+    },
     buttonPrevious(){
       if (0 === this.img_index)
         this.img_index = this.product.img.length - 1
@@ -186,7 +224,13 @@ export default {
           this.productsListModal = true
         }
       } catch (exception){}
-    }
+    },
+    getCartCount() {
+      let productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
+      if (productsCart == null)
+        productsCart = []
+      this.cartCount = productsCart.length
+    },
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -198,9 +242,10 @@ export default {
       catalog_id: null,
       group_id: this.product.group_id
     }
-    console.log(this.search)
     window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
     window.addEventListener('scroll', this.handleScroll);
+    this.getCartCount();
+    this.addedCart()
   }
 }
 </script>
