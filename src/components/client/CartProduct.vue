@@ -14,9 +14,36 @@
         </div>
       </div>
       <div v-else>
+        <button v-if="cartHistory.length > 1" type="button" class="btn btn-warning btn-lg mb-2 ms-2" @click="openOrderHistory">Посмотреть мои заказы</button>
+
         <h2 class="ps-2 fw-semibold mb-4">Корзина</h2>
-        <div class="d-flex flex-row w-100">
-          <div class="w-75 z-1">
+
+        <div v-if="products.length === 0" class="ps-2">
+          <h6>В корзине пусто</h6>
+          <router-link to="/">
+            <button type="button" class="btn btn-link ps-0">Пройти в главную страницу</button>
+          </router-link>
+        </div>
+
+        <div class="d-flex flex-column w-100">
+          <div v-if="products.length > 0">
+            <div class="card" style="max-width: 400px">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title me-2">Итого</h5>
+                  <h5 class="card-title fw-semibold">{{ new Intl.NumberFormat("ru-RU").format(sum) }} TMT</h5>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title link-secondary me-2">Товыры</h5>
+                  <h5 class="card-title link-secondary">{{ count }} шт.</h5>
+                </div>
+                <div class="w-100 d-flex justify-content-start mt-2">
+                  <button class="btn my-btn-color" @click="openOrder">Заказать</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-100 mt-2">
             <div class="d-flex justify-content-start mt-2 p-2 cart-list" v-for="(row, index) in products">
               <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
                 <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
@@ -48,21 +75,6 @@
               </div>
             </div>
           </div>
-          <div class="fixed-top d-flex justify-content-end pt-5 pe-3 z-0">
-            <div class="card w-25 mt-5">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title">Итого</h5>
-                  <h5 class="card-title fw-semibold">{{ new Intl.NumberFormat("ru-RU").format(sum) }} TMT</h5>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title link-secondary">Товыры</h5>
-                  <h5 class="card-title link-secondary">{{ count }} шт.</h5>
-                </div>
-                <button class="btn my-btn-color" @click="openOrder">Заказать</button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -89,12 +101,29 @@ export default {
       count: 0,
       sum: 0,
       modal: false,
-      orderObject: null
+      orderObject: null,
+      cartHistory: null,
     }
   },
   methods: {
-    updateOrder(){
+    updateOrder(data){
       this.modal = false
+
+      if (data.changed === true) {
+        window.localStorage.removeItem('productsCart')
+
+        let cartHistory = JSON.parse(window.localStorage.getItem('cartHistory'));
+        if (cartHistory == null)
+          cartHistory = []
+
+        cartHistory.unshift(data.order_id)
+        window.localStorage.setItem('cartHistory', JSON.stringify(cartHistory))
+
+        this.products = [];
+      }
+    },
+    openOrderHistory(){
+      console.log('openOrderHistory')
     },
     openOrder(){
       this.orderObject = this.products
@@ -123,15 +152,20 @@ export default {
     },
   },
   mounted() {
-    this.products = JSON.parse(window.localStorage.getItem('productsCart'));
-    this.products.forEach((row) => {
-      row.count = 1
-      row.price = row.price.replace(' TMT', '');
-      row.price = row.price.replace(' ', '');
-      row.discount = row.discount.replace(' ', '');
-    })
-    this.changeData()
+    this.cartHistory = JSON.parse(window.localStorage.getItem('cartHistory')) ?? [];
+    this.products = JSON.parse(window.localStorage.getItem('productsCart')) ?? [];
+    if (this.products.length > 0) {
+      this.products.forEach((row) => {
+        row.count = 1
+        row.price = row.price.replace(' TMT', '');
+        row.price = row.price.replace(' ', '');
+        row.discount = row.discount.replace(' ', '');
+      })
+      this.changeData()
+    }
     this.loading = false
+
+    console.log(this.cartHistory)
   }
 }
 </script>
@@ -158,9 +192,5 @@ export default {
 .my-btn-color:hover{
   background-color: #ad2ea9;
   color: white;
-}
-.img-hover:hover{
-  border-radius: 20%;
-  box-shadow: 0 0 3px rgb(189, 189, 189) inset;
 }
 </style>

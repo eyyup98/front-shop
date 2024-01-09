@@ -60,10 +60,11 @@ export default {
     }
   },
   methods: {
-    closeModal(changed = false) {
+    closeModal(changed = false, id) {
       this.modalObject.hide();
       this.$emit('updateParent', {
-        changed: changed
+        changed: changed,
+        order_id: id
       })
     },
     async sendOrders() {
@@ -95,6 +96,7 @@ export default {
         }
       })
 
+      let id;
       try {
         await axios.post(`http://back.ey/api/v1/client-orders`, {
           token: localStorage.access_token,
@@ -102,21 +104,22 @@ export default {
             user: this.user,
             orders: products
           }
-        })
+        }).then(response => (
+            id = response.data.data.id
+        ))
       } catch (exception) {
         console.log(exception.response.data.msg)
         func.toastElList('Произошла ошибка. Приносим свои извинения. Попробуйте позже');
         return;
       }
 
-      this.closeModal(true)
+      this.closeModal(true, id)
     }
   },
   mounted() {
     this.orders = JSON.parse(JSON.stringify(this.object));
     this.modalObject = new bootstrap.Modal(document.getElementById('orderModal'), {});
     this.modalObject.show()
-    console.log(this.orders)
   }
 }
 </script>
