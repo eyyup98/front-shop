@@ -22,6 +22,9 @@
           <li :class="`nav-item ${classActive[4]}`" @click="changeActive(4)">
             <router-link class="nav-link" to="/admin/panel/products">Товары</router-link>
           </li>
+          <li :class="`nav-item ${classActive[5]}`" @click="changeActive(5)">
+            <router-link class="nav-link" to="/admin/panel/orders">Заказы</router-link>
+          </li>
         </ul>
         <button class="btn btn-danger btn-sm" type="button" @click="logout">Выход</button>
       </div>
