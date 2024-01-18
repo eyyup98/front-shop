@@ -18,15 +18,18 @@
               </div>
               <div class="px-2 mt-3">
                 <div class="d-flex justify-content-between pb-0 mb-0">
-                  <span class="h4 fw-semibold">{{row.price}}</span>
-                  <span class="text-decoration-line-through" style="color: #656565;" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+                  <span class="h4 fw-semibold">{{new Intl.NumberFormat("ru-RU").format(row.price)}} <span class="h6 text-secondary">TMT</span></span>
+                  <span class="text-decoration-line-through text-secondary opacity-50" style="font-size: 16px" v-if="Number(row.discount) !== 0">
+                    {{new Intl.NumberFormat("ru-RU").format(row.discount)}}
+                  </span>
                 </div>
-                <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100 py-1" style="color: #656565;">{{row.name}}</h6>
+                <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100 py-1 text-secondary">{{row.name}}</h6>
               </div>
             </router-link>
           </div>
           <div class="w-100 bottom-0 py-0 my-0">
-            <button type="button" class="btn my-btn-color btn-sm px-4 py-1 my-0" @click="addCart(row)">В корзину</button>
+            <button v-if="!checkCart(row.id)" type="button" class="btn my-btn-color btn-sm px-4 py-1 my-0" @click="addCart(row)">В корзину</button>
+            <button v-else type="button" class="btn my-btn-color btn-sm px-2 py-1 my-0" @click="dropCart(row)">Убрать из корзины</button>
           </div>
         </div>
       </div>
@@ -51,6 +54,7 @@ export default {
         catalog_id: null,
         group_id: null
       },
+      productsCart: [],
     }
   },
   props: {
@@ -65,20 +69,28 @@ export default {
       }
     },
     addCart(product){
-      let productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
-      if (productsCart == null)
-        productsCart = []
-
-      let flag = true
-      productsCart.forEach((row) => {
-        if (row.id === product.id)
-          flag = false
+      this.productsCart.unshift(product.id)
+      window.localStorage.setItem('productsCart', JSON.stringify(this.productsCart))
+      this.getCartCount();
+    },
+    dropCart(row){
+      let index;
+      this.productsCart.forEach((rowArr, indexArr) => {
+        if (rowArr === row.id)
+          index = indexArr
       })
 
-      if (flag) {
-        productsCart.unshift(product)
-        window.localStorage.setItem('productsCart', JSON.stringify(productsCart))
-      }
+      this.productsCart.splice(index, 1);
+      window.localStorage.setItem('productsCart', JSON.stringify(this.productsCart))
+      this.getCartCount();
+    },
+    checkCart(id){
+      let flag = false
+      this.productsCart.forEach((row) => {
+        if (row === id)
+          flag = true
+      })
+      return flag;
     },
     async getData() {
       this.loading = true
@@ -103,8 +115,14 @@ export default {
 
       this.loading = false
     },
+    getCartCount() {
+      this.$emit('updateParent', {})
+    },
   },
   async mounted() {
+    this.productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
+    if (this.productsCart == null)
+      this.productsCart = []
     await this.getData()
   }
 }

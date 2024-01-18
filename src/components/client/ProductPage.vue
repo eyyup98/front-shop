@@ -1,5 +1,5 @@
 <template>
-  <NavBarClient :cartCount="cartCount" @updateParent="updateParentMethod"></NavBarClient>
+  <NavBarClient :cartCount="this.productsCart.length" @updateParent="updateParentMethod"></NavBarClient>
 
   <div class="loading" v-if="loading === true">
     <div class="text-center">
@@ -39,8 +39,12 @@
         <div class="p-2 flex-column flex-column w-50"  style="height: 85vh; /*border: #008200 2px solid*/">
           <h5 class="fw-bolder ps-3">{{ product.name }}</h5>
           <div class="d-flex flex-row align-items-end mt-4 ps-3">
-            <div class="fw-bold d-flex align-items-end alignment" style="font-size: 34px">{{ product.price }}</div>
-            <div class="text-decoration-line-through ms-4 alignment" style="color: #656565" v-if="Number(product.discount) !== 0">{{ product.discount }}</div>
+            <div class="fw-bold d-flex align-items-end alignment fs-3">
+              {{ new Intl.NumberFormat("ru-RU").format(product.price) }} <span class="h5 text-secondary ms-2">TMT</span>
+            </div>
+            <div class="text-decoration-line-through ms-4 alignment text-secondary opacity-75" v-if="Number(product.discount) !== 0">
+              {{ new Intl.NumberFormat("ru-RU").format(product.discount) }}
+            </div>
           </div>
 
           <div class="p-3 flex-column flex-column mt-4" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 2%; ">
@@ -57,17 +61,15 @@
                 Все характеристики и описание
               </a></p>
             </div>
-            <button type="button" class="btn px-4" style="background-color: #d946d2; color: white;" @click="addCart">
-              <span v-if="addedCart() === false" class="fw-bolder">Добавить в корзину</span>
-              <span v-else class="fw-bolder">В корзине</span>
-            </button>
+              <button v-if="!checkCart(product.id)" type="button" class="btn my-btn-color" @click="addCart">Добавить в корзину</button>
+              <button v-else type="button" class="btn my-btn-color" @click="dropCart">Убрать из корзины</button>
           </div>
         </div>
       </div>
 
-      <div class="ms-4 mt-4">
+      <div class="ms-4 mt-4 mb-4">
         <h4 class="fw-bold">Смотрите также</h4>
-        <SeeMorePage v-if="productsListModal" :searchParent="search"></SeeMorePage>
+        <SeeMorePage v-if="productsListModal" :searchParent="search" @updateParent="updateCartCount"></SeeMorePage>
       </div>
     </div>
 
@@ -116,43 +118,44 @@ export default {
       },
       keyTest: 0,
       productsListModal: false,
-      cartCount: 0,
+      productsCart: []
     }
   },
   methods: {
-    addCart(){
-      let productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
-      if (productsCart == null)
-        productsCart = []
+    updateCartCount(){
+      this.getCartCount()
+    },
+    checkCart(id){
+      let flag = false
+      this.productsCart.forEach((row) => {
+        if (row === id)
+          flag = true
+      })
+      return flag;
+    },
+    dropCart(){
+      let index;
+      this.productsCart.forEach((rowArr, indexArr) => {
+        if (rowArr === this.product.id)
+          index = indexArr
+      })
 
+      this.productsCart.splice(index, 1);
+      window.localStorage.setItem('productsCart', JSON.stringify(this.productsCart))
+      this.getCartCount();
+    },
+    addCart(){
       let flag = true
-      productsCart.forEach((row) => {
-        if (row.id === this.product.id)
+      this.productsCart.forEach((row) => {
+        if (row === this.product.id)
           flag = false
       })
 
-      let addProduct = JSON.parse(JSON.stringify(this.product));
-      addProduct.img = addProduct.img[0].src ?? []
-
       if (flag) {
-        productsCart.unshift(addProduct)
-        window.localStorage.setItem('productsCart', JSON.stringify(productsCart))
+        this.productsCart.unshift(this.product.id)
+        window.localStorage.setItem('productsCart', JSON.stringify(this.productsCart))
         this.getCartCount();
       }
-    },
-    addedCart(){
-      let productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
-      if (productsCart == null)
-        return false;
-
-      let flag = false;
-      productsCart.forEach((function (row) {
-        if (row.id === Number(this.id)) {
-          flag = true
-        }
-      }).bind(this))
-
-      return flag;
     },
     buttonPrevious(){
       if (0 === this.img_index)
@@ -226,16 +229,16 @@ export default {
       } catch (exception){}
     },
     getCartCount() {
-      let productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
-      if (productsCart == null)
-        productsCart = []
-      this.cartCount = productsCart.length
+      this.productsCart = JSON.parse(window.localStorage.getItem('productsCart'));
+      if (this.productsCart == null)
+        this.productsCart = []
     },
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll);
   },
   async mounted() {
+    this.getCartCount();
     window.scrollTo(0, 0);
     await this.getData()
     this.search = {
@@ -244,8 +247,6 @@ export default {
     }
     window.localStorage.setItem('reloadPage', JSON.stringify(this.$route.path))
     window.addEventListener('scroll', this.handleScroll);
-    this.getCartCount();
-    this.addedCart()
   }
 }
 </script>
@@ -353,5 +354,12 @@ div.zoom .img-client-first {
 }
 .carousel-btn:hover{
   color: #d946d2;
+}
+.my-btn-color{
+  background-color: #d946d2;
+  color: white;
+}
+.my-btn-color:hover{
+  background-color: #ad2ea9;
 }
 </style>

@@ -86,6 +86,7 @@
 import NavBarClient from "./NavBarClient.vue";
 import OrderModal from "./OrderModal.vue";
 import router from "../../router";
+import axios from "axios";
 
 export default {
   name: "CartProduct",
@@ -150,16 +151,27 @@ export default {
       window.localStorage.setItem('searchParams', JSON.stringify(search))
       await router.push({name: 'home'});
     },
+    async getData(){
+      this.loading = true
+
+      await axios.post(`http://back.ey/api/v1/products/for-cart`, {
+        token: localStorage.access_token,
+        params: {
+          productsList: JSON.parse(window.localStorage.getItem('productsCart')) ?? []
+        }
+      }).then(response => (
+          this.products = response.data
+      ))
+
+      this.loading = false
+    },
   },
-  mounted() {
+  async mounted() {
     this.cartHistory = JSON.parse(window.localStorage.getItem('cartHistory')) ?? [];
-    this.products = JSON.parse(window.localStorage.getItem('productsCart')) ?? [];
+    await this.getData()
     if (this.products.length > 0) {
       this.products.forEach((row) => {
         row.count = 1
-        row.price = row.price.replace(' TMT', '');
-        row.price = row.price.replace(' ', '');
-        row.discount = row.discount.replace(' ', '');
       })
       this.changeData()
     }

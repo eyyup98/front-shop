@@ -59,8 +59,10 @@
               </div>
               <div class="px-2">
                 <div class="d-flex justify-content-between pb-0 mb-0">
-                  <span class="h4 fw-semibold alignment">{{row.price}}</span>
-                  <span class="text-decoration-line-through alignment discount" v-if="Number(row.discount) !== 0">{{row.discount}}</span>
+                  <span class="h4 fw-semibold alignment">{{new Intl.NumberFormat("ru-RU").format(row.price)}} <span class="h6 text-secondary">TMT</span></span>
+                  <span class="text-decoration-line-through alignment text-secondary opacity-50" style="font-size: 16px" v-if="Number(row.discount) !== 0">
+                    {{new Intl.NumberFormat("ru-RU").format(row.discount)}}
+                  </span>
                 </div>
                 <span class="d-inline-block text-truncate mt-0 pt-0 w-100 name">{{row.name}}</span>
               </div>
@@ -255,9 +257,6 @@ export default {
   margin:0;
   text-align:center;
   padding: 0;
-}
-.discount{
-  color: #656565;
 }
 .name{
   color: #939393;
