@@ -98,7 +98,7 @@ export default {
       }
 
       try {
-          await axios.get('http://back.ey/api/v1/verification', {
+          await axios.get('https://etaganov-trade.ru/api/v1/verification', {
             params: {
               token: localStorage.access_token
             }

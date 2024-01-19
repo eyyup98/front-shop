@@ -95,7 +95,7 @@ export default {
       this.loading = true
 
       try {
-        await axios.get('http://back.ey/api/v1/catalogs/for-params', {
+        await axios.get('https://etaganov-trade.ru/api/v1/catalogs/for-params', {
           params: {
             token: localStorage.access_token
           }
@@ -136,7 +136,7 @@ export default {
     async deleteParam(object) {
       if (confirm(`Вы действителдьно хотите удалить параметр "` + object.name + '"')) {
         try {
-          await axios.delete('http://back.ey/api/v1/params-title/' + object.id, {
+          await axios.delete('https://etaganov-trade.ru/api/v1/params-title/' + object.id, {
             params: {
               token: localStorage.access_token
             }

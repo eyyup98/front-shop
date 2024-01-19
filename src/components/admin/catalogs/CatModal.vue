@@ -65,7 +65,7 @@ export default {
       }
 
       try {
-        await axios.post(`http://back.ey/api/v1/catalogs/${this.catalog.id}`, {
+        await axios.post(`https://etaganov-trade.ru/api/v1/catalogs/${this.catalog.id}`, {
           token: localStorage.access_token,
           params: {
             name: this.catalog.name,

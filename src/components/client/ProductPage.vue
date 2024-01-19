@@ -210,7 +210,7 @@ export default {
       }
 
       if (this.product === null) {
-        await axios.get(`http://back.ey/api/v1/client-products/${this.id}`, {
+        await axios.get(`https://etaganov-trade.ru/api/v1/client-products/${this.id}`, {
           params: {}
         }).then(response => (
             this.product = response.data

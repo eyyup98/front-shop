@@ -27,7 +27,7 @@ export default {
   methods: {
     auth: async function () {
       try {
-        await axios.post('http://back.ey/api/v1/auth/authentication', {
+        await axios.post('https://etaganov-trade.ru/api/v1/auth/authentication', {
           login: this.login,
           password: this.password,
         }).then(response => (
@@ -47,7 +47,7 @@ export default {
   async mounted() {
     if (typeof localStorage.access_token !== "undefined") {
       try {
-        await axios.get('http://back.ey/api/v1/verification', {
+        await axios.get('https://etaganov-trade.ru/api/v1/verification', {
           params: {
             token: localStorage.access_token
           }

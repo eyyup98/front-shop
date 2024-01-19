@@ -98,7 +98,7 @@ export default {
 
       let id;
       try {
-        await axios.post(`http://back.ey/api/v1/client-orders`, {
+        await axios.post(`https://etaganov-trade.ru/api/v1/client-orders`, {
           token: localStorage.access_token,
           params: {
             user: this.user,

@@ -135,7 +135,7 @@ export default {
     async searchMethod() {
       if (this.searchValue !== '') {
         this.searchCacheList = []
-        await axios.get('http://back.ey/api/v1/client-products/search', {
+        await axios.get('https://etaganov-trade.ru/api/v1/client-products/search', {
           params: {
             token: localStorage.access_token,
             search: this.searchValue
@@ -153,7 +153,7 @@ export default {
       const catalogsCache = window.localStorage.getItem('catalogList')
       if (catalogsCache === null) {
         try {
-          await axios.get('http://back.ey/api/v1/client-catalogs', {})
+          await axios.get('https://etaganov-trade.ru/api/v1/client-catalogs', {})
               .then(response => (
                   this.catalogs = response.data
               ))

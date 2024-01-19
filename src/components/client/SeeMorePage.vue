@@ -95,7 +95,7 @@ export default {
     async getData() {
       this.loading = true
 
-        await axios.get(`http://back.ey/api/v1/client-products`, {
+        await axios.get(`https://etaganov-trade.ru/api/v1/client-products`, {
           params: {
             catalog_id: this.searchParent.catalog_id ?? null,
             group_id: this.searchParent.group_id ?? null,

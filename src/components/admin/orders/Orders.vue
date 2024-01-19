@@ -126,7 +126,7 @@ export default {
       this.loading = true
       let data;
 
-      await axios.get(`http://back.ey/api/v1/orders`, {
+      await axios.get(`https://etaganov-trade.ru/api/v1/orders`, {
         params: {
           token: localStorage.access_token,
           pagination: this.activePage

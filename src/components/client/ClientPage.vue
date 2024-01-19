@@ -138,7 +138,7 @@ export default {
         if (searchParams !== null)
           this.search = JSON.parse(searchParams)
 
-        await axios.get(`http://back.ey/api/v1/client-products`, {
+        await axios.get(`https://etaganov-trade.ru/api/v1/client-products`, {
           params: {
             catalog_id: this.search.catalog_id,
             group_id: this.search.group_id,

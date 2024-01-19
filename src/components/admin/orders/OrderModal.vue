@@ -115,7 +115,7 @@ export default {
     },
     async save() {
       try {
-        await axios.post(`http://back.ey/api/v1/orders/${this.order.id}`, {
+        await axios.post(`https://etaganov-trade.ru/api/v1/orders/${this.order.id}`, {
           token: localStorage.access_token,
           params: {
             other_info: this.order.other_info,

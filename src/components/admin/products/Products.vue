@@ -107,7 +107,7 @@ export default {
     async deleteProduct(product){
       if (confirm(`Вы действителдьно хотите удалить параметр "` + (product.name ?? '') + '"')) {
         try {
-          await axios.delete(`http://back.ey/api/v1/products/${product.id}`, {
+          await axios.delete(`https://etaganov-trade.ru/api/v1/products/${product.id}`, {
             params: {
               token: localStorage.access_token,
             }
@@ -121,7 +121,7 @@ export default {
     },
     async searchMethod() {
       if (this.search.searchInput !== '') {
-        await axios.get('http://back.ey/api/v1/products/search', {
+        await axios.get('https://etaganov-trade.ru/api/v1/products/search', {
           params: {
             token: localStorage.access_token,
             catalog_id: this.catalog_id,
@@ -166,7 +166,7 @@ export default {
       this.searchList = []
       this.loading = true
 
-      await axios.get(`http://back.ey/api/v1/products`, {
+      await axios.get(`https://etaganov-trade.ru/api/v1/products`, {
         params: {
           token: localStorage.access_token,
           catalog_id: this.catalog_id,
@@ -191,7 +191,7 @@ export default {
     async getCatalogs() {
       this.loading = true
       try {
-        await axios.get('http://back.ey/api/v1/catalogs/for-groups', {
+        await axios.get('https://etaganov-trade.ru/api/v1/catalogs/for-groups', {
           params: {
             token: localStorage.access_token
           }
