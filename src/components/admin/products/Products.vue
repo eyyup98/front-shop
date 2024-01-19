@@ -100,7 +100,7 @@ export default {
       searchList: [],
       modalProduct: null,
       modal: null,
-      baseUrl: 'http://back-img.ey'
+      baseUrl: 'https://etaganov-trade.ru'
     }
   },
   methods: {

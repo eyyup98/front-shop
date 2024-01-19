@@ -98,7 +98,7 @@ export default {
     return {
       products: null,
       loading: true,
-      baseUrl: 'http://back-img.ey',
+      baseUrl: 'https://etaganov-trade.ru',
       count: 0,
       sum: 0,
       modal: false,

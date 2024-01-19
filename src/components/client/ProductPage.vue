@@ -110,7 +110,7 @@ export default {
       id: this.$route.query.id,
       loading: true,
       product: null,
-      baseUrl: 'http://back-img.ey',
+      baseUrl: 'https://etaganov-trade.ru',
       img_index: 0,
       search: {
         catalog_id: null,

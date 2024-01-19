@@ -47,7 +47,7 @@ export default {
   data(){
     return {
       id: this.$route.query.id,
-      baseUrl: 'http://back-img.ey',
+      baseUrl: 'https://etaganov-trade.ru',
       productsTest: null,
       loading: true,
       search: {

@@ -74,7 +74,7 @@ export default {
   },
   data() {
     return {
-      baseUrl: 'http://back-img.ey',
+      baseUrl: 'https://etaganov-trade.ru',
       products: null,
       loading: true,
       search: {

@@ -233,7 +233,7 @@ export default {
           this.product = response.data
       ))
       this.product.img.forEach((function (eachEle) {
-        this.preview_img[this.preview_img.length] = 'http://back-img.ey' + eachEle.src
+        this.preview_img[this.preview_img.length] = 'https://etaganov-trade.ru' + eachEle.src
       }).bind(this))
     },
   },
