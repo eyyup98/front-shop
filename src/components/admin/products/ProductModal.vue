@@ -174,7 +174,7 @@ export default {
 
       try {
         let id = ''
-        await axios.post(`https://etaganov-trade.ru/api/v1/products/${this.product.id}`, {
+        await axios.post(`http://back.ey/api/v1/products/${this.product.id}`, {
           token: localStorage.access_token,
           product: this.endData
         }).then(response => (
@@ -183,7 +183,7 @@ export default {
 
         let formData = new FormData();
         formData.append("images", this.product.img);
-        await axios.post(`https://etaganov-trade.ru/api/v1/products-img${id}`,
+        await axios.post(`http://back.ey/api/v1/products-img${id}`,
             this.product.img
             , {
               headers: {
@@ -216,7 +216,7 @@ export default {
       }
     },
     async getCatalogs() {
-      await axios.get('https://etaganov-trade.ru/api/v1/catalogs/for-params', {
+      await axios.get('http://back.ey/api/v1/catalogs/for-params', {
         params: {
           token: localStorage.access_token
         }
@@ -225,7 +225,7 @@ export default {
       ))
     },
     async getProduct(id) {
-      await axios.get(`https://etaganov-trade.ru/api/v1/products/${id}`, {
+      await axios.get(`http://back.ey/api/v1/products/${id}`, {
         params: {
           token: localStorage.access_token
         }
@@ -233,7 +233,8 @@ export default {
           this.product = response.data
       ))
       this.product.img.forEach((function (eachEle) {
-        this.preview_img[this.preview_img.length] = 'https://etaganov-trade.ru' + eachEle.src
+        if (eachEle.size === 'S')
+          this.preview_img[this.preview_img.length] = 'http://back-img.ey' + eachEle.src
       }).bind(this))
     },
   },

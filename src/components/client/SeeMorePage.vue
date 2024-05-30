@@ -47,7 +47,7 @@ export default {
   data(){
     return {
       id: this.$route.query.id,
-      baseUrl: 'https://etaganov-trade.ru',
+      baseUrl: 'http://back-img.ey',
       productsTest: null,
       loading: true,
       search: {
@@ -95,7 +95,7 @@ export default {
     async getData() {
       this.loading = true
 
-        await axios.get(`https://etaganov-trade.ru/api/v1/client-products`, {
+        await axios.get(`http://back.ey/api/v1/client-products`, {
           params: {
             catalog_id: this.searchParent.catalog_id ?? null,
             group_id: this.searchParent.group_id ?? null,

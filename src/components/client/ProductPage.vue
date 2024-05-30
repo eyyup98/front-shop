@@ -13,9 +13,9 @@
       <div class="d-flex m-auto" style="height: 85vh;" id="product-for-height">
         <div class="p-2 w-50 d-flex" style="height: 85vh">
 
-          <div class="img-list w-100 d-flex justify-content-around" v-if="product.img.length > 1">
+          <div class="img-list w-100 d-flex justify-content-around" v-if="product.img_s.length > 1">
             <ul class="images h-100 no-scrollbar">
-              <li v-for="(img, index) in product.img" @click="img_index = index">
+              <li v-for="(img, index) in product.img_s" @click="img_index = index">
                 <div class="w-100 img-list-client h-100"
                      v-bind:style="{ backgroundImage: 'url(' + baseUrl+img.src + ')' }">
                 </div>
@@ -24,11 +24,11 @@
           </div>
 
           <div class="ps-1 h-100">
-            <div v-if="product.img.length !== 0" class="h-100 d-flex position-relative">
-              <div id="zoom" class="zoom h-100" @mousemove="zoom($event, baseUrl+product.img[img_index].src)" @mouseout="zoomOut">
+            <div v-if="product.img_l.length !== 0" class="h-100 d-flex position-relative">
+              <div id="zoom" class="zoom h-100" @mousemove="zoom($event, baseUrl+product.img_l[img_index].src)" @mouseout="zoomOut">
                 <button class="carousel-btn position-absolute z-1 top-50 start-0 d-flex justify-content-center align-items-center ms-1"
                         @click="buttonPrevious" id="buttonPrevious">🠔</button>
-                <div class="img-client-first" v-bind:style="{ backgroundImage: 'url(' + baseUrl+product.img[img_index].src + ')' }"></div>
+                <div class="img-client-first" v-bind:style="{ backgroundImage: 'url(' + baseUrl+product.img_l[img_index].src + ')' }"></div>
                 <button class="carousel-btn position-absolute z-1 top-50 end-0 d-flex justify-content-center align-items-center me-1"
                         @click="buttonNext" id="buttonNext">🠖</button>
               </div>
@@ -110,7 +110,7 @@ export default {
       id: this.$route.query.id,
       loading: true,
       product: null,
-      baseUrl: 'https://etaganov-trade.ru',
+      baseUrl: 'http://back-img.ey',
       img_index: 0,
       search: {
         catalog_id: null,
@@ -159,12 +159,12 @@ export default {
     },
     buttonPrevious(){
       if (0 === this.img_index)
-        this.img_index = this.product.img.length - 1
+        this.img_index = this.product.img_s.length - 1
       else
         this.img_index = this.img_index - 1
     },
     buttonNext(){
-      if ((this.product.img.length - 1) === this.img_index)
+      if ((this.product.img_s.length - 1) === this.img_index)
         this.img_index = 0
       else
         this.img_index = this.img_index + 1
@@ -210,7 +210,7 @@ export default {
       }
 
       if (this.product === null) {
-        await axios.get(`https://etaganov-trade.ru/api/v1/client-products/${this.id}`, {
+        await axios.get(`http://back.ey/api/v1/client-products/${this.id}`, {
           params: {}
         }).then(response => (
             this.product = response.data

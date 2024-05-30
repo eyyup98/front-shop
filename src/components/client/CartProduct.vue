@@ -98,7 +98,7 @@ export default {
     return {
       products: null,
       loading: true,
-      baseUrl: 'https://etaganov-trade.ru',
+      baseUrl: 'http://back-img.ey',
       count: 0,
       sum: 0,
       modal: false,
@@ -154,7 +154,7 @@ export default {
     async getData(){
       this.loading = true
 
-      await axios.post(`https://etaganov-trade.ru/api/v1/products/for-cart`, {
+      await axios.post(`http://back.ey/api/v1/products/for-cart`, {
         token: localStorage.access_token,
         params: {
           productsList: JSON.parse(window.localStorage.getItem('productsCart')) ?? []
