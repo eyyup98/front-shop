@@ -29,6 +29,7 @@
 <script>
 import axios from "axios";
 import func from "../../../js/functions"
+import apiClient from "@/api/axios";
 
 export default {
   name: "CatModal",
@@ -65,7 +66,7 @@ export default {
       }
 
       try {
-        await axios.post(`http://back.ey/api/v1/catalogs/${this.catalog.id}`, {
+        await apiClient.post(`/v1/catalogs/${this.catalog.id}`, {
           token: localStorage.access_token,
           params: {
             name: this.catalog.name,

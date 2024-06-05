@@ -76,6 +76,7 @@
 import axios from "axios";
 import ParamModal from "./ParamModal.vue";
 import func from "../../../js/functions"
+import apiClient from "@/api/axios";
 
 export default {
   name: "Params",
@@ -95,7 +96,7 @@ export default {
       this.loading = true
 
       try {
-        await axios.get('http://back.ey/api/v1/catalogs/for-params', {
+        await apiClient.get('/v1/catalogs/for-params', {
           params: {
             token: localStorage.access_token
           }
@@ -136,7 +137,7 @@ export default {
     async deleteParam(object) {
       if (confirm(`Вы действителдьно хотите удалить параметр "` + object.name + '"')) {
         try {
-          await axios.delete('http://back.ey/api/v1/params-title/' + object.id, {
+          await apiClient.delete('/v1/params-title/' + object.id, {
             params: {
               token: localStorage.access_token
             }

@@ -88,6 +88,7 @@ import axios from "axios";
 import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import func from "../../../js/functions"
+import apiClient from "@/api/axios";
 
 // ^\d{1,2}(?:\.\d{1,2})?$|^\.\d{1,2}$
 
@@ -174,7 +175,7 @@ export default {
 
       try {
         let id = ''
-        await axios.post(`http://back.ey/api/v1/products/${this.product.id}`, {
+        await apiClient.post(`/v1/products/${this.product.id}`, {
           token: localStorage.access_token,
           product: this.endData
         }).then(response => (
@@ -183,7 +184,7 @@ export default {
 
         let formData = new FormData();
         formData.append("images", this.product.img);
-        await axios.post(`http://back.ey/api/v1/products-img${id}`,
+        await apiClient.post(`/v1/products-img${id}`,
             this.product.img
             , {
               headers: {
@@ -216,7 +217,7 @@ export default {
       }
     },
     async getCatalogs() {
-      await axios.get('http://back.ey/api/v1/catalogs/for-params', {
+      await apiClient.get('/v1/catalogs/for-params', {
         params: {
           token: localStorage.access_token
         }
@@ -225,7 +226,7 @@ export default {
       ))
     },
     async getProduct(id) {
-      await axios.get(`http://back.ey/api/v1/products/${id}`, {
+      await apiClient.get(`/v1/products/${id}`, {
         params: {
           token: localStorage.access_token
         }

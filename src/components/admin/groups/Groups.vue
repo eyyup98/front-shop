@@ -61,6 +61,7 @@
 import axios from "axios";
 import GroupModal from "./GroupModal.vue";
 import func from "../../../js/functions"
+import apiClient from "@/api/axios";
 
 export default {
   name: "Groups",
@@ -79,7 +80,7 @@ export default {
     async getData() {
       this.loading = true
       try {
-        await axios.get('http://back.ey/api/v1/catalogs/for-groups', {
+        await apiClient.get('/v1/catalogs/for-groups', {
           params: {
             token: localStorage.access_token
           }

@@ -87,6 +87,7 @@ import NavBarClient from "./NavBarClient.vue";
 import OrderModal from "./OrderModal.vue";
 import router from "../../router";
 import axios from "axios";
+import apiClient from "@/api/axios";
 
 export default {
   name: "CartProduct",
@@ -154,7 +155,7 @@ export default {
     async getData(){
       this.loading = true
 
-      await axios.post(`http://back.ey/api/v1/client-products/for-cart`, {
+      await apiClient.post(`/v1/client-products/for-cart`, {
         token: localStorage.access_token,
         params: {
           productsList: JSON.parse(window.localStorage.getItem('productsCart')) ?? []

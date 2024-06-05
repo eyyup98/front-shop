@@ -88,6 +88,7 @@
 import axios from "axios";
 import OrderModal from "./OrderModal.vue";
 import func from "../../../js/functions";
+import apiClient from "@/api/axios";
 
 export default {
   name: "Orders",
@@ -126,7 +127,7 @@ export default {
       this.loading = true
       let data;
 
-      await axios.get(`http://back.ey/api/v1/orders`, {
+      await apiClient.get(`/v1/orders`, {
         params: {
           token: localStorage.access_token,
           pagination: this.activePage

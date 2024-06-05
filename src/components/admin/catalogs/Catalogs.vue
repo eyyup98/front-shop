@@ -46,6 +46,7 @@
 import func from "../../../js/functions"
 import CatModal from "./CatModal.vue";
 import axios from "axios";
+import apiClient from "@/api/axios";
 
 export default {
   name: "Catalogs",
@@ -64,7 +65,7 @@ export default {
     async getData() {
       this.loading = true
       try {
-        await axios.get('http://back.ey/api/v1/catalogs', {
+        await apiClient.get('/v1/catalogs', {
           params: {
             token: localStorage.access_token
           }
@@ -95,7 +96,7 @@ export default {
     async deleteCat(index) {
       if (confirm('Вы действителдьно хотите удалить каталог "' + this.catalogs[index].name + '"')) {
         try {
-          await axios.delete('http://back.ey/api/v1/catalogs/' + this.catalogs[index].id, {
+          await apiClient.delete('/v1/catalogs/' + this.catalogs[index].id, {
             params: {
               token: localStorage.access_token
             }

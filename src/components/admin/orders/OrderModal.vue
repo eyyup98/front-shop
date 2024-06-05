@@ -89,6 +89,7 @@
 <script>
 import func from "../../../js/functions";
 import axios from "axios";
+import apiClient from "@/api/axios";
 
 export default {
   name: "OrderModal",
@@ -115,7 +116,7 @@ export default {
     },
     async save() {
       try {
-        await axios.post(`http://back.ey/api/v1/orders/${this.order.id}`, {
+        await apiClient.post(`/v1/orders/${this.order.id}`, {
           token: localStorage.access_token,
           params: {
             other_info: this.order.other_info,

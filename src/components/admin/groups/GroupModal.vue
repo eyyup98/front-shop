@@ -39,6 +39,7 @@
 <script>
 import axios from "axios";
 import func from "../../../js/functions"
+import apiClient from "@/api/axios";
 
 export default {
   name: "GroupModal",
@@ -78,7 +79,7 @@ export default {
     async getCatalogs() {
       this.loading = true
       try {
-        await axios.get('http://back.ey/api/v1/catalogs', {
+        await apiClient.get('/v1/catalogs', {
           params: {
             token: localStorage.access_token
           }
@@ -109,7 +110,7 @@ export default {
         return;
 
       try {
-        await axios.post(`http://back.ey/api/v1/groups`, {
+        await apiClient.post(`/v1/groups`, {
           token: localStorage.access_token,
           params: this.object,
           delete: this.deleteArray

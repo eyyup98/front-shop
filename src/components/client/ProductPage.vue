@@ -98,6 +98,7 @@ import NavBarClient from "./NavBarClient.vue";
 import func from "../../js/functions";
 import router from "../../router";
 import SeeMorePage from "./SeeMorePage.vue";
+import apiClient from "@/api/axios";
 
 export default {
   name: "ProductPage",
@@ -210,7 +211,7 @@ export default {
       }
 
       if (this.product === null) {
-        await axios.get(`http://back.ey/api/v1/client-products/${this.id}`, {
+        await apiClient.get(`/v1/client-products/${this.id}`, {
           params: {}
         }).then(response => (
             this.product = response.data

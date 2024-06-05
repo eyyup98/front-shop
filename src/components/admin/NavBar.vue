@@ -62,6 +62,7 @@
 <script>
 import router from "../../router";
 import axios from "axios";
+import apiClient from "@/api/axios";
 
 export default {
     name: "NavBar",
@@ -98,7 +99,7 @@ export default {
       }
 
       try {
-          await axios.get('http://back.ey/api/v1/verification', {
+          await apiClient.get('/v1/verification', {
             params: {
               token: localStorage.access_token
             }

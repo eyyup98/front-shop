@@ -138,7 +138,7 @@ export default {
     async searchMethod() {
       if (this.searchValue !== '') {
         this.searchCacheList = []
-        await axios.get('http://back.ey/api/v1/client-products/search', {
+        await apiClient.get('/v1/client-products/search', {
           params: {
             token: localStorage.access_token,
             search: this.searchValue

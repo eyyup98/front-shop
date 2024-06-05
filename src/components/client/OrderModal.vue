@@ -39,6 +39,7 @@
 <script>
 import func from "../../js/functions";
 import axios from "axios";
+import apiClient from "@/api/axios";
 
 export default {
   name: "OrderModal",
@@ -98,7 +99,7 @@ export default {
 
       let id;
       try {
-        await axios.post(`http://back.ey/api/v1/client-orders`, {
+        await apiClient.post(`/v1/client-orders`, {
           token: localStorage.access_token,
           params: {
             user: this.user,

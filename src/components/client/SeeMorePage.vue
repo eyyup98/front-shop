@@ -41,6 +41,7 @@
 import axios from "axios";
 import func from "../../js/functions";
 import router from "../../router";
+import apiClient from "@/api/axios";
 
 export default {
   name: "SeeMorePage",
@@ -95,7 +96,7 @@ export default {
     async getData() {
       this.loading = true
 
-        await axios.get(`http://back.ey/api/v1/client-products`, {
+        await apiClient.get(`/v1/client-products`, {
           params: {
             catalog_id: this.searchParent.catalog_id ?? null,
             group_id: this.searchParent.group_id ?? null,

@@ -13,6 +13,7 @@
 <script>
 import axios from "axios";
 import router from "../../router";
+import apiClient from "@/api/axios";
 
 export default {
   name: "Auth",
@@ -27,7 +28,7 @@ export default {
   methods: {
     auth: async function () {
       try {
-        await axios.post('http://back.ey/api/v1/auth/authentication', {
+        await apiClient.post('/v1/auth/authentication', {
           login: this.login,
           password: this.password,
         }).then(response => (
@@ -47,7 +48,7 @@ export default {
   async mounted() {
     if (typeof localStorage.access_token !== "undefined") {
       try {
-        await axios.get('http://back.ey/api/v1/verification', {
+        await apiClient.get('/v1/verification', {
           params: {
             token: localStorage.access_token
           }
