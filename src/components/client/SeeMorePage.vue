@@ -42,13 +42,14 @@ import axios from "axios";
 import func from "../../js/functions";
 import router from "../../router";
 import apiClient from "@/api/axios";
+import apiImg from "@/api/axiosImg";
 
 export default {
   name: "SeeMorePage",
   data(){
     return {
       id: this.$route.query.id,
-      baseUrl: 'http://back-img.ey',
+      baseUrl: apiImg,
       productsTest: null,
       loading: true,
       search: {

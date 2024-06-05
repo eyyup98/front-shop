@@ -99,6 +99,7 @@ import func from "../../js/functions";
 import router from "../../router";
 import SeeMorePage from "./SeeMorePage.vue";
 import apiClient from "@/api/axios";
+import apiImg from "@/api/axiosImg";
 
 export default {
   name: "ProductPage",
@@ -111,7 +112,7 @@ export default {
       id: this.$route.query.id,
       loading: true,
       product: null,
-      baseUrl: 'http://back-img.ey',
+      baseUrl: apiImg,
       img_index: 0,
       search: {
         catalog_id: null,

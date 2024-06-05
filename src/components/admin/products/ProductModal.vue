@@ -89,6 +89,7 @@ import 'vue3-carousel/dist/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import func from "../../../js/functions"
 import apiClient from "@/api/axios";
+import apiImg from "@/api/axiosImg";
 
 // ^\d{1,2}(?:\.\d{1,2})?$|^\.\d{1,2}$
 
@@ -235,7 +236,7 @@ export default {
       ))
       this.product.img.forEach((function (eachEle) {
         if (eachEle.size === 'S')
-          this.preview_img[this.preview_img.length] = 'http://back-img.ey' + eachEle.src
+          this.preview_img[this.preview_img.length] = apiImg + eachEle.src
       }).bind(this))
     },
   },

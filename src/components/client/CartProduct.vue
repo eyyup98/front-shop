@@ -88,6 +88,7 @@ import OrderModal from "./OrderModal.vue";
 import router from "../../router";
 import axios from "axios";
 import apiClient from "@/api/axios";
+import apiImg from "@/api/axiosImg";
 
 export default {
   name: "CartProduct",
@@ -99,7 +100,7 @@ export default {
     return {
       products: null,
       loading: true,
-      baseUrl: 'http://back-img.ey',
+      baseUrl: apiImg,
       count: 0,
       sum: 0,
       modal: false,

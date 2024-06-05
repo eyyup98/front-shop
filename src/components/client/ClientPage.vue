@@ -47,6 +47,7 @@ import NavBarClient from "./NavBarClient.vue";
 import func from "../../js/functions";
 import router from "../../router";
 import apiClient from "@/api/axios";
+import apiImg from "@/api/axiosImg";
 
 onscroll = function(){
   // if(window.scrollY+1 >= document.documentElement.scrollHeight-document.documentElement.clientHeight)
@@ -75,7 +76,7 @@ export default {
   },
   data() {
     return {
-      baseUrl: 'http://back-img.ey',
+      baseUrl: apiImg,
       products: null,
       loading: true,
       search: {

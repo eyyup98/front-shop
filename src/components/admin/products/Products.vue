@@ -80,6 +80,7 @@ import ProductModal from "./ProductModal.vue";
 import axios from "axios";
 import func from "../../../js/functions";
 import apiClient from "@/api/axios";
+import apiImg from "@/api/axiosImg";
 
 export default {
   name: "Products",
@@ -101,7 +102,7 @@ export default {
       searchList: [],
       modalProduct: null,
       modal: null,
-      baseUrl: 'http://back-img.ey'
+      baseUrl: apiImg
     }
   },
   methods: {
