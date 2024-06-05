@@ -154,7 +154,7 @@ export default {
     async getData(){
       this.loading = true
 
-      await axios.post(`http://back.ey/api/v1/products/for-cart`, {
+      await axios.post(`http://back.ey/api/v1/client-products/for-cart`, {
         token: localStorage.access_token,
         params: {
           productsList: JSON.parse(window.localStorage.getItem('productsCart')) ?? []

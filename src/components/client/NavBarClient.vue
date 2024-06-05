@@ -77,6 +77,9 @@
 import router from "../../router";
 import axios from "axios";
 import func from "../../js/functions";
+import apiClient from '@/api/axios'
+
+// console.log('hello: ' + path.replace(/^\/api/, ''))
 
 export default {
   name: "NavBarClient",
@@ -153,7 +156,7 @@ export default {
       const catalogsCache = window.localStorage.getItem('catalogList')
       if (catalogsCache === null) {
         try {
-          await axios.get('http://back.ey/api/v1/client-catalogs', {})
+          await apiClient.get('/v1/client-catalogs', {})
               .then(response => (
                   this.catalogs = response.data
               ))
