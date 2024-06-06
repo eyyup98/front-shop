@@ -211,7 +211,7 @@ export default {
       }
     },
     deleteImg(index, object) {
-      if (confirm(`Вы действителдьно хотите удалить изображение "` + object.name + '"')) {
+      if (confirm(`Вы действительно хотите удалить изображение "` + object.name + '"')) {
         this.product.img.splice(index, 1);
         this.preview_img.splice(index, 1);
         this.deleteImgArr[this.deleteImgArr.length] = {id: object.id}
@@ -236,7 +236,7 @@ export default {
       ))
       this.product.img.forEach((function (eachEle) {
         if (eachEle.size === 'S')
-          this.preview_img[this.preview_img.length] = apiImg + eachEle.src
+          this.preview_img[this.preview_img.length] = apiImg.slice(0, -1) + eachEle.src
       }).bind(this))
     },
   },
