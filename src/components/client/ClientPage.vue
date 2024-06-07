@@ -1,8 +1,8 @@
 <template>
-  <div style="background-color: rgba(248,248,248,0.5)" class="pb-4">
+  <div class="wrapper">
     <NavBarClient :cartCount="this.productsCart.length" @updateParent="updateParentMethod"></NavBarClient>
 
-    <div style="width: 90%; margin: 0 auto">
+    <div>
       <div class="loading" v-if="loading === true">
         <div class="text-center">
           <div class="spinner-border mt-5 m-auto" role="status">
@@ -11,28 +11,32 @@
         </div>
       </div>
       <div v-else>
-        <div class="d-flex flex-wrap">
-          <div :name="'product-block'" class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="(row, index) in products" @mousemove="moveBtn(index)" @mouseout="outBtn">
+        <div class="d-flex flex-wrap content">
+          <div :name="'product-block'" class="product-block my-3 d-flex flex-column m-auto" v-for="(row, index) in products" @mousemove="moveBtn(index)" @mouseout="outBtn">
             <div @click="openProduct(row);" class="mb-0 pb-0">
               <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
                 <div>
                   <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
                   <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
                 </div>
-                <div class="px-2 mt-3">
-                  <div class="d-flex justify-content-between pb-0 mb-0">
-                    <span class="h4 fw-semibold">{{new Intl.NumberFormat("ru-RU").format(row.price)}} <span class="h6 text-secondary">TMT</span></span>
-                    <span class="text-decoration-line-through text-secondary opacity-50" style="font-size: 16px" v-if="Number(row.discount) !== 0">
+                <div class="img-bottom">
+                  <div class="d-flex flex-column pb-0 mb-0">
+                    <div>
+                    <span class="product-cost fw-semibold">{{new Intl.NumberFormat("ru-RU").format(row.price)}}</span>
+                      <span class="px-1 fw-semibold currency">TMT</span>
+                    <span class="text-decoration-line-through text-secondary opacity-50 old-cost px-2" v-if="Number(row.discount) !== 0">
                       {{new Intl.NumberFormat("ru-RU").format(row.discount)}}
                     </span>
-                  </div>
-                  <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100 py-1 text-secondary">{{row.name}}</h6>
+                    </div>
+                    <span class="text-secondary product-text">TMT</span>
+                    </div>
+                  <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100 py-1 text-secondary product-text">{{row.name}}</h6>
                 </div>
               </router-link>
             </div>
             <div class="w-100 bottom-0 py-0 my-0">
-              <button v-if="!checkCart(row.id)" type="button" class="btn my-btn-color btn-sm px-4 py-1 my-0" @click="addCart(row)">В корзину</button>
-              <button v-else type="button" class="btn my-btn-color btn-sm px-2 py-1 my-0" @click="dropCart(row)">Убрать из корзины</button>
+              <button v-if="!checkCart(row.id)" type="button" class="btn my-btn-color btn-sm px-4 py-1 my-0 cart-text" @click="addCart(row)">В корзину</button>
+              <button v-else type="button" class="btn my-btn-color btn-sm px-2 py-1 my-0 cart-text" @click="dropCart(row)">Убрать из корзины</button>
             </div>
           </div>
         </div>
@@ -169,45 +173,8 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 
-.img{
-  width: 100%;
-  height: 50vh;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-size: cover;
-  border-radius: 3%;
-  aspect-ratio: 9/12;
-  /*border: 3px saddlebrown solid;*/
-}
-.product-block {
-  display: flex;
-  flex-direction:column;
-  min-width: 280px;
-  max-width: 300px;
-  padding: 10px;
-  border-radius: 3%;
-  aspect-ratio: 9/12;
-  /*background-color: rgb(255, 255, 255);*/
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-}
-.product-block:hover{
-  transform: scale(1.1, 1.1);
-  background-color: white;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-  border-radius: 3%;
-}
-.my-btn-color{
-  background-color: #d946d2;
-  color: white;
-}
-.my-btn-color:hover{
-  background-color: #ad2ea9;
-}
-.ttt{
-  /*display: none;*/
-  opacity: 0;
-}
+@import '../../assets/client/client-page-1.css';
+@import '../../assets/client/client-page-2.css';
 </style>
