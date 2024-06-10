@@ -1,40 +1,54 @@
-
-/*_____________________________________________________*/
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /*position: -webkit-sticky;*/
-    /*position: sticky;*/
     top: 0;
     transition: 0.5s;
     color: #fff;
     z-index: 999999 !important;
     width: 100%;
     margin: 0 auto 1%;
-    /*border-radius: 0 0 10px 10px;*/
     background-color: #9a97ff;
 }
-
-/*_____________________________________________________*/
 .nb-color {
     color: white;
     margin: 0 0 0 20px;
 }
+.cart-block {
+    margin: 0 0 0 30px;
+}
 .cat-btn{
-    border: 1px solid #939393;
+    border: 1px solid #ffffff;
     color: white;
+    padding: 0 0 3px 0;
+    margin: 0;
+    font-size: 29px;
 }
 .cat-btn:hover{
-    border: 1px solid #ffffff;
+    border: 1px solid rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255, 0.2);
 }
 .other-btn{
-    color: #d4d4d4;
+    color: #ffffff;
     /*border: 1px solid #939393;*/
 }
+.offcanvas-body {
+    padding: 67px 0 0 0;
+}
 .offcanvas-style {
-    padding: 90px 15px 0 0;
-    position: absolute; width: 40%; height: 100vh
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100vh;
+    margin: 0;
+}
+.accordion {
+    --bs-accordion-border-color: none;
+    --bs-accordion-inner-border-radius: none;
+    --bs-accordion-btn-focus-box-shadow: none;
 }
 .group-text {
     margin: 0 0 0 30px;
@@ -44,11 +58,20 @@
 }
 .wrapper-navbar {
     position: relative;
+    top: 0;
+    left: 0;
+}
+.navbar {
+    width: 1400px;
+    margin: 0 auto;
 }
 .other-btn:hover {
     border-radius: 10px;
-    border: 1px solid #939393;
+    border: 1px solid rgb(255, 255, 255, 0);
     color: white;
+}
+.other-btn:active {
+    border: 1px solid rgb(255, 255, 255, 0);
 }
 .none-focus:focus {
     box-shadow: 0 1px 1px rgb(255, 255, 255) inset, 0 0 8px rgba(255, 255, 255, 1);
@@ -78,12 +101,17 @@
 .cart-count{
     width: 20px;
     height: 20px;
-    background-color: red;
+    background-color: rgba(253, 0, 0, 0.7);
     position: absolute;
     font-size: 14px;
     border-radius: 50%;
-    right: 20%;
+    left: -20%;
+    top: 30%;
     color: white;
-    top: 0;
-    border: #ff4949 solid 1px;
+    /*top: 0;*/
+    border: rgba(255, 73, 73, 0.91) solid 1px;
+}
+.btn-close {
+    right: 0;
+    top: 15%;
 }

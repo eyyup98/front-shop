@@ -2,24 +2,24 @@
   <div class="wrapper">
     <div class="wrapper-navbar">
       <div class="header fixed-top">
-        <nav class="navbar w-100">
+        <nav class="navbar">
           <div class="container-fluid d-flex flex-nowrap">
             <div>
-              <button class="btn cat-btn" @click="openCat = openCat === false; groups = null" data-bs-toggle="offcanvas"
+              <button class="btn cat-btn" id="OffcanvasBtn" @click="openCat = openCat === false; groups = null" data-bs-toggle="offcanvas"
                       data-bs-target="#myOffcanvas" aria-controls="offcanvasWithBothOptions">
                 <span v-if="openCat === false">☰</span>
                 <span v-else>✕</span>
               </button>
             </div>
             <router-link class="navbar-brand nb-color" to="/"><div class="pvw-title"><span>E-Trade</span></div></router-link>
-            <div class="w-75 mx-3 position-relative">
+            <div class="w-75 ms-3 position-relative">
               <input id="searchInput" class="form-control me-2 h-100 none-focus search" type="search" placeholder="Найти в магазине" aria-label="Search"
                      @input="searchMethod" @keyup.enter="enterSearch" v-model="searchValue" @focus="viewSearchCache">
               <button type="button" class="btn-close position-absolute none-focus" aria-label="Close"
                       v-if="searchValue !== ''" @click="searchValue = ''"></button>
-              <div class="dropdown bottom-0 start-0 w-100" v-if="searchValue !== '' || searchCacheList.length > 0">
-                <ul class="dropdown-menu d-inline-block w-100" v-if="searchList.length > 0 || searchCacheList.length > 0">
-                  <li class="dropdown-item d-inline-block text-truncate" v-for="item in searchList">
+              <div class="dropdown" v-if="searchValue !== '' || searchCacheList.length > 0">
+                <ul class="dropdown-menu d-inline-block w-100 search-list-block" v-if="searchList.length > 0 || searchCacheList.length > 0">
+                  <li class="dropdown-item d-inline-block text-truncate search-list-text" v-for="item in searchList">
                     <img class="me-2" src="@/assets/icons/search.png" width="20" height="20"/>
                     {{ item.name }}
                   </li>
@@ -33,11 +33,11 @@
                 </ul>
               </div>
             </div>
-            <div>
+            <div class="cart-block">
               <router-link to="/cart">
-                <button class="btn other-btn position-relative d-flex flex-column">
+                <button class="btn other-btn position-relative d-flex flex-column p-0">
                   <div v-if="cartCount !== 0" class="cart-count d-flex align-items-center justify-content-center"><span>{{ cartCount }}</span></div>
-                  <img class="d-block m-auto" src="@/assets/icons/cart.png" width="30"/>
+                  <img class="d-block m-auto" src="@/assets/icons/cart.png" width="45"/>
                   <!--              <span style="font-size: 14px; line-height: 0">Корзина</span>-->
                 </button>
               </router-link>
@@ -50,7 +50,7 @@
            aria-labelledby="staticBackdropLabel">
         <div class="offcanvas-body w-100">
           <div class="d-flex flex-nowrap ">
-            <div class="accordion w-100 mb-1">
+            <div class="accordion w-100">
               <div class="accordion-item"  v-for="(itemC, index) in catalogs">
                 <h2 class="accordion-header" :id="'panelsStayOpen-headingOne'+index" @click="selectGroups(itemC.groups, index)">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseOne'+index" aria-expanded="true" :aria-controls="'panelsStayOpen-collapseOne'+index">
@@ -59,7 +59,7 @@
                 </h2>
                 <div v-if="loading === false && catalogs[index].groups !== null" :id="'panelsStayOpen-collapseOne'+index"
                      class="accordion-collapse collapse" :aria-labelledby="'panelsStayOpen-headingOne'+indexCatalog">
-                  <div class="accordion-body group-list" v-for="item in catalogs[index].groups" @click="selectSearch(item)">
+                  <div class="accordion-body group-list" v-for="item in catalogs[index].groups" @click="selectSearch(item);">
                     <div class="group-text">{{ item.name }}</div>
                   </div>
                 </div>
@@ -115,12 +115,13 @@ export default {
   emits: ["updateParent"],
   methods: {
     selectSearch(object){
-      // let hideBtn = document.getElementById('closeOffcanvas')
-      // hideBtn.click()
       window.localStorage.removeItem('productsList')
       this.$emit('updateParent', {
         search: object
       })
+      let hideBtn = document.getElementById('OffcanvasBtn')
+      hideBtn.click()
+      // this.openCat = this.openCat === false;
     },
     viewSearchCache(){
       if (JSON.parse(window.localStorage.getItem('searchCache')) !== null)
@@ -195,5 +196,6 @@ export default {
 
 <style scoped>
 @import '../../assets/client/nav-bar-1.css';
-@import '../../assets/client/nav-bar-2.css';
+@import '../../assets/client/nav-bar-1100.css';
+@import '../../assets/client/nav-bar-800.css';
 </style>

@@ -1,6 +1,8 @@
-@media /*(min-width: 768px) and*/ (max-width: 800px) {
+@media /*(min-width: 768px) and*/ (max-width: 600px) {
     .content {
-        padding: 0 5px;
+        margin: 65px 5px 0;
+        padding: 15px 0 0 0;
+        /*border: black 2px solid;*/
     }
     .img{
         background-repeat: no-repeat;
@@ -51,7 +53,6 @@
     .product-block:hover{
         transform: none;
         box-shadow: none;
-
     }
     .button-block{
         margin: 10px 0 10px 0;

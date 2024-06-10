@@ -1,0 +1,12 @@
+@media /*(min-width: 768px) and*/ (max-width: 1100px) {
+
+    .accordion-header {
+        padding: 2px;
+    }
+    .offcanvas-style {
+        width: 50%;
+    }
+    .offcanvas-body {
+        padding: 67px 0 0 0;
+    }
+}

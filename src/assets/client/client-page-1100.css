@@ -1,0 +1,35 @@
+@media /*(min-width: 768px) and*/ (max-width: 1100px) {
+    .content {
+        margin: 65px 25px 0;
+        padding: 25px 0 0 0;
+    }
+    .product-block {
+        display: flex;
+        flex-direction:column;
+        padding: 8px;
+        width: 25%;
+        border-radius: 3%;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    .product-cost {
+        font-size: 24px;
+    }
+    .old-cost{
+        font-size: 14px;
+    }
+    .product-text {
+        font-size: 14px;
+        margin: 0;
+    }
+    .currency {
+        font-size: 16px;
+    }
+    .bottom-text{
+        font-size: 18px;
+        width: 100%;
+        padding: 7px;
+    }
+    .img-bottom {
+        margin: 5px 0 0 0;
+    }
+}

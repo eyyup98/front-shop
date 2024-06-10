@@ -3,7 +3,7 @@
     <NavBarClient :cartCount="this.productsCart.length" @updateParent="updateParentMethod"></NavBarClient>
 
     <div>
-      <div class="loading" v-if="loading === true">
+      <div class="loading position-absolute start-50 top-50" v-if="loading === true">
         <div class="text-center">
           <div class="spinner-border mt-5 m-auto" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -176,5 +176,7 @@ export default {
 <style scoped>
 
 @import '../../assets/client/client-page-1.css';
-@import '../../assets/client/client-page-2.css';
+@import '../../assets/client/client-page-1100.css';
+@import '../../assets/client/client-page-850.css';
+@import '../../assets/client/client-page-600.css';
 </style>

@@ -243,7 +243,7 @@ export default {
   border-radius: 3%;
 }
 .product-block:hover{
-  transform: scale(1.1, 1.1);
+  transform: scale(1.05, 1.05);
   background-color: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
   border-radius: 3%;
