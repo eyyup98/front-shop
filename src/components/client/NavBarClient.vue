@@ -5,11 +5,29 @@
         <nav class="navbar">
           <div class="container-fluid d-flex flex-nowrap">
             <div>
-              <button class="btn cat-btn" id="OffcanvasBtn" @click="openCat = openCat === false; groups = null" data-bs-toggle="offcanvas"
-                      data-bs-target="#myOffcanvas" aria-controls="offcanvasWithBothOptions">
+              <button class="btn cat-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
+                      aria-controls="offcanvasScrolling" @click="openCat = openCat === false; groups = null" id="OffcanvasBtn">
                 <span v-if="openCat === false">☰</span>
                 <span v-else>✕</span>
               </button>
+
+              <div class="offcanvas offcanvas-start offcanvas-style" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+                <div class="accordion w-100">
+                  <div class="accordion-item"  v-for="(itemC, index) in catalogs">
+                    <h2 class="accordion-header" :id="'panelsStayOpen-headingOne'+index" @click="selectGroups(itemC.groups, index)">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseOne'+index" aria-expanded="true" :aria-controls="'panelsStayOpen-collapseOne'+index">
+                        {{ itemC.name }}
+                      </button>
+                    </h2>
+                    <div v-if="loading === false && catalogs[index].groups !== null" :id="'panelsStayOpen-collapseOne'+index"
+                         class="accordion-collapse collapse" :aria-labelledby="'panelsStayOpen-headingOne'+indexCatalog">
+                      <div class="accordion-body group-list" v-for="item in catalogs[index].groups" @click="selectSearch(item);">
+                        <div class="group-text">{{ item.name }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <router-link class="navbar-brand nb-color" to="/"><div class="pvw-title"><span>E-Trade</span></div></router-link>
             <div class="w-75 ms-3 position-relative">

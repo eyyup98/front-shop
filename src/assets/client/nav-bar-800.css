@@ -19,9 +19,9 @@
     .accordion-header {
         padding: 2px;
     }
-    .offcanvas-body {
-        padding: 67px 0 0 0;
-    }
+    /*.offcanvas-body {*/
+    /*    padding: 67px 0 0 0;*/
+    /*}*/
     .btn-close {
         right: -3%;
         top: 18%;

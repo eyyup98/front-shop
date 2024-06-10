@@ -33,13 +33,13 @@
     color: #ffffff;
     /*border: 1px solid #939393;*/
 }
-.offcanvas-body {
-    padding: 67px 0 0 0;
-}
+/*.offcanvas-body {*/
+/*    padding: 67px 0 0 0;*/
+/*}*/
 .offcanvas-style {
     padding: 0;
     position: absolute;
-    top: 0;
+    top: 70px;
     left: 0;
     width: 40%;
     height: 100vh;
@@ -64,6 +64,7 @@
 .navbar {
     width: 1400px;
     margin: 0 auto;
+    height: 70px;
 }
 .other-btn:hover {
     border-radius: 10px;
