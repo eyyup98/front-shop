@@ -1,0 +1,8 @@
+@media /*(min-width: 768px) and*/ (max-width: 576px) {
+    .modal-header {
+        padding: 5px 20px;
+    }
+    .modal-dialog {
+        margin: 20px 5px 0;
+    }
+}

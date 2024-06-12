@@ -1,91 +1,121 @@
 <template>
-  <NavBarClient :cartCount="this.productsCart.length" @updateParent="updateParentMethod"></NavBarClient>
+  <div class="wrapper">
+    <NavBarClient :cartCount="this.productsCart.length" @updateParent="updateParentMethod"></NavBarClient>
 
-  <div class="loading" v-if="loading === true">
-    <div class="text-center">
-      <div class="spinner-border mt-5 m-auto" role="status">
-        <span class="visually-hidden">Loading...</span>
+    <div class="loading" v-if="loading === true">
+      <div class="text-center">
+        <div class="spinner-border mt-5 m-auto" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
     </div>
-  </div>
-  <div v-else>
-    <div style="width: 95%" class="m-auto">
-      <div class="d-flex m-auto" style="height: 85vh;" id="product-for-height">
-        <div class="p-2 w-50 d-flex" style="height: 85vh">
-
-          <div class="img-list w-100 d-flex justify-content-around" v-if="product.img_s.length > 1">
-            <ul class="images h-100 no-scrollbar">
-              <li v-for="(img, index) in product.img_s" @click="img_index = index">
-                <div class="w-100 img-list-client h-100"
-                     v-bind:style="{ backgroundImage: 'url(' + baseUrl+img.src + ')' }">
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          <div class="ps-1 h-100">
-            <div v-if="product.img_l.length !== 0" class="h-100 d-flex position-relative">
-              <div id="zoom" class="zoom h-100" @mousemove="zoom($event, baseUrl+product.img_l[img_index].src)" @mouseout="zoomOut">
-                <button class="carousel-btn position-absolute z-1 top-50 start-0 d-flex justify-content-center align-items-center ms-1"
-                        @click="buttonPrevious" id="buttonPrevious">🠔</button>
-                <div class="img-client-first" v-bind:style="{ backgroundImage: 'url(' + baseUrl+product.img_l[img_index].src + ')' }"></div>
-                <button class="carousel-btn position-absolute z-1 top-50 end-0 d-flex justify-content-center align-items-center me-1"
-                        @click="buttonNext" id="buttonNext">🠖</button>
+    <div v-else>
+      <div class="m-auto">
+        <div class="d-flex m-auto" id="product-for-height">
+          <div class="d-flex pp-content-block">
+            <div class="img-list d-flex justify-content-around position-relative" v-if="product.img_s.length > 1">
+              <div class="position-absolute w-100 h-100">
+                <ul class="images no-scrollbar">
+                  <li v-for="(img, index) in product.img_s" @click="img_index = index">
+                    <div class="img-block">
+                      <div class="w-100 img-list-client"
+                           v-bind:style="{ backgroundImage: 'url(' + baseUrl+img.src + ')' }">
+                      </div>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
-            <div v-else class="img-client-first h-100" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
-          </div>
-        </div>
-        <div class="p-2 flex-column flex-column w-50"  style="height: 85vh; /*border: #008200 2px solid*/">
-          <h5 class="fw-bolder ps-3">{{ product.name }}</h5>
-          <div class="d-flex flex-row align-items-end mt-4 ps-3">
-            <div class="fw-bold d-flex align-items-end alignment fs-3">
-              {{ new Intl.NumberFormat("ru-RU").format(product.price) }} <span class="h5 text-secondary ms-2">TMT</span>
+            <div id="carouselExampleIndicators" class="carousel slide first-photo-block">
+              <div id="carouselExampleIndicators" class="carousel slide h-100">
+                <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#carouselExampleIndicators" :data-bs-slide-to="index"
+                          :class="index === img_index ? ' active' : ''" aria-current="true" v-for="(param, index) in product.img_s"></button>
+                </div>
+                <div class="carousel-inner" style="border: #0a53be solid 2px">
+                  <div class="carousel-item" :class="index === img_index ? ' active' : ''" v-for="(param, index) in product.img_s">
+                    <div class="img-block">
+                      <div class="img-client-first" v-bind:style="{ backgroundImage: 'url(' + baseUrl+product.img_l[index].src + ')' }"></div>
+                    </div>
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev"
+                        >
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next"
+                        >
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
             </div>
-            <div class="text-decoration-line-through ms-4 alignment text-secondary opacity-75" v-if="Number(product.discount) !== 0">
-              {{ new Intl.NumberFormat("ru-RU").format(product.discount) }}
-            </div>
-          </div>
 
-          <div class="p-3 flex-column flex-column mt-4" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 2%; ">
-            <h5 class="mb-4" style="font-size: 20px">Характеристики и описание</h5>
-            <div v-for="(param, index) in product.params" class="d-flex justify-content-between">
-              <div class="w-50 mt-2" v-if="index < 3" style="font-size:16px; color: #656565">{{param.name}}</div>
-              <div class="w-50 mt-2" v-if="index < 3" style="font-size: 16px">{{param.value}}</div>
+<!--            <div class="ps-1 h-100 w-100">-->
+<!--              <div v-if="product.img_l.length !== 0" class="h-100 d-flex position-relative">-->
+<!--                <div id="zoom" class="zoom h-100" @mousemove="zoom($event, baseUrl+product.img_l[img_index].src)" @mouseout="zoomOut">-->
+<!--                  <button class="carousel-btn position-absolute z-1 top-50 start-0 d-flex justify-content-center align-items-center ms-1"-->
+<!--                          @click="buttonPrevious" id="buttonPrevious">🠔</button>-->
+<!--                  <div class="img-client-first" v-bind:style="{ backgroundImage: 'url(' + baseUrl+product.img_l[img_index].src + ')' }"></div>-->
+<!--                  <button class="carousel-btn position-absolute z-1 top-50 end-0 d-flex justify-content-center align-items-center me-1"-->
+<!--                          @click="buttonNext" id="buttonNext">🠖</button>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div v-else class="img-client-first h-100" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>-->
+<!--            </div>-->
+          </div>
+          <div class="flex-column pp-content-block">
+            <h5 class="fw-bolder ps-3">{{ product.name }}</h5>
+            <div class="d-flex flex-row align-items-end mt-4 ps-3">
+              <div class="fw-bold d-flex align-items-end alignment fs-3">
+                {{ new Intl.NumberFormat("ru-RU").format(product.price) }} <span class="h5 text-secondary ms-2">TMT</span>
+              </div>
+              <div class="text-decoration-line-through ms-4 alignment text-secondary opacity-75" v-if="Number(product.discount) !== 0">
+                {{ new Intl.NumberFormat("ru-RU").format(product.discount) }}
+              </div>
             </div>
-            <div v-if="product.params.length > 3" class="p-0 m-0">
-              <span class="p-0 m-0">...</span>
-              <p><a data-bs-toggle="offcanvas"
-                    class="btn btn-link link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover p-0 m-0"
-                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-                Все характеристики и описание
-              </a></p>
-            </div>
+
+            <div class="p-3 flex-column flex-column mt-4">
+              <h5 class="mb-4">Характеристики и описание</h5>
+              <div v-for="(param, index) in product.params" class="d-flex justify-content-between">
+                <div class="w-50 mt-2" v-if="index < 3">{{param.name}}</div>
+                <div class="w-50 mt-2" v-if="index < 3">{{param.value}}</div>
+              </div>
+              <div v-if="product.params.length > 3" class="p-0 m-0">
+                <span class="p-0 m-0">...</span>
+                <p><a data-bs-toggle="offcanvas"
+                      class="btn btn-link link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover p-0 m-0"
+                      data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                  Все характеристики и описание
+                </a></p>
+              </div>
               <button v-if="!checkCart(product.id)" type="button" class="btn my-btn-color" @click="addCart">Добавить в корзину</button>
               <button v-else type="button" class="btn my-btn-color" @click="dropCart">Убрать из корзины</button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="ms-4 mt-4 mb-4">
-        <h4 class="fw-bold">Смотрите также</h4>
-        <SeeMorePage v-if="productsListModal" :searchParent="search" @updateParent="updateCartCount"></SeeMorePage>
-      </div>
-    </div>
-
-    <div class="offcanvas offcanvas-end pt-5 mt-2" style="width: 40%" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title fw-bolder" id="offcanvasRightLabel">Характеристики и описание</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <div v-for="(param) in product.params" class="d-flex justify-content-between">
-          <div class="w-50 mt-2" style="color: #656565">{{param.name}}</div>
-          <div class="w-50 mt-2 ms-4">{{param.value}}</div>
+        <div class="ms-4 mt-4 mb-4">
+          <h4 class="fw-bold">Смотрите также</h4>
+          <SeeMorePage v-if="productsListModal" :searchParent="search" @updateParent="updateCartCount"></SeeMorePage>
         </div>
-        <div class="d-flex flex-column">
-          <div class="w-50 mt-2" style="color: #656565">Описание товара</div>
-          <div class="w-50 mt-2">{{product.description}}</div>
+      </div>
+
+      <div class="offcanvas offcanvas-end pt-5 mt-2" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title fw-bolder" id="offcanvasRightLabel">Характеристики и описание</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <div v-for="(param) in product.params" class="d-flex justify-content-between">
+            <div class="w-50 mt-2">{{param.name}}</div>
+            <div class="w-50 mt-2 ms-4">{{param.value}}</div>
+          </div>
+          <div class="d-flex flex-column">
+            <div class="w-50 mt-2">Описание товара</div>
+            <div class="w-50 mt-2">{{product.description}}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -164,12 +194,16 @@ export default {
         this.img_index = this.product.img_s.length - 1
       else
         this.img_index = this.img_index - 1
+
+      console.log(this.img_index)
     },
     buttonNext(){
       if ((this.product.img_s.length - 1) === this.img_index)
         this.img_index = 0
       else
         this.img_index = this.img_index + 1
+
+      console.log(this.img_index)
     },
     zoomOut() {
       document.getElementById('zoom').style.backgroundImage = 'none';
@@ -254,114 +288,6 @@ export default {
 </script>
 
 <style scoped>
-.w-33{
-  width: 33%;
-  margin: 0 auto;
-}
-.img-client-first{
-  width: 100%;
-  /*height: 100%;*/
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-size: cover;
-  border-radius: 3%;
-  aspect-ratio: 9/12;
-  /*border: #2c3e50 2px solid;*/
-}
-.img-list-client {
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-size: cover;
-  border-radius: 5%;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
-  /*min-width: 20%;*/
-  /*max-width: 90%;*/
-  aspect-ratio: 9/12;
-}
-ul.images {
-  margin: 0;
-  padding: 0;
-  display:flex;
-  flex-direction:column;
-  overflow: scroll;
-  width: 70%;
-}
-@media screen and (max-width: 1500px) {
-  ul.images {
-    width: 100%;
-  }
-}
-ul.images li {
-  display: inline-block;
-  flex: 0 0 auto;
-  width: 100%;
-  min-height: 20%;
-  aspect-ratio: 9/12;
-  margin: 0 0 5px 0;
-  padding: 5px;
-  border-radius: 5%;
-}
-ul.images li:hover{
-  padding: 0;
-  border: 2px solid rgba(0,0,0,0.1);
-  box-shadow: 0 0 5px rgba(0,0,0,0);
-  border-radius: 6%;
-}
-ul.images li:last-child{
-  margin: 0;
-}
-.no-scrollbar {
-  overflow-y: scroll;
-  scrollbar-width: none; /*mozilla*/
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none; /*chrome*/
-}
-div.zoom {
-  background-position: 50% 50%;
-  position: relative;
-  height: 100%;
-  /*width: 100%;*/
-  overflow: hidden;
-  cursor: zoom-in;
-  background-repeat: no-repeat;
-  border-radius: 3%;
-}
-div.zoom .img-client-first:hover {
-  opacity: 0;
-}
-div.zoom .img-client-first {
-  transition: opacity 0.5s;
-  display: block;
-  height: 100%;
-  margin: 0 auto;
-  opacity: 1;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-}
-.alignment{
-  line-height:60px;
-  margin:0;
-  text-align:center;
-  padding: 0;
-}
-.carousel-btn{
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  background-color: white;
-}
-.carousel-btn{
-  opacity: 0;
-}
-.carousel-btn:hover{
-  color: #d946d2;
-}
-.my-btn-color{
-  background-color: #d946d2;
-  color: white;
-}
-.my-btn-color:hover{
-  background-color: #ad2ea9;
-}
+
+@import '../../assets/client/product-page-1.css';
 </style>

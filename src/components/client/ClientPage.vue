@@ -175,6 +175,7 @@ export default {
 </script>
 <style scoped>
 
+@import '../../assets/client/base.css';
 @import '../../assets/client/client-page-1.css';
 @import '../../assets/client/client-page-1100.css';
 @import '../../assets/client/client-page-850.css';

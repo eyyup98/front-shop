@@ -57,4 +57,7 @@
     .button-block{
         margin: 10px 0 10px 0;
     }
+    .my-btn-color{
+        padding: 4px 10px;
+    }
 }

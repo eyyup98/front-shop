@@ -158,11 +158,4 @@ export default {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
   border-radius: 3%;
 }
-.my-btn-color{
-  background-color: #d946d2;
-  color: white;
-}
-.my-btn-color:hover{
-  background-color: #ad2ea9;
-}
 </style>

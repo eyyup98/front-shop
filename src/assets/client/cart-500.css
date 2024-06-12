@@ -1,0 +1,38 @@
+@media /*(min-width: 768px) and*/ (max-width: 500px) {
+    .img{
+        width: 120px;
+        aspect-ratio: 9/12;
+    }
+    .cart-list {
+        padding: 0;
+        margin: 0 0 20px 0;
+    }
+    .cart-list:hover{
+        border-radius: 10px;
+        box-shadow: none;
+    }
+    .content {
+        padding: 20px 10px;
+    }
+    .cart-products {
+        width: 100%;
+        padding: 0;
+    }
+    .all-text-cart {
+        margin: 0 0 0 10px;
+        font-size: 16px;
+    }
+    .pagination-button {
+        padding: 3px 8px 7px;
+    }
+    .pagination-count {
+        padding: 5px 10px;
+    }
+    .pagination {
+        height: 10px;
+    }
+    .cart-delete-btn {
+        padding: 5px 5px 5px 9px ;
+        margin: 0 0 0 10px;
+    }
+}

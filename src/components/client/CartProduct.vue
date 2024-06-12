@@ -1,77 +1,82 @@
 <template>
+  <div class="wrapper">
+    <NavBarClient @updateParent="updateParentMethod" :cartCount="0"></NavBarClient>
 
-  <NavBarClient @updateParent="updateParentMethod" :cartCount="0"></NavBarClient>
+    <OrderModal v-if="modal === true" :object="orderObject" @updateParent="updateOrder"></OrderModal>
 
-  <OrderModal v-if="modal === true" :object="orderObject" @updateParent="updateOrder"></OrderModal>
-
-  <div class="p-4">
-    <div style="width: 90%; margin: 0 auto">
-      <div class="loading" v-if="loading === true">
-        <div class="text-center">
-          <div class="spinner-border mt-5 m-auto" role="status">
-            <span class="visually-hidden">Loading...</span>
+    <div class="content">
+      <div>
+        <div class="loading" v-if="loading === true">
+          <div class="text-center">
+            <div class="spinner-border mt-5 m-auto" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div v-else>
-        <button v-if="cartHistory.length > 1" type="button" class="btn btn-warning btn-lg mb-2 ms-2" @click="openOrderHistory">Посмотреть мои заказы</button>
+        <div v-else>
+          <button v-if="cartHistory.length > 1" type="button" class="btn btn-warning btn-lg mb-2 ms-2" @click="openOrderHistory">Посмотреть мои заказы</button>
 
-        <h2 class="ps-2 fw-semibold mb-4">Корзина</h2>
+          <h2 class="cart-title">Корзина</h2>
 
-        <div v-if="products.length === 0" class="ps-2">
-          <h6>В корзине пусто</h6>
-          <router-link to="/">
-            <button type="button" class="btn btn-link ps-0">Пройти в главную страницу</button>
-          </router-link>
-        </div>
+          <div v-if="products.length === 0" class="ps-2">
+            <h6>В корзине пусто</h6>
+            <router-link to="/">
+              <button type="button" class="btn btn-link ps-0">Пройти в главную страницу</button>
+            </router-link>
+          </div>
 
-        <div class="d-flex flex-column w-100">
-          <div v-if="products.length > 0">
-            <div class="card" style="max-width: 400px">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title me-2">Итого</h5>
-                  <h5 class="card-title fw-semibold">{{ new Intl.NumberFormat("ru-RU").format(sum) }} TMT</h5>
-                </div>
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title link-secondary me-2">Товыры</h5>
-                  <h5 class="card-title link-secondary">{{ count }} шт.</h5>
-                </div>
-                <div class="w-100 d-flex justify-content-start mt-2">
-                  <button class="btn my-btn-color" @click="openOrder">Заказать</button>
+          <div class="d-flex-cart w-100">
+            <div class="cart-products">
+              <div class="d-flex justify-content-start cart-list" v-for="(row, index) in products">
+                <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
+                  <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
+                  <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
+                </router-link>
+                <div class="d-flex flex-wrap align-content-between all-text-cart">
+                  <div class="d-flex flex-column w-100">
+                    <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
+                      <span class="link-secondary fw-semibold product-name">{{ row.name }}</span>
+                    </router-link>
+                    <span class="fw-bold">{{ new Intl.NumberFormat("ru-RU").format(row.price * row.count) }} TMT</span>
+                    <span class="text-decoration-line-through link-secondary" v-if="Number(row.discount) !== 0">
+                      {{ new Intl.NumberFormat("ru-RU").format(row.discount * row.count) }} TMT
+                    </span>
+                  </div>
+                  <div class="w-100">
+                    <nav class="d-flex flex-row">
+                      <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                          <button v-if="row.count !== 1" @click="row.count = row.count - 1; changeData();" class="page-link fw-bolder pagination-button">-</button>
+                          <button v-else class="page-link disabled fw-bolder pagination-button">-</button>
+                        </li>
+                        <li class="page-item"><span class="page-link text-bg-light pagination-count">{{ row.count }}</span></li>
+                        <li class="page-item p-0" @click="row.count = row.count + 1; changeData();">
+                          <button class="page-link fw-bolder pagination-button">+</button>
+                        </li>
+                      </ul>
+                      <button class="h-75 btn btn-light d-flex align-items-center cart-delete-btn">
+                        <img class="m-0 p-0" src="@/assets/icons/delete.png" width="30" height="30" @click="deleteProduct(index)"/>
+                      </button>
+                    </nav>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="w-100 mt-2">
-            <div class="d-flex justify-content-start mt-2 p-2 cart-list" v-for="(row, index) in products">
-              <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
-                <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
-                <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
-              </router-link>
-              <div class="d-flex flex-column ms-3">
-                <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
-                  <h5 class="link-secondary fw-semibold">{{ row.name }}</h5>
-                </router-link>
-                <h6 class="fw-bold">{{ new Intl.NumberFormat("ru-RU").format(row.price * row.count) }} TMT</h6>
-                <h6 class="text-decoration-line-through link-secondary" v-if="Number(row.discount) !== 0">
-                  {{ new Intl.NumberFormat("ru-RU").format(row.discount * row.count) }} TMT
-                </h6>
-                <nav class="d-flex flex-row mt-2">
-                  <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                      <button v-if="row.count !== 1" @click="row.count = row.count - 1; changeData();" class="page-link fw-bolder">-</button>
-                      <button v-else class="page-link disabled fw-bolder">-</button>
-                    </li>
-                    <li class="page-item"><span class="page-link text-bg-light">{{ row.count }}</span></li>
-                    <li class="page-item p-0" @click="row.count = row.count + 1; changeData();">
-                      <button class="page-link fw-bolder">+</button>
-                    </li>
-                  </ul>
-                  <button class="h-75 btn btn-light d-flex align-items-center ms-3">
-                    <img class="m-0 p-0" src="@/assets/icons/delete.png" width="30" height="30" @click="deleteProduct(index)"/>
-                  </button>
-                </nav>
+            <div v-if="products.length > 0" class="cart-total">
+              <div class="card w-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <span class="card-title">Итого</span>
+                    <span class="card-title fw-semibold">{{ new Intl.NumberFormat("ru-RU").format(sum) }} TMT</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="card-title link-secondary me-2">Товары</span>
+                    <span class="card-title link-secondary fw-semibold">{{ count }} шт.</span>
+                  </div>
+                  <div class="d-flex justify-content-start order-btn-block">
+                    <button class="btn my-btn-color" @click="openOrder">Заказать</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -185,26 +190,10 @@ export default {
 </script>
 
 <style scoped>
-.img{
-  width: 150px;
-  /*height: 25vh;*/
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-size: cover;
-  border-radius: 3%;
-  aspect-ratio: 9/12;
-  /*border: 3px saddlebrown solid;*/
-}
-.cart-list:hover{
-  background-color: #f6f6f6;
-  border-radius: 10px;
-}
-.my-btn-color{
-  background-color: #d946d2;
-  color: white;
-}
-.my-btn-color:hover{
-  background-color: #ad2ea9;
-  color: white;
-}
+
+@import '../../assets/client/base.css';
+@import '../../assets/client/cart-1.css';
+@import '../../assets/client/cart-900.css';
+@import '../../assets/client/cart-500.css';
+
 </style>
