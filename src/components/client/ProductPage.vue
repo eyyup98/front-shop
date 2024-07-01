@@ -11,61 +11,19 @@
     </div>
     <div v-else>
       <div class="m-auto">
-        <div class="d-flex m-auto" id="product-for-height">
+        <div class="d-flex m-auto parent-flex" id="product-for-height">
           <div class="d-flex pp-content-block">
-            <div class="img-list d-flex justify-content-around position-relative" v-if="product.img_s.length > 1">
-              <div class="position-absolute w-100 h-100">
-                <ul class="images no-scrollbar">
-                  <li v-for="(img, index) in product.img_s" @click="img_index = index">
-                    <div class="img-block">
-                      <div class="w-100 img-list-client"
-                           v-bind:style="{ backgroundImage: 'url(' + baseUrl+img.src + ')' }">
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div id="carouselExampleIndicators" class="carousel slide first-photo-block">
-              <div id="carouselExampleIndicators" class="carousel slide h-100">
-                <div class="carousel-indicators">
-                  <button type="button" data-bs-target="#carouselExampleIndicators" :data-bs-slide-to="index"
-                          :class="index === img_index ? ' active' : ''" aria-current="true" v-for="(param, index) in product.img_s"></button>
-                </div>
-                <div class="carousel-inner" style="border: #0a53be solid 2px">
-                  <div class="carousel-item" :class="index === img_index ? ' active' : ''" v-for="(param, index) in product.img_s">
-                    <div class="img-block">
-                      <div class="img-client-first" v-bind:style="{ backgroundImage: 'url(' + baseUrl+product.img_l[index].src + ')' }"></div>
-                    </div>
-                  </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev"
-                        >
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next"
-                        >
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Next</span>
-                </button>
-              </div>
-            </div>
-
-<!--            <div class="ps-1 h-100 w-100">-->
-<!--              <div v-if="product.img_l.length !== 0" class="h-100 d-flex position-relative">-->
-<!--                <div id="zoom" class="zoom h-100" @mousemove="zoom($event, baseUrl+product.img_l[img_index].src)" @mouseout="zoomOut">-->
-<!--                  <button class="carousel-btn position-absolute z-1 top-50 start-0 d-flex justify-content-center align-items-center ms-1"-->
-<!--                          @click="buttonPrevious" id="buttonPrevious">🠔</button>-->
-<!--                  <div class="img-client-first" v-bind:style="{ backgroundImage: 'url(' + baseUrl+product.img_l[img_index].src + ')' }"></div>-->
-<!--                  <button class="carousel-btn position-absolute z-1 top-50 end-0 d-flex justify-content-center align-items-center me-1"-->
-<!--                          @click="buttonNext" id="buttonNext">🠖</button>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div v-else class="img-client-first h-100" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>-->
-<!--            </div>-->
+            <swiper
+                :slidesPerView="'auto'"
+                :spaceBetween="0"
+                :pagination="{clickable: true,}"
+                :modules="modules"
+                class="mySwiper"
+            >
+              <swiper-slide v-for="(image, index) in product.img_l"><img :src="baseUrl+image.src" class="slider-image"></swiper-slide>
+            </swiper>
           </div>
-          <div class="flex-column pp-content-block">
+          <div class="flex-column pp-content-block info-block">
             <h5 class="fw-bolder ps-3">{{ product.name }}</h5>
             <div class="d-flex flex-row align-items-end mt-4 ps-3">
               <div class="fw-bold d-flex align-items-end alignment fs-3">
@@ -102,19 +60,21 @@
         </div>
       </div>
 
-      <div class="offcanvas offcanvas-end pt-5 mt-2" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title fw-bolder" id="offcanvasRightLabel">Характеристики и описание</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <div v-for="(param) in product.params" class="d-flex justify-content-between">
-            <div class="w-50 mt-2">{{param.name}}</div>
-            <div class="w-50 mt-2 ms-4">{{param.value}}</div>
+      <div class="offcanvas-block">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title fw-bolder" id="offcanvasRightLabel">Характеристики и описание</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
-          <div class="d-flex flex-column">
-            <div class="w-50 mt-2">Описание товара</div>
-            <div class="w-50 mt-2">{{product.description}}</div>
+          <div class="offcanvas-body">
+            <div v-for="(param) in product.params" class="d-flex justify-content-between">
+              <div class="w-50 mt-2">{{param.name}}</div>
+              <div class="w-50 mt-2 ms-4">{{param.value}}</div>
+            </div>
+            <div class="d-flex flex-column">
+              <div class="w-50 mt-2">Описание товара</div>
+              <div class="w-50 mt-2">{{product.description}}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -130,12 +90,22 @@ import router from "../../router";
 import SeeMorePage from "./SeeMorePage.vue";
 import apiClient from "@/api/axios";
 import apiImg from "@/api/axiosImg";
-
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
 export default {
   name: "ProductPage",
   components: {
     NavBarClient,
     SeeMorePage,
+    Swiper,
+    SwiperSlide,
+  },
+  setup() {
+    return {
+      modules: [Pagination],
+    };
   },
   data() {
     return {
@@ -150,10 +120,27 @@ export default {
       },
       keyTest: 0,
       productsListModal: false,
-      productsCart: []
+      productsCart: [],
+      currentImage: 0,
+      touchStartX: 0,
+      touchEndX: 0
     }
   },
   methods: {
+    nextImage() {
+      this.currentImage = (this.currentImage + 1) % this.product.img_l.length;
+    },
+    prevImage() {
+      this.currentImage = (this.currentImage - 1 + this.product.img_l.length) % this.product.img_l.length;
+    },
+    handleSwipe() {
+      const swipeThreshold = 50; // Минимальное расстояние в пикселях для распознавания свайпа
+      if (this.touchEndX < this.touchStartX - swipeThreshold) {
+        this.nextImage();
+      } else if (this.touchEndX > this.touchStartX + swipeThreshold) {
+        this.prevImage();
+      }
+    },
     updateCartCount(){
       this.getCartCount()
     },
@@ -188,40 +175,6 @@ export default {
         window.localStorage.setItem('productsCart', JSON.stringify(this.productsCart))
         this.getCartCount();
       }
-    },
-    buttonPrevious(){
-      if (0 === this.img_index)
-        this.img_index = this.product.img_s.length - 1
-      else
-        this.img_index = this.img_index - 1
-
-      console.log(this.img_index)
-    },
-    buttonNext(){
-      if ((this.product.img_s.length - 1) === this.img_index)
-        this.img_index = 0
-      else
-        this.img_index = this.img_index + 1
-
-      console.log(this.img_index)
-    },
-    zoomOut() {
-      document.getElementById('zoom').style.backgroundImage = 'none';
-      document.getElementById('buttonPrevious').style.opacity = '0';
-      document.getElementById('buttonNext').style.opacity = '0';
-    },
-    zoom(e, url){
-      let zoomer = e.currentTarget;
-      let offsetX;
-      let offsetY
-      e.offsetX ? offsetX = e.offsetX : 0
-      e.offsetY ? offsetY = e.offsetY : 0
-      let x = offsetX/zoomer.offsetWidth*100
-      let y = offsetY/zoomer.offsetHeight*100
-      zoomer.style.backgroundPosition = x + '% ' + y + '%';
-      document.getElementById('zoom').style.backgroundImage = 'url(' + url + ')'
-      document.getElementById('buttonPrevious').style.opacity = '1';
-      document.getElementById('buttonNext').style.opacity = '1';
     },
     async updateParentMethod(data) {
       this.search = {
@@ -289,5 +242,9 @@ export default {
 
 <style scoped>
 
+@import '../../assets/client/base.css';
 @import '../../assets/client/product-page-1.css';
+@import '../../assets/client/product-page-1000.css';
+@import '../../assets/client/product-page-heigh.css';
+
 </style>
