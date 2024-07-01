@@ -9,25 +9,29 @@
     </div>
     <div v-else>
       <div class="d-flex flex-wrap">
-        <div class="product-block my-3 d-flex flex-column p-2 m-auto" v-for="(row, index) in productsTest">
-          <div @click="refresh()" class="mb-0 pb-0">
+        <div class="product-block d-flex flex-column m-auto" v-for="(row, index) in productsTest">
+          <div @click="refresh()" class="">
             <router-link class="nav-link" :to="{ path: '/product', query: {id: row.id}}">
-              <div>
+              <div class="img-block">
                 <div v-if="row.img" class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl+row.img + ')' }"></div>
                 <div v-else class="img" v-bind:style="{ backgroundImage: 'url(' + baseUrl + '/images/no-photo.jpg)' }"></div>
               </div>
-              <div class="px-2 mt-3">
-                <div class="d-flex justify-content-between pb-0 mb-0">
-                  <span class="h4 fw-semibold">{{new Intl.NumberFormat("ru-RU").format(row.price)}} <span class="h6 text-secondary">TMT</span></span>
-                  <span class="text-decoration-line-through text-secondary opacity-50" style="font-size: 16px" v-if="Number(row.discount) !== 0">
-                    {{new Intl.NumberFormat("ru-RU").format(row.discount)}}
-                  </span>
+              <div class="img-bottom">
+                <div class="d-flex flex-column">
+                  <div>
+                    <span class="product-cost fw-semibold">{{new Intl.NumberFormat("ru-RU").format(row.price)}}</span>
+                    <span class="px-1 fw-semibold currency">TMT</span>
+                    <span class="text-decoration-line-through text-secondary opacity-50 old-cost" v-if="Number(row.discount) !== 0">
+                      {{new Intl.NumberFormat("ru-RU").format(row.discount)}}
+                      </span>
+                  </div>
+                  <!--                    <span class="text-secondary product-text"  style="margin: 0; padding: 0;">TMT</span>-->
+                  <span class="d-inline-block text-truncate w-100 text-secondary product-text">{{row.name}}</span>
                 </div>
-                <h6 class="d-inline-block text-truncate mt-0 pt-0 w-100 py-1 text-secondary">{{row.name}}</h6>
               </div>
             </router-link>
           </div>
-          <div class="w-100 bottom-0 py-0 my-0">
+          <div class="">
             <button v-if="!checkCart(row.id)" type="button" class="btn my-btn-color btn-sm px-4 py-1 my-0" @click="addCart(row)">В корзину</button>
             <button v-else type="button" class="btn my-btn-color btn-sm px-2 py-1 my-0" @click="dropCart(row)">Убрать из корзины</button>
           </div>
@@ -131,31 +135,9 @@ export default {
 </script>
 
 <style scoped>
-.img{
-  width: 100%;
-  height: 50vh;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-size: cover;
-  border-radius: 3%;
-  aspect-ratio: 9/12;
-  /*border: 3px saddlebrown solid;*/
-}
-.product-block {
-  display: flex;
-  flex-direction:column;
-  min-width: 280px;
-  max-width: 300px;
-  padding: 10px;
-  border-radius: 3%;
-  aspect-ratio: 9/12;
-  /*background-color: rgb(255, 255, 255);*/
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-}
-.product-block:hover{
-  transform: scale(1.05, 1.05);
-  background-color: white;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-  border-radius: 3%;
-}
+@import '../../assets/client/base.css';
+@import '../../assets/client/client-page-1.css';
+@import '../../assets/client/client-page-1100.css';
+@import '../../assets/client/client-page-850.css';
+@import '../../assets/client/client-page-600.css';
 </style>
