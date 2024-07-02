@@ -1,0 +1,101 @@
+/* ClientPage */
+.product-cost {
+    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 18px);
+}
+.old-cost{
+    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
+}
+.product-text {
+    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 9px);
+}
+.currency {
+    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 9px);
+}
+.bottom-text {
+    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
+}
+/*_____________________*/
+
+.cart-text{
+    font-size: 14px;
+}
+
+@media (max-width: 850px) {
+    /* ClientPage */
+    .product-cost {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 20px);
+    }
+    .old-cost{
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+    }
+    .product-text {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
+    }
+    .currency {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
+    }
+    .bottom-text {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+    }
+    /*______________________*/
+}
+
+@media (max-width: 600px) {
+    /* ClientPage */
+    .product-cost {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 22px);
+    }
+    .old-cost{
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 16px);
+    }
+    .product-text {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+    }
+    .currency {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+    }
+    .bottom-text {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 16px);
+    }
+    /*______________________*/
+}
+
+@media (max-width: 335px) {
+    /* ClientPage */
+    .product-cost {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 20px);
+    }
+    .old-cost{
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+    }
+    .product-text {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
+    }
+    .currency {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
+    }
+    .bottom-text {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+    }
+    /*______________________*/
+}
+
+@media (min-width: 1400px) {
+    /* ClientPage */
+    .product-cost {
+        font-size: 24px;
+    }
+    .old-cost{
+        font-size: 18px;
+    }
+    .product-text {
+        font-size: 14px;
+    }
+    .currency {
+        font-size: 14px;
+    }
+    .bottom-text {
+        font-size: 18px;
+    }
+    /*________________________*/
+}

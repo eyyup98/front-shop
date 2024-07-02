@@ -180,4 +180,5 @@ export default {
 @import '../../assets/client/client-page-1100.css';
 @import '../../assets/client/client-page-850.css';
 @import '../../assets/client/client-page-600.css';
+@import '../../assets/client/font-size.css';
 </style>
