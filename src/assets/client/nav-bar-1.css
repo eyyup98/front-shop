@@ -10,6 +10,10 @@
     margin: 0 auto 1%;
     background-color: #9a97ff;
 }
+.search-h {
+    width: 75%;
+    margin: 0 0 0 2%;
+}
 .nb-color {
     color: white;
     margin: 0 0 0 20px;

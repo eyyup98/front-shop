@@ -1,6 +1,7 @@
 @media /*(min-width: 768px) and*/ (max-width: 800px) {
-    .header{
-
+    .search-h {
+        width: 100%;
+        margin: 0;
     }
     .pvw-title span {
         /*color: white;*/

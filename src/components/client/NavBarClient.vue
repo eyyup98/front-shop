@@ -30,7 +30,7 @@
               </div>
             </div>
             <router-link class="navbar-brand nb-color" to="/"><div class="pvw-title"><span>E-Trade</span></div></router-link>
-            <div class="w-75 ms-3 position-relative">
+            <div class="search-h position-relative card-pr-name">
               <input id="searchInput" class="form-control me-2 h-100 none-focus search" type="search" placeholder="Найти в магазине" aria-label="Search"
                      @input="searchMethod" @keyup.enter="enterSearch" v-model="searchValue" @focus="viewSearchCache">
               <button type="button" class="btn-close position-absolute none-focus" aria-label="Close"
@@ -38,8 +38,8 @@
               <div class="dropdown" v-if="searchValue !== '' || searchCacheList.length > 0">
                 <ul class="dropdown-menu d-inline-block w-100 search-list-block" v-if="searchList.length > 0 || searchCacheList.length > 0">
                   <li class="dropdown-item d-inline-block text-truncate search-list-text" v-for="item in searchList">
-                    <img class="me-2" src="@/assets/icons/search.png" width="20" height="20"/>
-                    {{ item.name }}
+                    <img class="me-1" src="@/assets/icons/search.png" width="15" height="15"/>
+                    <span class="card-pr-name">{{ item.name }}</span>
                   </li>
                   <li class="dropdown-item d-inline-block text-truncate d-flex justify-content-between" v-for="(item, index) in searchCacheList">
                     <div>
@@ -216,4 +216,5 @@ export default {
 @import '../../assets/client/nav-bar-1.css';
 @import '../../assets/client/nav-bar-1100.css';
 @import '../../assets/client/nav-bar-800.css';
+@import '../../assets/client/font-size.css';
 </style>
