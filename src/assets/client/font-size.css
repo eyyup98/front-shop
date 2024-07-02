@@ -2,19 +2,26 @@
 .product-cost {
     font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 18px);
 }
-.old-cost{
+.old-cost, .bottom-text{
     font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
 }
-.product-text {
+.product-text, .currency {
     font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 9px);
-}
-.currency {
-    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 9px);
-}
-.bottom-text {
-    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
 }
 /*_____________________*/
+
+/* ProductPage */
+.card-pr-cost {
+    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 24px);
+}
+.card-pr-name {
+    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 18px);
+}
+.card-pr-currency, .card-pr-discount, .card-har {
+    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+}
+/*______________*/
+
 
 .cart-text{
     font-size: 14px;
@@ -25,19 +32,26 @@
     .product-cost {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 20px);
     }
-    .old-cost{
+    .old-cost, .bottom-text{
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
     }
-    .product-text {
+    .product-text, .currency {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
-    }
-    .currency {
-        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
-    }
-    .bottom-text {
-        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
     }
     /*______________________*/
+    
+    /* ProductPage */
+    .card-pr-cost {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 22px);
+    }
+    .card-pr-name {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 16px);
+    }
+    .card-pr-currency, .card-pr-discount, .card-har {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
+    }
+    /*______________*/
+
 }
 
 @media (max-width: 600px) {
@@ -45,19 +59,27 @@
     .product-cost {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 22px);
     }
-    .old-cost{
+    .old-cost, .bottom-text {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 16px);
     }
-    .product-text {
+    .product-text, .currency {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
-    }
-    .currency {
-        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
-    }
-    .bottom-text {
-        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 16px);
     }
     /*______________________*/
+
+
+    /* ProductPage */
+    .card-pr-cost {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 24px);
+    }
+    .card-pr-name {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 18px);
+    }
+    .card-pr-currency, .card-pr-discount, .card-har {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+    }
+    /*______________*/
+
 }
 
 @media (max-width: 335px) {
@@ -65,19 +87,27 @@
     .product-cost {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 20px);
     }
-    .old-cost{
+    .old-cost, .bottom-text{
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
     }
-    .product-text {
+    .product-text, .currency {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
-    }
-    .currency {
-        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
-    }
-    .bottom-text {
-        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
     }
     /*______________________*/
+
+
+    /* ProductPage */
+    .card-pr-cost {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 24px);
+    }
+    .card-pr-name {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 18px);
+    }
+    .card-pr-currency, .card-pr-discount, .card-har {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+    }
+    /*______________*/
+
 }
 
 @media (min-width: 1400px) {
@@ -85,17 +115,25 @@
     .product-cost {
         font-size: 24px;
     }
-    .old-cost{
+    .old-cost, .bottom-text{
         font-size: 18px;
     }
-    .product-text {
+    .product-text, .currency {
         font-size: 14px;
-    }
-    .currency {
-        font-size: 14px;
-    }
-    .bottom-text {
-        font-size: 18px;
     }
     /*________________________*/
+
+
+    /* ProductPage */
+    .card-pr-cost {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 26px);
+    }
+    .card-pr-name {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 20px);
+    }
+    .card-pr-currency, .card-pr-discount, .card-har {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 18px);
+    }
+    /*______________*/
+
 }

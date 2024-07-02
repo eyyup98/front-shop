@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 90%; margin: 0 auto">
+  <div class="wrapper pt-0 mt-0">
     <div class="loading" v-if="loading === true">
       <div class="text-center">
         <div class="spinner-border mt-5 m-auto" role="status">
@@ -32,8 +32,8 @@
             </router-link>
           </div>
           <div class="">
-            <button v-if="!checkCart(row.id)" type="button" class="btn my-btn-color btn-sm px-4 py-1 my-0" @click="addCart(row)">В корзину</button>
-            <button v-else type="button" class="btn my-btn-color btn-sm px-2 py-1 my-0" @click="dropCart(row)">Убрать из корзины</button>
+            <button v-if="!checkCart(row.id)" type="button" class="btn my-btn-color btn-sm bottom-text" @click="addCart(row)">В корзину</button>
+            <button v-else type="button" class="btn my-btn-color btn-sm bottom-text" @click="dropCart(row)">Убрать из корзины</button>
           </div>
         </div>
       </div>
@@ -140,4 +140,5 @@ export default {
 @import '../../assets/client/client-page-1100.css';
 @import '../../assets/client/client-page-850.css';
 @import '../../assets/client/client-page-600.css';
+@import '../../assets/client/font-size.css';
 </style>

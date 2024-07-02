@@ -203,3 +203,39 @@ body {
 .info-block {
     margin: 20px 0 0 0;
 }
+.card-pr-cost {
+    display: inline-block;
+    margin: 20px 0;
+}
+.see-more {
+    margin: 40px 0 0 0;
+}
+.card-pr-text-block {
+    width: 80%;
+    margin: 20px auto 0;
+}
+
+.card-pr-name, .card-pr-cost{
+    font-weight: bold;
+}
+.line-start {
+    white-space: nowrap;
+}
+.dotted-line {
+    flex-grow: 1;
+    border-bottom: 1px dotted #a6a6a6; /* Цвет и стиль линии */
+    margin: 0 8px; /* Отступ линии */
+}
+.line-end {
+    white-space: nowrap;
+}
+.all-har {
+    color: rgb(115, 112, 227);
+}
+.all-har:hover {
+    color: #9a97ff;
+}
+.link-offset-2 {
+    text-decoration: none !important;
+    text-underline-offset: 0 !important
+}
