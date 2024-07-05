@@ -1,24 +1,24 @@
 /* ClientPage */
 .product-cost {
-    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 18px);
+    font-size: 24px;
 }
 .old-cost, .bottom-text{
-    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
+    font-size: 18px;
 }
 .product-text, .currency {
-    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 9px);
+    font-size: 14px;
 }
 /*_____________________*/
 
 /* ProductPage */
 .card-pr-cost {
-    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 24px);
+    font-size: 24px;
 }
 .card-pr-name {
-    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 18px);
+    font-size: 20px;
 }
 .card-pr-currency, .card-pr-discount, .card-har {
-    font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+    font-size: 14px
 }
 /*______________*/
 
@@ -59,8 +59,11 @@
     .product-cost {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 18px);
     }
-    .old-cost, .bottom-text {
+    .old-cost {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
+    }
+    .bottom-text {
+        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 16px);
     }
     .product-text, .currency {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 12px);
@@ -108,34 +111,6 @@
     }
     .card-pr-currency, .card-pr-discount, .card-har {
         font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 14px);
-    }
-    /*______________*/
-
-}
-
-@media (min-width: 1400px) {
-    /* ClientPage */
-    .product-cost {
-        font-size: 24px;
-    }
-    .old-cost, .bottom-text{
-        font-size: 18px;
-    }
-    .product-text, .currency {
-        font-size: 14px;
-    }
-    /*________________________*/
-
-
-    /* ProductPage */
-    .card-pr-cost {
-        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 26px);
-    }
-    .card-pr-name {
-        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 20px);
-    }
-    .card-pr-currency, .card-pr-discount, .card-har {
-        font-size: calc( (100vw - 480px)/(1280 - 480) * (24 - 18) + 18px);
     }
     /*______________*/
 

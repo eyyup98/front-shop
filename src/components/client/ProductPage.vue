@@ -10,13 +10,12 @@
       </div>
     </div>
     <div v-else>
-      <div class="m-auto">
+      <div class="m-auto my-bc">
         <div class="d-flex m-auto parent-flex" id="product-for-height">
           <div class="d-flex pp-content-block">
             <swiper
                 :slidesPerView="'auto'"
                 :spaceBetween="0"
-                :pagination="{clickable: true,}"
                 :modules="modules"
                 class="mySwiper"
             >
@@ -24,9 +23,8 @@
             </swiper>
           </div>
           <div class="flex-column pp-content-block info-block card-pr-text-block">
-            <span class="card-pr-name">{{ product.name }}</span>
-            <div>
-              <span class="card-pr-cost">{{new Intl.NumberFormat("ru-RU").format(product.price)}}</span>
+            <div class="separation-blocks">
+              <div class="card-pr-cost">{{new Intl.NumberFormat("ru-RU").format(product.price)}}</div>
               <span class="card-pr-currency ps-1 pe-3">TMT</span>
               <span class="text-decoration-line-through opacity-75 card-pr-discount" v-if="Number(product.discount) !== 0">
                       {{new Intl.NumberFormat("ru-RU").format(product.discount)}}
@@ -34,11 +32,13 @@
             </div>
 
             <div class="flex-column">
+              <div class="separation-blocks">
+              <div class="card-pr-name">{{ product.name }}</div>
 <!--              <h5 class="mb-4">Характеристики и описание</h5>-->
-              <div v-for="(param, index) in product.params" class="d-flex justify-content-between">
-                <div class="line-start text-secondary card-har mb-2" v-if="index < 5">{{param.name}}</div>
+              <div v-for="(param, index) in product.params" class="d-flex justify-content-between pr-params-list">
+                <div class="line-start text-secondary card-har pe-1" v-if="index < 5">{{param.name}}</div>
                 <div class="dotted-line" v-if="index < 5"></div>
-                <div class="line-end card-har" v-if="index < 5">{{param.value}}</div>
+                <div class="line-end card-har card-har-val ps-1 text-right" v-if="index < 5">{{param.value}}</div>
               </div>
               <div v-if="product.params.length > 5" class="mt-2">
                 <p><a data-bs-toggle="offcanvas"
@@ -47,8 +47,9 @@
                   <span class="all-har bottom-text">Все характеристики и описание</span>
                 </a></p>
               </div>
-              <button v-if="!checkCart(product.id)" type="button" class="btn my-btn-color bottom-text" @click="addCart">Добавить в корзину</button>
-              <button v-else type="button" class="btn my-btn-color bottom-text" @click="dropCart">Убрать из корзины</button>
+              </div>
+              <button v-if="!checkCart(product.id)" type="button" class="btn my-btn-color bottom-text pr-btn" @click="addCart">Добавить в корзину</button>
+              <button v-else type="button" class="btn my-btn-color bottom-text pr-btn" @click="dropCart">Убрать из корзины</button>
               <div class="card-pr-name see-more">Смотрите также</div>
             </div>
           </div>
@@ -67,12 +68,12 @@
           </div>
           <div class="offcanvas-body p-4 pt-0">
             <div v-for="(param) in product.params" class="d-flex justify-content-between mb-2">
-              <div class="line-start text-secondary card-har">{{param.name}}</div>
+              <div class="line-start text-secondary card-har pe-1">{{param.name}}</div>
               <div class="dotted-line"></div>
-              <div class="line-end card-har">{{param.value}}</div>
+              <div class="line-end card-har card-har-val ps-1 text-right">{{param.value}}</div>
             </div>
 <!--            <div class="d-flex flex-column" v-if="product.description !== null">-->
-            <div class="d-flex flex-column">
+            <div class="d-flex flex-column" v-if="product.description !== null && product.description !== ''">
               <div class="card-har text-secondary">Описание товара</div>
               <div class="card-har">{{product.description}}</div>
             </div>

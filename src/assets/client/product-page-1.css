@@ -223,8 +223,8 @@ body {
 }
 .dotted-line {
     flex-grow: 1;
-    border-bottom: 1px dotted #a6a6a6; /* Цвет и стиль линии */
-    margin: 0 8px; /* Отступ линии */
+    border-bottom: 1px dotted #e8e8e8; /* Цвет и стиль линии */
+    margin: 3px; /* Отступ линии */
 }
 .line-end {
     white-space: nowrap;
@@ -238,4 +238,23 @@ body {
 .link-offset-2 {
     text-decoration: none !important;
     text-underline-offset: 0 !important
+}
+.card-har {
+    margin: 10px 0 0 0;
+}
+.card-har-val {
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+}
+.text-right {
+    text-align: right;
+}
+
+.separation-blocks {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.07);;
+    width: 100%;
+    border-radius: 20px;
+    padding: 16px;
+    margin: 8px 0;
 }
