@@ -10,54 +10,50 @@
       </div>
     </div>
     <div v-else>
-      <div class="container m-auto my-bc" id="product-for-height">
-        <div class="d-flex pr-control-flex">
-          <div class="pr-img-block">
-              <swiper
-                  :slidesPerView="'auto'"
-                  :spaceBetween="0"
-                  :modules="modules"
-                  class="mySwiper"
-              >
-                <swiper-slide v-for="(image, index) in product.img_l">
-                  <img :src="baseUrl+image.src" class="slider-image">
-                </swiper-slide>
-              </swiper>
+      <div class="m-auto my-bc">
+        <div class="d-flex m-auto parent-flex" id="product-for-height">
+          <div class="d-flex pp-content-block">
+            <swiper
+                :slidesPerView="'auto'"
+                :spaceBetween="0"
+                :modules="modules"
+                class="mySwiper"
+            >
+              <swiper-slide v-for="(image, index) in product.img_l"><img :src="baseUrl+image.src" class="slider-image"></swiper-slide>
+            </swiper>
           </div>
-          <div class="pr-content-block">
-            <div class="flex-column pp-content-block info-block card-pr-text-block">
-              <div class="separation-blocks">
-                <div class="card-pr-cost">{{new Intl.NumberFormat("ru-RU").format(product.price)}}</div>
-                <span class="card-pr-currency ps-1 pe-3">TMT</span>
-                <span class="text-decoration-line-through opacity-75 card-pr-discount" v-if="Number(product.discount) !== 0">
+          <div class="flex-column pp-content-block info-block card-pr-text-block">
+            <div class="separation-blocks">
+              <div class="card-pr-cost">{{new Intl.NumberFormat("ru-RU").format(product.price)}}</div>
+              <span class="card-pr-currency ps-1 pe-3">TMT</span>
+              <span class="text-decoration-line-through opacity-75 card-pr-discount" v-if="Number(product.discount) !== 0">
                       {{new Intl.NumberFormat("ru-RU").format(product.discount)}}
                       </span>
-              </div>
+            </div>
 
-              <div class="flex-column">
-                <div class="separation-blocks">
-                  <div class="card-pr-name">{{ product.name }}</div>
-                  <!--              <h5 class="mb-4">Характеристики и описание</h5>-->
-                  <div v-for="(param, index) in product.params" class="d-flex justify-content-between pr-params-list">
-                    <div class="line-start text-secondary card-har pe-1" v-if="index < 5">{{param.name}}</div>
-                    <div class="dotted-line" v-if="index < 5"></div>
-                    <div class="line-end card-har card-har-val ps-1 text-right" v-if="index < 5">{{param.value}}</div>
-                  </div>
-                  <div v-if="product.params.length > 5" class="mt-2">
-                    <p><a data-bs-toggle="offcanvas"
-                          class="btn btn-link link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover p-0 m-0"
-                          data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-                      <span class="all-har bottom-text">Все характеристики и описание</span>
-                    </a></p>
-                  </div>
-                </div>
-                <button v-if="!checkCart(product.id)" type="button" class="btn my-btn-color bottom-text pr-btn" @click="addCart">Добавить в корзину</button>
-                <button v-else type="button" class="btn my-btn-color bottom-text pr-btn" @click="dropCart">Убрать из корзины</button>
+            <div class="flex-column">
+              <div class="separation-blocks">
+              <div class="card-pr-name">{{ product.name }}</div>
+<!--              <h5 class="mb-4">Характеристики и описание</h5>-->
+              <div v-for="(param, index) in product.params" class="d-flex justify-content-between pr-params-list">
+                <div class="line-start text-secondary card-har pe-1" v-if="index < 5">{{param.name}}</div>
+                <div class="dotted-line" v-if="index < 5"></div>
+                <div class="line-end card-har card-har-val ps-1 text-right" v-if="index < 5">{{param.value}}</div>
               </div>
+              <div v-if="product.params.length > 5" class="mt-2">
+                <p><a data-bs-toggle="offcanvas"
+                      class="btn btn-link link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover p-0 m-0"
+                      data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                  <span class="all-har bottom-text">Все характеристики и описание</span>
+                </a></p>
+              </div>
+              </div>
+              <button v-if="!checkCart(product.id)" type="button" class="btn my-btn-color bottom-text pr-btn" @click="addCart">Добавить в корзину</button>
+              <button v-else type="button" class="btn my-btn-color bottom-text pr-btn" @click="dropCart">Убрать из корзины</button>
+              <div class="card-pr-name see-more">Смотрите также</div>
             </div>
           </div>
         </div>
-        <div class="card-pr-name see-more">Смотрите также</div>
 
         <div class="">
           <SeeMorePage v-if="productsListModal" :searchParent="search" @updateParent="updateCartCount"></SeeMorePage>
@@ -252,7 +248,7 @@ export default {
 @import '../../assets/client/product-page-1.css';
 @import '../../assets/client/product-page-1000.css';
 @import '../../assets/client/product-page-700.css';
+@import '../../assets/client/product-page-heigh.css';
 @import '../../assets/client/font-size.css';
-@import '../../assets/client/product-page-test.css';
 
 </style>
