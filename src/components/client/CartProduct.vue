@@ -83,12 +83,14 @@
         </div>
       </div>
     </div>
+    <NavBarFooter :cartCount="0" @updateParent="updateParentMethod"></NavBarFooter>
   </div>
 
 </template>
 
 <script>
 import NavBarClient from "./NavBarClient.vue";
+import NavBarFooter from "./NavBarFooter.vue";
 import OrderModal from "./OrderModal.vue";
 import router from "../../router";
 import axios from "axios";
@@ -98,6 +100,7 @@ import apiImg from "@/api/axiosImg";
 export default {
   name: "CartProduct",
   components: {
+    NavBarFooter,
     NavBarClient,
     OrderModal
   },

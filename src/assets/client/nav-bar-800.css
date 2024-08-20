@@ -37,4 +37,16 @@
         padding: 3px;
         /*margin: 0;*/
     }
+    .footer {
+        display: block;
+    }
+    .view-cat-header {
+        display: none !important;
+    }
+    .view-cat-footer {
+        display: block;
+    }
+    .flex-footer {
+        width: 90%;
+    }
 }

@@ -85,6 +85,7 @@
         </div>
       </div>
     </div>
+    <NavBarFooter :cartCount="this.productsCart.length" @updateParent="updateParentMethod"></NavBarFooter>
   </div>
 </template>
 
@@ -100,9 +101,11 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
+import NavBarFooter from "./NavBarFooter.vue";
 export default {
   name: "ProductPage",
   components: {
+    NavBarFooter,
     NavBarClient,
     SeeMorePage,
     Swiper,

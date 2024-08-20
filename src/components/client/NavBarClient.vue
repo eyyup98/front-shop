@@ -5,23 +5,23 @@
         <nav class="navbar">
           <div class="container-fluid d-flex flex-nowrap">
             <div>
-              <button class="btn cat-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
-                      aria-controls="offcanvasScrolling" @click="openCat = openCat === false; groups = null" id="OffcanvasBtn">
-                <span v-if="openCat === false">☰</span>
-                <span v-else>✕</span>
+              <button class="btn btn other-btn position-relative d-flex flex-column p-0 view-cat-header" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft"
+                      aria-controls="offcanvasLeft" @click="toggleOpenCat" id="OffcanvasBtn">
+                <img v-if="!openCat" class="d-block m-auto" src="@/assets/icons/list.png" width="50"/>
+                <img v-else class="d-block m-auto" src="@/assets/icons/cross.png" width="45"/>
               </button>
 
-              <div class="offcanvas offcanvas-start offcanvas-style" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+              <div class="offcanvas offcanvas-start offcanvas-style" tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasLeftLabel" ref="offcanvasElement" data-bs-backdrop="false">
                 <div class="accordion w-100">
-                  <div class="accordion-item"  v-for="(itemC, index) in catalogs">
+                  <div class="accordion-item" v-for="(itemC, index) in catalogs" :key="index">
                     <h2 class="accordion-header" :id="'panelsStayOpen-headingOne'+index" @click="selectGroups(itemC.groups, index)">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseOne'+index" aria-expanded="true" :aria-controls="'panelsStayOpen-collapseOne'+index">
                         {{ itemC.name }}
                       </button>
                     </h2>
-                    <div v-if="loading === false && catalogs[index].groups !== null" :id="'panelsStayOpen-collapseOne'+index"
-                         class="accordion-collapse collapse" :aria-labelledby="'panelsStayOpen-headingOne'+indexCatalog">
-                      <div class="accordion-body group-list" v-for="item in catalogs[index].groups" @click="selectSearch(item);">
+                    <div v-if="!loading && catalogs[index].groups !== null" :id="'panelsStayOpen-collapseOne'+index"
+                         class="accordion-collapse collapse" :aria-labelledby="'panelsStayOpen-headingOne'+index">
+                      <div class="accordion-body group-list" v-for="(item, subIndex) in catalogs[index].groups" :key="subIndex" @click="selectSearch(item)">
                         <div class="group-text">{{ item.name }}</div>
                       </div>
                     </div>
@@ -51,7 +51,7 @@
                 </ul>
               </div>
             </div>
-            <div class="cart-block">
+            <div class="cart-block view-cat-header">
               <router-link to="/cart">
                 <button class="btn other-btn position-relative d-flex flex-column p-0">
                   <div v-if="cartCount !== 0" class="cart-count d-flex align-items-center justify-content-center"><span>{{ cartCount }}</span></div>
@@ -62,41 +62,6 @@
             </div>
           </div>
         </nav>
-      </div>
-
-      <div class="offcanvas offcanvas-start offcanvas-style" data-bs-scroll="false" data-bs-backdrop="static" tabindex="-1" id="myOffcanvas"
-           aria-labelledby="staticBackdropLabel">
-        <div class="offcanvas-body w-100">
-          <div class="d-flex flex-nowrap ">
-            <div class="accordion w-100">
-              <div class="accordion-item"  v-for="(itemC, index) in catalogs">
-                <h2 class="accordion-header" :id="'panelsStayOpen-headingOne'+index" @click="selectGroups(itemC.groups, index)">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#panelsStayOpen-collapseOne'+index" aria-expanded="true" :aria-controls="'panelsStayOpen-collapseOne'+index">
-                    {{ itemC.name }}
-                  </button>
-                </h2>
-                <div v-if="loading === false && catalogs[index].groups !== null" :id="'panelsStayOpen-collapseOne'+index"
-                     class="accordion-collapse collapse" :aria-labelledby="'panelsStayOpen-headingOne'+indexCatalog">
-                  <div class="accordion-body group-list" v-for="item in catalogs[index].groups" @click="selectSearch(item);">
-                    <div class="group-text">{{ item.name }}</div>
-                  </div>
-                </div>
-              </div>
-
-              <!--              <div class="list-group list-group-flush w-100">-->
-              <!--                <button v-for="(item, index) in catalogs" type="button" class="list-group-item list-group-item-action text-nowrap none-border pe-5"-->
-              <!--                        @mouseover="selectGroups(item.groups, index)" name="cat-btn" @click="selectSearch(item)">{{ item.name }}-->
-              <!--                </button>-->
-              <!--              </div>-->
-              <!--              <div v-if="loading === false && groups !== null" class="flex-fill w-100 h-100 ps-5">-->
-              <!--                <div class="list-group list-group-flush">-->
-              <!--                  <button v-for="item in groups" type="button" @click="selectSearch(item)"-->
-              <!--                          class="list-group-item list-group-item-action text-nowrap none-border ps-4 p gr-btn">-->
-              <!--                    {{ item.name }}-->
-              <!--                  </button>-->
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -132,13 +97,24 @@ export default {
   },
   emits: ["updateParent"],
   methods: {
+    toggleOpenCat() {
+      this.openCat = !this.openCat;
+      this.groups = null;
+    },
     selectSearch(object){
       window.localStorage.removeItem('productsList')
       this.$emit('updateParent', {
         search: object
       })
-      let hideBtn = document.getElementById('OffcanvasBtn')
-      hideBtn.click()
+      const width = window.innerWidth;
+      console.log(width)
+      if (width <= 800) {
+        let hideBtn2 = document.getElementById('OffcanvasBtn2')
+        hideBtn2.click()
+      } else {
+        let hideBtn = document.getElementById('OffcanvasBtn')
+        hideBtn.click()
+      }
       // this.openCat = this.openCat === false;
     },
     viewSearchCache(){
