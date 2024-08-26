@@ -49,4 +49,20 @@
     .flex-footer {
         width: 90%;
     }
+    .navbar {
+        height: 60px;
+        padding: 0;
+    }
+    .nav-footer {
+        height: 50px;
+    }
+    .search {
+        height: 40px;
+    }
+    .container-fluid {
+        padding-left: 0;
+    }
+    .offcanvas-style {
+        top: 60px;
+    }
 }

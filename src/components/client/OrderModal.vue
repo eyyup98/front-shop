@@ -9,28 +9,28 @@
           </div>
           <div class="modal-body">
             <div class="mb-2">
-              <label class="form-label">Имя</label>
-              <input type="text" class="form-control h-50" v-model="user.name">
+              <label class="form-label label-fs">Имя</label>
+              <input type="text" class="form-control h-50 label-fs" v-model="user.name">
             </div>
             <div class="mb-2">
-              <label class="form-label mb-0">Номер телефона</label>
+              <label class="form-label mb-0 label-fs">Номер телефона</label>
               <div class="input-group">
-                <span class="input-group-text h-50">+993</span>
-                <input type="tel" class="form-control h-50" v-model="user.phone" placeholder="********">
+                <span class="input-group-text h-50 label-fs">+993</span>
+                <input type="tel" class="form-control h-50 label-fs" v-model="user.phone" placeholder="********">
               </div>
             </div>
             <div class="mb-2">
-              <label class="form-label mb-0">Адрес доставки</label>
-              <textarea type="text" class="form-control" v-model="user.address" placeholder="Напишите адрес доставки"></textarea>
+              <label class="form-label mb-0 label-fs">Адрес доставки</label>
+              <textarea type="text" class="form-control label-fs" v-model="user.address" placeholder="Напишите адрес доставки"></textarea>
             </div>
             <div class="mb-2">
-              <label class="form-label mb-0">Комментарий к заказу</label>
-              <textarea type="text" class="form-control" v-model="user.comment" placeholder="Здесь вы можете оставить дополнительную информацию для заказа"></textarea>
+              <label class="form-label mb-0 label-fs">Комментарий к заказу</label>
+              <textarea type="text" class="form-control label-fs" v-model="user.comment" placeholder="Здесь вы можете оставить дополнительную информацию для заказа"></textarea>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Отмена</button>
-            <button type="button" class="btn btn-primary" @click="sendOrders">Отправить</button>
+            <button type="button" class="btn btn-secondary label-fs" data-bs-dismiss="modal" @click="closeModal">Отмена</button>
+            <button type="button" class="btn btn-primary label-fs" @click="sendOrders">Отправить</button>
           </div>
         </div>
       </div>
@@ -130,6 +130,6 @@ export default {
 <style scoped>
 @import '../../assets/client/base.css';
 @import '../../assets/client/order-modal-1.css';
-@import '../../assets/client/order-modal-500.css';
 @import '../../assets/client/order-modal-900.css';
+@import '../../assets/client/order-modal-500.css';
 </style>

@@ -16,13 +16,8 @@
         <div v-else>
           <button v-if="cartHistory.length > 1" type="button" class="btn btn-warning btn-lg mb-2 ms-2" @click="openOrderHistory">Посмотреть мои заказы</button>
 
-          <h2 class="cart-title">Корзина</h2>
-
           <div v-if="products.length === 0" class="ps-2">
             <h6>В корзине пусто</h6>
-            <router-link to="/">
-              <button type="button" class="btn btn-link ps-0">Пройти в главную страницу</button>
-            </router-link>
           </div>
 
           <div class="d-flex-cart w-100">
@@ -83,14 +78,12 @@
         </div>
       </div>
     </div>
-    <NavBarFooter :cartCount="0" @updateParent="updateParentMethod"></NavBarFooter>
   </div>
 
 </template>
 
 <script>
 import NavBarClient from "./NavBarClient.vue";
-import NavBarFooter from "./NavBarFooter.vue";
 import OrderModal from "./OrderModal.vue";
 import router from "../../router";
 import axios from "axios";
@@ -100,7 +93,6 @@ import apiImg from "@/api/axiosImg";
 export default {
   name: "CartProduct",
   components: {
-    NavBarFooter,
     NavBarClient,
     OrderModal
   },

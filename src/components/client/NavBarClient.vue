@@ -7,11 +7,12 @@
             <div>
               <button class="btn btn other-btn position-relative d-flex flex-column p-0 view-cat-header" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft"
                       aria-controls="offcanvasLeft" @click="toggleOpenCat" id="OffcanvasBtn">
-                <img v-if="!openCat" class="d-block m-auto" src="@/assets/icons/list.png" width="50"/>
+                <img v-if="!openCat" class="d-block m-auto" src="@/assets/icons/list.png" width="45"/>
                 <img v-else class="d-block m-auto" src="@/assets/icons/cross.png" width="45"/>
               </button>
 
-              <div class="offcanvas offcanvas-start offcanvas-style" tabindex="-1" id="offcanvasLeft" aria-labelledby="offcanvasLeftLabel" ref="offcanvasElement" data-bs-backdrop="false">
+              <div class="offcanvas offcanvas-start offcanvas-style" tabindex="-1" data-bs-scroll="false" id="offcanvasLeft"
+                   aria-labelledby="offcanvasLeftLabel" ref="offcanvasElement" data-bs-backdrop="false">
                 <div class="accordion w-100">
                   <div class="accordion-item" v-for="(itemC, index) in catalogs" :key="index">
                     <h2 class="accordion-header" :id="'panelsStayOpen-headingOne'+index" @click="selectGroups(itemC.groups, index)">
@@ -31,7 +32,7 @@
             </div>
             <router-link class="navbar-brand nb-color" to="/"><div class="pvw-title"><span>E-Trade</span></div></router-link>
             <div class="search-h position-relative card-pr-name">
-              <input id="searchInput" class="form-control me-2 h-100 none-focus search" type="search" placeholder="Найти в магазине" aria-label="Search"
+              <input id="searchInput" class="form-control none-focus search" type="search" placeholder="Найти в магазине" aria-label="Search"
                      @input="searchMethod" @keyup.enter="enterSearch" v-model="searchValue" @focus="viewSearchCache">
               <button type="button" class="btn-close position-absolute none-focus" aria-label="Close"
                       v-if="searchValue !== ''" @click="searchValue = ''"></button>
@@ -57,6 +58,33 @@
                   <div v-if="cartCount !== 0" class="cart-count d-flex align-items-center justify-content-center"><span>{{ cartCount }}</span></div>
                   <img class="d-block m-auto" src="@/assets/icons/cart.png" width="45"/>
                   <!--              <span style="font-size: 14px; line-height: 0">Корзина</span>-->
+                </button>
+              </router-link>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <div class="footer fixed-bottom">
+        <nav class="navbar nav-footer">
+          <div class="container-fluid d-flex flex-nowrap flex-footer">
+            <div class="view-cat-footer">
+              <button class="btn other-btn position-relative d-flex flex-column p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLeft"
+                      aria-controls="offcanvasLeft" @click="toggleOpenCat" id="OffcanvasBtn2">
+                <img v-if="!openCat" class="d-block m-auto" src="@/assets/icons/list.png" width="35"/>
+                <img v-else class="d-block m-auto" src="@/assets/icons/cross.png" width="35"/>
+              </button>
+            </div>
+            <div class="cart-block view-cat-footer">
+              <button class="btn other-btn position-relative d-flex flex-column p-0" @click="selectHome">
+                <img class="d-block m-auto" src="@/assets/icons/home.png" width="40"/>
+              </button>
+            </div>
+            <div class="cart-block view-cat-footer">
+              <router-link to="/cart">
+                <button class="btn other-btn position-relative d-flex flex-column p-0">
+                  <div v-if="cartCount !== 0" class="cart-count d-flex align-items-center justify-content-center"><span>{{ cartCount }}</span></div>
+                  <img class="d-block m-auto" src="@/assets/icons/cart.png" width="35"/>
                 </button>
               </router-link>
             </div>
@@ -97,6 +125,15 @@ export default {
   },
   emits: ["updateParent"],
   methods: {
+    selectHome(){
+      window.localStorage.removeItem('productsList')
+      this.$emit('updateParent', {
+        search: {
+          catalog_id: null,
+          group_id: null,
+        }
+      })
+    },
     toggleOpenCat() {
       this.openCat = !this.openCat;
       this.groups = null;

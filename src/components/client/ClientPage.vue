@@ -42,14 +42,12 @@
         </div>
       </div>
     </div>
-    <NavBarFooter :cartCount="this.productsCart.length" @updateParent="updateParentMethod"></NavBarFooter>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import NavBarClient from "./NavBarClient.vue";
-import NavBarFooter from "./NavBarFooter.vue";
 import apiClient from "@/api/axios";
 import apiImg from "@/api/axiosImg";
 
@@ -77,7 +75,6 @@ export default {
   name: "ClientPage",
   components: {
     NavBarClient,
-    NavBarFooter
   },
   data() {
     return {

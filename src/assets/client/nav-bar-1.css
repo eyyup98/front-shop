@@ -24,6 +24,9 @@
     width: 75%;
     margin: 0 0 0 2%;
 }
+.search {
+    height: 100%;
+}
 .nb-color {
     color: white;
     margin: 0 0 0 20px;

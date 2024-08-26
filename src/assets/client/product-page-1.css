@@ -42,15 +42,6 @@
 .parent-flex {
     flex-direction: column;
 }
-.offcanvas-style {
-    padding: 0;
-    position: absolute;
-    top: 70px;
-    left: 0;
-    width: 60%;
-    height: 100vh;
-    margin: 0;
-}
 .offcanvas-end {
     width: 50%;
     padding: 70px 0 0 0;
